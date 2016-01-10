@@ -1,0 +1,13 @@
+#+title: Projects
+
+This website tries to keep a list of projects related to clasp, especially of C++ libraries that have been exposed to clasp.
+
+* Known Projects
+
+| Project Name | Description                                 |
+|--------------+---------------------------------------------|
+| Cando        | drmeister's library for designing molecules |
+| clasp-sfml   | clasp binding for [[http://www.sfml-dev.org][SFML]]                      |
+
+
+* Submit Project

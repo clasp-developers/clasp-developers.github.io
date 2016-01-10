@@ -1,0 +1,9 @@
+#+title: News
+#+options: num:nil
+
+* <2015-11-20 Fr> Release 0.4
+-  Clasp has a completely new, optimizing/inlining compiler called
+   cclasp!
+-  Fixnum, character and single-float types are immediate values.
+-  General object pointers and cons pointers are tagged for speed.
+-  Lots of bug fixes and stability improvements.
