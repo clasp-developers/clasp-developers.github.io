@@ -1,3 +1,27 @@
+;;; clasp-website.el - Emacs Lisp for generating the clasp website.
+;;;
+;;; This program is free software: you can redistribute it and/or modify
+;;; it under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation, either version 3 of the License, or
+;;; (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;;;
+;;; Usage:
+;;; =====
+;;; The functions in this file can be used to create the
+;;; webpage for clasp.
+;;; Simply evaluate this file and call make-clasp-website.
+;;; If you don't want to enter the directories every time you
+;;; use the function, customize clasp-website-source-directory
+;;; and clasp-website-target-directory.
+ 
 
 (defgroup clasp-website nil
   "Customization of the system for creating the clasp website.")
@@ -48,8 +72,8 @@ POSTFIX is html code that is appended to the menu."
   (create-menu-preamble
    "footer.org" nil "<center>" "</center>"))
 
-(defun make-clasp-documentation (force)
-  "Create the documentation for clasp.
+(defun make-clasp-website (force)
+  "Create the website for clasp.
 If prefix arg FORCE is non-nil, force rebuild files that were not updated."
   (interactive "P")
   (let ((org-html-htmlize-output-type 'css)
