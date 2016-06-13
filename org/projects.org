@@ -1,4 +1,5 @@
-#+title: Projects
+#+TITLE: Projects
+#+OPTIONS: toc:nil num:nil
 
 This website tries to keep a list of projects related to clasp, especially of C++ libraries that have been exposed to clasp.
 

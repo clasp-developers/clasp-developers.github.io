@@ -39,6 +39,34 @@ The generated html files will be placed in this directory."
   :type '(directory)
   :group 'clasp-website)
 
+(defcustom clasp-website-youtube-video-format (cons 560 315)
+  "A a cons cell consisiting of width and height for
+embedded youtube videos."
+  :type '(cons integer integer)
+  :group 'clasp-website)
+
+(defcustom youtube-iframe-format
+  ""
+  (concat "<iframe width=\"440\""
+          " height=\"335\""
+          " src=\"https://www.youtube.com/embed/%s\""
+          " frameborder=\"0\""
+          " allowfullscreen>%s</iframe>"))
+
+(org-add-link-type
+ "youtube"
+ (lambda (handle)
+   (browse-url
+    (concat "https://www.youtube.com/embed/"
+            handle)))
+ (lambda (path desc backend)
+   (cl-case backend
+     (html (format "<iframe width=\"%d\" height=\"%d\" src=\"https://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen>%s</iframe>"
+                   (car clasp-website-youtube-video-format)
+		   (cdr clasp-website-youtube-video-format)
+		   path (or desc "")))
+     (latex (format "\href{%s}{%s}"
+                    path (or desc "video"))))))
 
 (defun create-menu-preamble (menu-file &optional ul-class prefix postfix)
   "Creates a preamble from MENU-FILE.
@@ -74,7 +102,8 @@ POSTFIX is html code that is appended to the menu."
 
 (defun make-clasp-website (force)
   "Create the website for clasp.
-If prefix arg FORCE is non-nil, force rebuild files that were not updated."
+If prefix arg FORCE is non-nil, force rebuild files that were not updated.
+Use FORCE, if you have updated menu.org, in order to update the menu on all files."
   (interactive "P")
   (let ((org-html-htmlize-output-type 'css)
 	(project-alist
@@ -95,6 +124,6 @@ If prefix arg FORCE is non-nil, force rebuild files that were not updated."
 	   :sitemap-title "Sitemap"
 	   :html-preamble 'create-clasp-project-menu-preamble
 	   :html-postamble 'create-clasp-project-postamble
-	   :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/htmlize.css\"/>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/readtheorg.css\"/>\n\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>\n<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/lib/js/jquery.stickytableheaders.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/readtheorg/js/readtheorg.js\"></script>"))))
+	   :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/htmlize.css\"/>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/readtheorg-no-toc.css\"/>\n\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>\n<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/lib/js/jquery.stickytableheaders.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/readtheorg/js/readtheorg.js\"></script>"))))
     (org-publish-project project-alist force)
     (message "Clasp website published.")))

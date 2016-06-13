@@ -1,0 +1,29 @@
+#+TITLE: Features
+#+OPTIONS: toc:nil num:nil
+
+
+* Seamless Integration of Common Lisp and C++
+
+Clasp is a new [[https://common-lisp.net/][Common Lisp]] implementation
+that seamlessly interoperates with C++ libraries and programs using
+[[http://llvm.org/][LLVM]] for compilation to native code. This allows
+Clasp to take advantage of a vast array of preexisting libraries and
+programs, such as out of the scientific computing ecosystem. Embedding
+them in a Common Lisp environment allows you to make use of rapid
+prototyping, incremental development, and other capabilities that make
+it a powerful language.
+
+
+* Common Lisp Ecosystem Support
+
+Clasp supports [[https://common-lisp.net/project/slime/][SLIME]],
+[[https://common-lisp.net/project/asdf/][ASDF]], and
+[[https://www.quicklisp.org/beta/][Quicklisp]]. As such, development as
+in other Common Lisp implementations should be rather straight forward.
+
+Note that Clasp does not currently support several of the staple
+features such as
+[[https://github.com/drmeister/clasp/issues/162][CFFI]],
+[[https://github.com/drmeister/clasp/issues/163][Bordeaux-Threads]], and
+[[https://github.com/drmeister/clasp/issues/164][Unicode]].
+

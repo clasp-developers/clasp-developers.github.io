@@ -1,0 +1,15 @@
+#+TITLE: Media
+#+OPTIONS: toc:nil num:nil
+
+* Publications
+
+
+* Videos
+
+[[youtube:5bQhGS8V6dQ][ELS 2016]]
+
+[[youtube:0rSMt1pAlbE][Google Tech Talk, August 2015]]
+
+[[youtube:8X69_42Mj-g][Google Tech Talk, June 2015]]
+
+[[youtube:h31pURzgYX8][Using Common Lisp to refactor C++]]

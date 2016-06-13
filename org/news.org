@@ -1,5 +1,5 @@
 #+title: News
-#+options: num:nil
+#+OPTIONS: toc:nil num:nil
 
 * <2015-11-20 Fr> Release 0.4
 -  Clasp has a completely new, optimizing/inlining compiler called

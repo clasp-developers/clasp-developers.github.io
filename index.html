@@ -3,8 +3,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Clasp &#x2014; Bringing Common Lisp and C++ Together</title>
-<!-- 2016-01-10 So 19:57 -->
+<title>Clasp</title>
+<!-- 2016-06-12 Sun 19:57 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Flash" />
@@ -88,13 +88,7 @@
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<link rel="stylesheet" type="text/css" href="./styles/readtheorg/css/titlepage.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -146,114 +140,49 @@ for the JavaScript code in this tag.
 <div id="preamble" class="status">
 <div id="top-menu">
 <ul>
-<li><a href="index.html">Home</a>
-</li>
+<li><a href="index.html">Clasp</a>
+<ul>
 <li><a href="news.html">News</a>
 </li>
-<li><a href="index.html">Documentation</a>
-<ul>
-<li><a href="building.html">Building Clasp</a>
+<li><a href="features.html">Features</a>
 </li>
-<li><a href="clbind-doc.html">Exposing C++ Libraries</a>
+<li><a href="download.html">Download</a>
 </li>
 </ul>
 </li>
+<li><a href="index.html">Doc</a>
+<ul>
+<li><a href="license.html">License</a>
+</li>
+<li><a href="building.html">Building Clasp</a>
+</li>
+<li><a href="clbind-doc.html">Exposing C++ Libraries</a>
+</li>
+</ul>
+</li>
+<li><a href="index.html">Misc</a>
+<ul>
 <li><a href="community.html">Community</a>
 </li>
 <li><a href="projects.html">Projects</a>
+</li>
+<li><a href="media.html">Media</a>
+</li>
+<li><a href="acknowlegements.html">Acknowledgements</a>
+</li>
+</ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<h1 class="title">Clasp &#x2014; Bringing Common Lisp and C++ Together</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#sec-1">1. Getting Clasp</a></li>
-<li><a href="#sec-2">2. Common Lisp Ecosystem Support</a></li>
-<li><a href="#sec-3">3. Reporting Problems</a></li>
-<li><a href="#sec-4">4. Acknowledgments</a></li>
-</ul>
-</div>
-</div>
-<p>
-Clasp is a new <a href="https://common-lisp.net/">Common Lisp</a> implementation
-that seamlessly interoperates with C++ libraries and programs using
-<a href="http://llvm.org/">LLVM</a> for compilation to native code. This allows
-Clasp to take advantage of a vast array of preexisting libraries and
-programs, such as out of the scientific computing ecosystem. Embedding
-them in a Common Lisp environment allows you to make use of rapid
-prototyping, incremental development, and other capabilities that make
-it a powerful language.
-</p>
+<h1 class="title">Clasp</h1>
 
 <div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Getting Clasp</h2>
+<h2 id="sec-1">Seamless Integration of Common Lisp and C++</h2>
 <div class="outline-text-2" id="text-1">
-<p>
-Precompiled and prepackaged versions of Clasp will be available for a
-limited number of distributions. Check the
-<a href="https://github.com/drmeister/clasp/releases">releases</a> to see if there is something available for you.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Common Lisp Ecosystem Support</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-Clasp supports <a href="https://common-lisp.net/project/slime/">SLIME</a>,
-<a href="https://common-lisp.net/project/asdf/">ASDF</a>, and
-<a href="https://www.quicklisp.org/beta/">Quicklisp</a>. As such, development as
-in other Common Lisp implementations should be rather straight forward.
-</p>
-
-<p>
-Note that Clasp does not currently support several of the staple
-features such as
-<a href="https://github.com/drmeister/clasp/issues/162">CFFI</a>,
-<a href="https://github.com/drmeister/clasp/issues/163">Bordeaux-Threads</a>, and
-<a href="https://github.com/drmeister/clasp/issues/164">Unicode</a>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Reporting Problems</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-Generally you can report problems in two fashions, either by
-<a href="https://github.com/drmeister/clasp/issues/new">opening an issue
-ticket</a> or by <i>chatting with us directly</i>. In both cases,
-though, you should have the following pieces handy in order for us to be
-able to help you out as quickly and painlessly as possible.
-</p>
-
-<ul class="org-ul">
-<li>Your operating system name and version.
-</li>
-<li>The versions of the <i>external libraries</i>
-   that you have installed.
-</li>
-<li>A paste of the build log or failure point that you reached.
-</li>
-<li>Patience.
-</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Acknowledgments</h2>
-<div class="outline-text-2" id="text-4">
-<p>
-Clasp was supported by the Defense Threat Reduction Agency (DOD-DTRA)
-(HDTRA1-09-1-0009) the National Institutes of Health (NIH/NIGMS Grant
-number: 2R01GM067866-07A2) and the National Science Foundation (Grant
-number: 1300231).
-</p>
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">(<a href="news.html">News</a>) &nbsp; &nbsp; (<a href="features.html">Features</a>) &nbsp; &nbsp; (<a href="download.html">Download</a>)</h3>
 </div>
 </div>
 </div>

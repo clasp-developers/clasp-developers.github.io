@@ -1,0 +1,13 @@
+#+TITLE: Acknowlegements
+#+OPTIONS: toc:nil num:nil
+
+* Code Used
+Parts of Clasp are based on the ECL compiler and the Cleavir project.
+
+Clasp uses LLVM and Clang Tools.
+
+* Funding
+Clasp was supported by the Defense Threat Reduction Agency (DOD-DTRA)
+(HDTRA1-09-1-0009) the National Institutes of Health (NIH/NIGMS Grant
+number: 2R01GM067866-07A2) and the National Science Foundation (Grant
+number: 1300231).
