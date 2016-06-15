@@ -6,10 +6,14 @@
 
 * Videos
 
-[[youtube:5bQhGS8V6dQ][ELS 2016]]
+** ELS Talk 2016
+[[youtube:5bQhGS8V6dQ][ELS Talk 2016]]
 
+** Google Tech Talk, August 2015
 [[youtube:0rSMt1pAlbE][Google Tech Talk, August 2015]]
 
+** Google Tech Talk, June 2015
 [[youtube:8X69_42Mj-g][Google Tech Talk, June 2015]]
 
+** Using Common Lisp to refactor C++
 [[youtube:h31pURzgYX8][Using Common Lisp to refactor C++]]

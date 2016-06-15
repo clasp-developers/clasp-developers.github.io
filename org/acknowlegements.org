@@ -2,7 +2,7 @@
 #+OPTIONS: toc:nil num:nil
 
 * Code Used
-Parts of Clasp are based on the ECL compiler and the Cleavir project.
+Parts of Clasp are based on [[https://common-lisp.net/project/ecl/][ECL (Embeddable Common Lisp)]] and on Cleavir, part of the [[https://github.com/robert-strandh/SICL][SICL]] project.
 
 Clasp uses LLVM and Clang Tools.
 
