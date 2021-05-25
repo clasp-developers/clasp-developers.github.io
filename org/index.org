@@ -4,4 +4,7 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./styles/readtheorg/css/titlepage.css" />
 
 * Seamless Integration of Common Lisp and C++ 
+
+Updated by Christian Schafmeister
+
 ** ([[file:news.org][News]]) \nbsp \nbsp ([[file:features.org][Features]]) \nbsp \nbsp ([[file:download.org][Download]])

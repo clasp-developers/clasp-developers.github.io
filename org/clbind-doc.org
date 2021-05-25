@@ -135,7 +135,7 @@ class_& def(char const*       name,
             string const&     declares  = "",
             string const&     docstring = "")
 #+END_SRC
-Thus exposing a member function is not different from [[Exposing Function][exposing free functions]], and the same arguments apply. (?? difference between policies and DefaultOrPolicies ??)
+Thus exposing a member function is not different from [[Exposing Functions][exposing free functions]], and the same arguments apply. (?? difference between policies and DefaultOrPolicies ??)
 The exception to this rule is the lambda-list (arguments), which always requires ~self~ as its first parameter, which becomes the ~this~ argument within the method.
 
 ** Static Member Function

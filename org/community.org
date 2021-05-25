@@ -20,7 +20,7 @@ In any case, you should have the following pieces handy in order for us to be
 able to help you out as quickly and painlessly as possible.
 
 -  Your operating system name and version.
--  The versions of the [[#external-dependencies][external libraries]]
+-  The versions of the [[file:external-dependencies][external libraries]]
    that you have installed.
 -  A paste of the build log or failure point that you reached.
 -  Patience.
