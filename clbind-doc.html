@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-26 Wed 01:19 -->
+<!-- 2021-05-26 Wed 15:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
@@ -289,6 +289,7 @@ for the JavaScript code in this tag.
 <li><a href="#orge18b0bd">6.3. Member Functions</a></li>
 <li><a href="#orgdce72e2">6.4. Static Member Function</a></li>
 <li><a href="#org59e31cc">6.5. Public Member Variables</a></li>
+<li><a href="#org1795f4c">6.6. Derivable classes</a></li>
 </ul>
 </li>
 <li><a href="#org8677bc7">7. Exposing Enums</a></li>
@@ -786,7 +787,6 @@ void double_vector_startup() {
 </div>
 </div>
 
-
 <div id="outline-container-orgdce72e2" class="outline-3">
 <h3 id="orgdce72e2"><span class="section-number-3">6.4</span> Static Member Function</h3>
 <div class="outline-text-3" id="text-6-4">
@@ -804,7 +804,142 @@ Exposing public member variables works similar to exposing member functions.
 </p>
 </div>
 </div>
+
+<div id="outline-container-org1795f4c" class="outline-3">
+<h3 id="org1795f4c"><span class="section-number-3">6.6</span> Derivable classes</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+Some C++ libraries provide base classes that the library user is meant to subclass to add additional application specific functionality.
+For this situation Clasp allows one to create classes in Common Lisp that derive from these C++ classes and implement methods that get called from
+both C++ and Common Lisp code.
+</p>
+
+<p>
+An example of this is within Clasp itself - where Clasp exposes the Clang ASTMatcher library.
+Clasp exposes a facility of the Clang ASTMatcher library that evaluates callbacks on Clang C++ Abstract Syntax Tree nodes.
+In the place of <code>class_</code> use <code>derivable_class_</code> and provide two class template arguments.
+The first template argument is a class that needs to be provided to clbind and is shown below (in this case DerivableMatchCallback).  
+The second template argument is the original library class that is to be subclassed (in this case clang::ast_matchers::MatchFinder::MatchCallback).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C++">derivable_class_&lt;DerivableMatchCallback, clang::ast_matchers::MatchFinder::MatchCallback&gt; cl_bc(m,"MatchCallback",create_default_constructor);
+cl_bc.def("run", &amp;DerivableMatchCallback::default_run)
+    .def("onStartOfTranslationUnit", &amp;DerivableMatchCallback::default_onStartOfTranslationUnit)
+    .def("onEndOfTranslationUnit", &amp;DerivableMatchCallback::default_onEndOfTranslationUnit);
+</pre>
 </div>
+
+<p>
+The DerivableMatchCallback must be defined before the derivable_class_ declaration above.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C++">namespace asttooling {
+  class DerivableMatchCallback;                        // (1)
+};
+
+template &lt;&gt;                                            // (2)
+struct gctools::GCInfo&lt;asttooling::DerivableMatchCallback&gt; {
+  static bool constexpr NeedsInitialization = false;
+  static bool constexpr NeedsFinalization = false;
+  static GCInfo_policy constexpr Policy = unmanaged;   // (3)
+};
+
+namespace asttooling {
+class DerivableMatchCallback                
+    : public clbind::Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt; {  // (4)
+  typedef clang::ast_matchers::MatchFinder::MatchCallback AlienBase;               // (5)
+public:
+
+  virtual void run(const clang::ast_matchers::MatchFinder::MatchResult &amp;Result) {  // (6)
+    const clang::ast_matchers::MatchFinderMatchResult conv(Result);
+    core::T_sp val =  translate::to_object&lt;const clang::ast_matchers::MatchFinderMatchResult &amp;&gt;::convert(conv);
+    core::eval::funcall(asttooling::_sym_run, this-&gt;asSmartPtr(), val);
+  }
+  void default_run(const clang::ast_matchers::MatchFinderMatchResult &amp;Result) {    // (7)
+    SIMPLE_ERROR(BF("Subclass must implement"));
+  };
+
+  virtual void onStartOfTranslationUnit() {                                        // (8)
+    printf("%s:%d entered onStartOfTranslationUnit funcalling\n", __FILE__, __LINE__);
+    core::eval::funcall(_sym_onStartOfTranslationUnit, this-&gt;asSmartPtr());
+  }
+  void default_onStartOfTranslationUnit() {
+    printf("%s:%d entered default_onStartOfTranslationUnit\n", __FILE__, __LINE__);
+    this-&gt;AlienBase::onStartOfTranslationUnit();
+  }
+
+  void describe() {                                                               // (9)
+    printf("%s:%d Entered DerivableMatchCallback::describe()\n", __FILE__, __LINE__);
+    printf("this=%p  typeid(this)@%p  typeid(this).name=%s\n", this, &amp;typeid(this), typeid(this).name());
+    printf("dynamic_cast&lt;void*&gt;(this) = %p\n", dynamic_cast&lt;void *&gt;(this));
+    printf("dynamic_cast&lt;core::T_O*&gt;(this) = %p\n", dynamic_cast&lt;core::T_O *&gt;(this));
+    printf("typeid(dynamic_cast&lt;core::T_O&gt;*&gt;(this))@%p  typeid.name=%s\n", &amp;typeid(dynamic_cast&lt;core::T_O *&gt;(this)), typeid(dynamic_cast&lt;core::T_O *&gt;(this)).name());
+    printf("dynamic_cast&lt;Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt;*&gt;(this) = %p\n", dynamic_cast&lt;Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt; *&gt;(this));
+    printf("dynamic_cast&lt;DerivableMatchCallback*&gt;(this) = %p\n", dynamic_cast&lt;DerivableMatchCallback *&gt;(this));
+    printf("alien pointer = %p\n", this-&gt;pointerToAlienWithin());
+    printf("_Class: %s\n", _rep_(this-&gt;_Class).c_str());
+    for (size_t i(0); i &lt; this-&gt;numberOfSlots(); ++i) {
+      printf("_Slots[%lu]: %s\n", i, _rep_(this-&gt;instanceRef(i)).c_str());
+    }
+  }
+  virtual ~DerivableMatchCallback() {                                            // (10)
+    // Non trivial dtor  
+  }
+};
+};
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>A forward declaration of the DerivableMatchCallback class for the next piece GCInfo</li>
+<li>A gctools::GCInfo template struct is used to tell the Clasp memory manager how to deal with this class.   The NeedsInitialization field tell the memory manager that the DerivableMatchCallback::initialize() function must be called after the object is allocated.  The NeedsFinalization field tells the memory manager that the destructor for this class needs to be registered with a finalizer.  NeedsFinalization is used for resources like streams and anything that needs cleanup when it is collected. The Policy tell the memory manager how the memory for this object is managed.
+<ol class="org-ol">
+<li>Policy = normal means the object is managed by the memory manager, it can be collected and it can be moved.</li>
+<li>Policy = collectable_immobile means the object can be collected by the memory manager but it cannot be moved.</li>
+<li>Policy = atomic means the object contains no internal pointers (such as strings or integer vectors) and so it can be placed in special memory that doesn't need to be scanned.</li>
+<li>Policy = unmanaged means the object will not be automatically collected and it cannot be moved.  This is used in special cases like static vectors.</li>
+</ol></li>
+<li>Instances of DerivableMatchCallback cannot be moved or automatically collected. They need to be managed manually and carefully so that they do not leak memory.</li>
+<li>The DerivableMatchCallback inherits from a special template class clbind::Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt;. This makes it inherit from both the C++ class MatchCallback and the Clasp Instance_O class, which adds Common Lisp slots to the object.</li>
+<li>The AlienBase type needs to be defined for derivable_class_ to function.</li>
+<li>THe virtual void run(&#x2026;) {&#x2026;} method is defined by <code>clang::ast_matchers::MatchFinder::MatchCallback</code> and we need to overload it. The body of this method translates the argument(s) into Common Lisp types and then invokes a Common Lisp function <code>core::eval::funcall(asttooling::_sym_run, this-&gt;asSmartPtr(), val)</code> that the user will define in Common Lisp.</li>
+<li>The void default_run(&#x2026;) method is a non virtual method that is exposed to Common Lisp. If a C++ base class defines the run method then defaul_run should call it.  If no C++ base class defines the run method then an error should be signalled and the user must provide a run function in Common Lisp.</li>
+<li>In this example the <code>onStartOfTranslationUnit~/~default_onStartOfTranslationUnit</code> are another pair of functions that allow the user to overload an on-start-of-translation-unit method from Common Lisp.</li>
+<li>In this example a <code>describe</code> method is provided to print internal information about a <code>DerivableMatchCallback</code> instance.</li>
+<li>The <code>DerivableMatchCallback</code> class should have a destructor.</li>
+</ol>
+
+<p>
+In the above example the <code>run~/~default_run</code> pair of methods demonstrate what you need to overload the <code>run</code> C++ method from Common Lisp.
+</p>
+
+<p>
+In Common Lisp - to create a derived class one would use&#x2026;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(defclass count-match-callback (ast-tooling:match-callback) ()        ;; (1)
+  (:metaclass core:derivable-cxx-class))
+
+(core:defvirtual ast-tooling:run ((self count-match-callback) match)  ;; (2)
+  (let* ((nodes (ast-tooling:nodes match))
+         (id-to-node-map (ast-tooling:idto-node-map nodes))
+         (node (gethash :whole id-to-node-map)))
+    (advance-match-counter)))
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>The derived class is defined using <code>defclass</code> inheriting from the exposed class and using the <code>:metaclass core:derivable-cxx-class</code>.</li>
+<li>The <code>core:defvirtual</code> macro is used to overload the <code>asttooling:run</code> method. The overloaded method takes two arguments, the first argument is the instance <code>self</code> and the second argument was passed from the C++ <code>run</code> virtual method.</li>
+</ol>
+</div>
+</div>
+</div>
+
+
 
 <div id="outline-container-org8677bc7" class="outline-2">
 <h2 id="org8677bc7"><span class="section-number-2">7</span> Exposing Enums</h2>

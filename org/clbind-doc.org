@@ -336,12 +336,124 @@ void double_vector_startup() {
 };
 #+END_SRC
 
-
 ** Static Member Function
 As Common Lisp does not have the notion of static member functions, exposing them is similar to [[Exposing Functions][exposing free functions]].
 
 ** Public Member Variables
 Exposing public member variables works similar to exposing member functions. 
+
+** Derivable classes
+
+Some C++ libraries provide base classes that the library user is meant to subclass to add additional application specific functionality.
+For this situation Clasp allows one to create classes in Common Lisp that derive from these C++ classes and implement methods that get called from
+both C++ and Common Lisp code.
+
+An example of this is within Clasp itself - where Clasp exposes the Clang ASTMatcher library.
+Clasp exposes a facility of the Clang ASTMatcher library that evaluates callbacks on Clang C++ Abstract Syntax Tree nodes.
+In the place of ~class_~ use ~derivable_class_~ and provide two class template arguments.
+The first template argument is a class that needs to be provided to clbind and is shown below (in this case DerivableMatchCallback).  
+The second template argument is the original library class that is to be subclassed (in this case clang::ast_matchers::MatchFinder::MatchCallback).
+
+#+BEGIN_SRC C++
+    derivable_class_<DerivableMatchCallback, clang::ast_matchers::MatchFinder::MatchCallback> cl_bc(m,"MatchCallback",create_default_constructor);
+    cl_bc.def("run", &DerivableMatchCallback::default_run)
+        .def("onStartOfTranslationUnit", &DerivableMatchCallback::default_onStartOfTranslationUnit)
+        .def("onEndOfTranslationUnit", &DerivableMatchCallback::default_onEndOfTranslationUnit);
+#+END_SRC
+
+The DerivableMatchCallback must be defined before the derivable_class_ declaration above.
+
+#+BEGIN_SRC C++
+namespace asttooling {
+  class DerivableMatchCallback;                        // (1)
+};
+
+template <>                                            // (2)
+struct gctools::GCInfo<asttooling::DerivableMatchCallback> {
+  static bool constexpr NeedsInitialization = false;
+  static bool constexpr NeedsFinalization = false;
+  static GCInfo_policy constexpr Policy = unmanaged;   // (3)
+};
+
+namespace asttooling {
+class DerivableMatchCallback                
+    : public clbind::Derivable<clang::ast_matchers::MatchFinder::MatchCallback> {  // (4)
+  typedef clang::ast_matchers::MatchFinder::MatchCallback AlienBase;               // (5)
+public:
+
+  virtual void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) {  // (6)
+    const clang::ast_matchers::MatchFinderMatchResult conv(Result);
+    core::T_sp val =  translate::to_object<const clang::ast_matchers::MatchFinderMatchResult &>::convert(conv);
+    core::eval::funcall(asttooling::_sym_run, this->asSmartPtr(), val);
+  }
+  void default_run(const clang::ast_matchers::MatchFinderMatchResult &Result) {    // (7)
+    SIMPLE_ERROR(BF("Subclass must implement"));
+  };
+
+  virtual void onStartOfTranslationUnit() {                                        // (8)
+    printf("%s:%d entered onStartOfTranslationUnit funcalling\n", __FILE__, __LINE__);
+    core::eval::funcall(_sym_onStartOfTranslationUnit, this->asSmartPtr());
+  }
+  void default_onStartOfTranslationUnit() {
+    printf("%s:%d entered default_onStartOfTranslationUnit\n", __FILE__, __LINE__);
+    this->AlienBase::onStartOfTranslationUnit();
+  }
+
+  void describe() {                                                               // (9)
+    printf("%s:%d Entered DerivableMatchCallback::describe()\n", __FILE__, __LINE__);
+    printf("this=%p  typeid(this)@%p  typeid(this).name=%s\n", this, &typeid(this), typeid(this).name());
+    printf("dynamic_cast<void*>(this) = %p\n", dynamic_cast<void *>(this));
+    printf("dynamic_cast<core::T_O*>(this) = %p\n", dynamic_cast<core::T_O *>(this));
+    printf("typeid(dynamic_cast<core::T_O>*>(this))@%p  typeid.name=%s\n", &typeid(dynamic_cast<core::T_O *>(this)), typeid(dynamic_cast<core::T_O *>(this)).name());
+    printf("dynamic_cast<Derivable<clang::ast_matchers::MatchFinder::MatchCallback>*>(this) = %p\n", dynamic_cast<Derivable<clang::ast_matchers::MatchFinder::MatchCallback> *>(this));
+    printf("dynamic_cast<DerivableMatchCallback*>(this) = %p\n", dynamic_cast<DerivableMatchCallback *>(this));
+    printf("alien pointer = %p\n", this->pointerToAlienWithin());
+    printf("_Class: %s\n", _rep_(this->_Class).c_str());
+    for (size_t i(0); i < this->numberOfSlots(); ++i) {
+      printf("_Slots[%lu]: %s\n", i, _rep_(this->instanceRef(i)).c_str());
+    }
+  }
+  virtual ~DerivableMatchCallback() {                                            // (10)
+    // Non trivial dtor  
+  }
+};
+};
+#+END_SRC
+
+1. A forward declaration of the DerivableMatchCallback class for the next piece GCInfo
+2. A gctools::GCInfo template struct is used to tell the Clasp memory manager how to deal with this class.   The NeedsInitialization field tell the memory manager that the DerivableMatchCallback::initialize() function must be called after the object is allocated.  The NeedsFinalization field tells the memory manager that the destructor for this class needs to be registered with a finalizer.  NeedsFinalization is used for resources like streams and anything that needs cleanup when it is collected. The Policy tell the memory manager how the memory for this object is managed.
+   1. Policy = normal means the object is managed by the memory manager, it can be collected and it can be moved.
+   2. Policy = collectable_immobile means the object can be collected by the memory manager but it cannot be moved.
+   3. Policy = atomic means the object contains no internal pointers (such as strings or integer vectors) and so it can be placed in special memory that doesn't need to be scanned.
+   4. Policy = unmanaged means the object will not be automatically collected and it cannot be moved.  This is used in special cases like static vectors.
+3. Instances of DerivableMatchCallback cannot be moved or automatically collected. They need to be managed manually and carefully so that they do not leak memory.
+4. The DerivableMatchCallback inherits from a special template class clbind::Derivable<clang::ast_matchers::MatchFinder::MatchCallback>. This makes it inherit from both the C++ class MatchCallback and the Clasp Instance_O class, which adds Common Lisp slots to the object.
+5. The AlienBase type needs to be defined for derivable_class_ to function.
+6. THe virtual void run(...) {...} method is defined by ~clang::ast_matchers::MatchFinder::MatchCallback~ and we need to overload it. The body of this method translates the argument(s) into Common Lisp types and then invokes a Common Lisp function ~core::eval::funcall(asttooling::_sym_run, this->asSmartPtr(), val)~ that the user will define in Common Lisp.
+7. The void default_run(...) method is a non virtual method that is exposed to Common Lisp. If a C++ base class defines the run method then defaul_run should call it.  If no C++ base class defines the run method then an error should be signalled and the user must provide a run function in Common Lisp.
+8. In this example the ~onStartOfTranslationUnit~/~default_onStartOfTranslationUnit~ are another pair of functions that allow the user to overload an on-start-of-translation-unit method from Common Lisp.
+9. In this example a ~describe~ method is provided to print internal information about a ~DerivableMatchCallback~ instance.
+10. The ~DerivableMatchCallback~ class should have a destructor.
+
+In the above example the ~run~/~default_run~ pair of methods demonstrate what you need to overload the ~run~ C++ method from Common Lisp.
+
+In Common Lisp - to create a derived class one would use...
+
+#+BEGIN_SRC lisp
+(defclass count-match-callback (ast-tooling:match-callback) ()        ;; (1)
+  (:metaclass core:derivable-cxx-class))
+
+(core:defvirtual ast-tooling:run ((self count-match-callback) match)  ;; (2)
+  (let* ((nodes (ast-tooling:nodes match))
+         (id-to-node-map (ast-tooling:idto-node-map nodes))
+         (node (gethash :whole id-to-node-map)))
+    (advance-match-counter)))
+#+END_SRC
+
+1. The derived class is defined using ~defclass~ inheriting from the exposed class and using the ~:metaclass core:derivable-cxx-class~.
+2. The ~core:defvirtual~ macro is used to overload the ~asttooling:run~ method. The overloaded method takes two arguments, the first argument is the instance ~self~ and the second argument was passed from the C++ ~run~ virtual method.
+
+
 
 * Exposing Enums
 
