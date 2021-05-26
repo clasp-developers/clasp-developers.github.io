@@ -1,5 +1,5 @@
 #+TITLE: Clasp
-#+SUBTITLE: Seamless Integration of Common Lisp and C++
+#+SUBSUBTITLE: Seamless Integration of Common Lisp and C++
 #+OPTIONS: toc:nil num:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./styles/readtheorg/css/titlepage.css" />
 
