@@ -134,7 +134,7 @@ CL_EXPOSE                                               // (5)
 void hello_world_startup () {                           // (6)
   using namespace clbind;                               // (7)
   package_ sc(HWPkg);                                   // (8)
-  sc.def("hello-world"), &helloWorld,                   // (9)
+  sc.def("hello-world", &helloWorld,                    // (9)
       "The classic! Print Hello world"_doc );          
 }
 #+END_SRC
