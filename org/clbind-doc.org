@@ -33,7 +33,7 @@ The my-demo.cc file would look like...
 
 void my_func()
 {
-  printf("This is my function\n");
+  printf("This is not the greatest function in the world. It's just a tribute!\n");
 }
 
 PACKAGE_USE("COMMON-LISP");
