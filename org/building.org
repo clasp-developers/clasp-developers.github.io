@@ -2,16 +2,16 @@
 #+title: Building Clasp
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
-At the moment, Clasp is supported on Linux and Mac OS X. On these
+For the forseeable future, Clasp is supported on Linux, Mac OS X, and OpenBSD.
+ On these
 systems, you should be able to build it from source if a pre-made
 package is not available or workable for you. In case you cannot get it
 to compile even with the instructions below, the quickest way to get
-help is to either [[file:reporting-problems][file an issue]], or to
-[[file:irc][chat with us directly]].
+help is to either [[file:reporting-problems.org][file an issue]], or to
+[[file:irc.org][chat with us directly]].
 
-Building on most systems will take around 4GB of RAM and ~2 hours with a
-relatively modern processor, so be prepared to watch a movie or do some
-other useful work until Clasp is all done.
+Building on most systems will take around 8GB of RAM and ~30 minutes with a
+relatively modern processor.
 
 * Building on Linux
 
@@ -64,7 +64,7 @@ to a directory on your system. Next, create a =local.config= containing
 =export GCC_TOOLCHAIN = /usr= if you are on Linux and
 =export TOOLSET = clang= if you are on OS X. Next, simply run =make=
 from the root of it. This will take some time to complete; maybe play a
-round of pinball or [[file:irc][chat on IRC for a bit]].
+round of pinball or [[file:irc.org][chat on IRC for a bit]].
 
 The next step is building Clasp itself. For this, clone it to a
 different folder and copy the =local.config.template= file within it to

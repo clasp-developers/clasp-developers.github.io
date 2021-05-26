@@ -1,6 +1,11 @@
 #+title: News
 #+OPTIONS: toc:nil num:nil
 
+* <2021-05-25> Prepare for release 1.0
+-  Clasp has the ability to save and restart from memory snapshots.
+-  Clasp supports the addition of extensions written in C++ by adding them to the extensions directory.
+   The extensions integrate with the clasp build system.
+
 * <2015-11-20 Fr> Release 0.4
 -  Clasp has a completely new, optimizing/inlining compiler called
    cclasp!

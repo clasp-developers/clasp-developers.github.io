@@ -7,6 +7,7 @@
 - [[file:clbind-doc.org][Exposing C++ Libraries with clbind]]
 - [[file:features.org][Features]]
 - [[file:download.org][Get Clasp]]
+- [[file:irc.org][Internet Relay Chat]]
 - [[file:license.org][License]]
 - [[file:media.org][Media]]
 - [[file:news.org][News]]
@@ -14,3 +15,4 @@
 - [[file:external-dependencies.org][external-dependencies]]
 - [[file:footer.org][footer]]
 - [[file:menu.org][menu]]
+- [[file:reporting-problems.org][reporting-problems]]

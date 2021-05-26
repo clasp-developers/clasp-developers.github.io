@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-25 Tue 16:48 -->
+<!-- 2021-05-25 Tue 19:32 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Building Clasp</title>
@@ -286,18 +286,18 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <p>
-At the moment, Clasp is supported on Linux and Mac OS X. On these
+For the forseeable future, Clasp is supported on Linux, Mac OS X, and OpenBSD.
+ On these
 systems, you should be able to build it from source if a pre-made
 package is not available or workable for you. In case you cannot get it
 to compile even with the instructions below, the quickest way to get
-help is to either <a href="reporting-problems">file an issue</a>, or to
-<a href="irc">chat with us directly</a>.
+help is to either <a href="reporting-problems.html">file an issue</a>, or to
+<a href="irc.html">chat with us directly</a>.
 </p>
 
 <p>
-Building on most systems will take around 4GB of RAM and ~2 hours with a
-relatively modern processor, so be prepared to watch a movie or do some
-other useful work until Clasp is all done.
+Building on most systems will take around 8GB of RAM and ~30 minutes with a
+relatively modern processor.
 </p>
 
 <div id="outline-container-org96c3794" class="outline-2">
@@ -375,7 +375,7 @@ to a directory on your system. Next, create a <code>local.config</code> containi
 <code>export GCC_TOOLCHAIN = /usr</code> if you are on Linux and
 <code>export TOOLSET = clang</code> if you are on OS X. Next, simply run <code>make</code>
 from the root of it. This will take some time to complete; maybe play a
-round of pinball or <a href="irc">chat on IRC for a bit</a>.
+round of pinball or <a href="irc.html">chat on IRC for a bit</a>.
 </p>
 
 <p>

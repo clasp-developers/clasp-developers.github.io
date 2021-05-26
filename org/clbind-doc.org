@@ -2,98 +2,282 @@
 #+OPTIONS: ^:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
-* Note on this document
-This document contains information on creating was created by piecing together information from different sources during the creation of the SFML binding.
-It is the result of conversations on #clasp, trial and error, and reading source code, provided in the hope that it can help other early adopters of clasp.
-It is not an official documentation, and is neither complete nor does it claim correctness.
-
-Due to the alpha status of clasp, everything in this document is subject to change.
 
 * General information
-clbind is based on luabind. Many things can be derived from looking at the [[http://www.rasterbar.com/products/luabind/docs.html][luabind documentation]].
+clbind is based on luabind with some ideas borrowed from pybind11 and boost::python.
+
+* Integrating with the clasp build system
+
+Integrating an external library, or your own C++ code, into Clasp involves integrating into Clasp's build system.
+Clasp build system is built on the [[http://waf.io][waf]] build system.
+
+All you need to do is clone your extension into the clasp/extensions directory and create a ~wscript~ file in each directory of your extension.
+
+For instance - suppose you have the following directory structure.
+
+#+BEGIN_SRC sh
+clasp
+├── wscript                 # Provided by Clasp
+└── extensions
+    ├── wscript             # Provided by Clasp
+    └── my-demo
+        └── src
+            └── my-demo.cc
+#+END_SRC
+
+The my-demo.cc file would look like...
+
+#+BEGIN_SRC C++
+#include <stdio.h>
+#include <clasp/clasp.h>
+
+void my_func()
+{
+  printf("This is my function\n");
+}
+
+PACKAGE_USE("COMMON-LISP");
+PACKAGE_NICKNAME("MD");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"MY-DEMO");
+
+namespace md {
+CL_EXPOSE
+void my_demo_startup() {
+  printf("Entered %s:%d:%s\n", __FILE__, __LINE__, __FUNCTION__ );
+  using namespace clbind;
+  package_ sc(HWPkg);
+  sc.def("my-func", &my_func);
+}
+#+END_SRC
+
+
+In the extensions/my-demo directory you need to add a ~wscript~ file that looks like below.
+It looks a bit daunting and we will fill in more information in the future as users request more information.
+For now these functions are required to integrate with the clasp waf build system.
+
+#+BEGIN_SRC Python
+
+from wscript_utils import *
+
+def analyze_clasp(cfg):
+    pass
+
+def options(cfg):
+    pass
+
+def configure(cfg):
+    pass
+
+def build(bld):
+    bld.recurse("src")          # (1)
+
+def build3(bld):
+    pass
+
+def build4(bld):
+    pass
+
+#+END_SRC
+
+1. The bld.recurse("src") call causes waf to recurse into the my-demo/src directory.  Add one of these calls for every source directory that you want to integrate into Clasp.
+
+
+Next you need a wscript file in the src directory - this one is simpler...
+
+#+BEGIN_SRC Python
+
+def configure(cfg):
+    pass
+
+def build(bld):
+    bld.extensions_source_files.append(bld.path.find_node("my-demo.cc"))    # (1)
+
+#+END_SRC
+
+1. Add one of these lines for every source file that you want to build.  Alternatively you can put the source files in a list and loop over then calling this function. This adds your extension C++ source files to the list of C++ files that clasp builds when it builds itself.
+
+Once these files are added your directory structure will look like...
+#+BEGIN_SRC sh
+clasp
+├── wscript
+└── extensions
+    ├── wscript
+    └── my-demo
+        ├── wscript         # Added above
+        └── src
+            ├── wscript     # Added above
+            └── my-demo.cc
+#+END_SRC
+
+
+That's it - once you have added these files you can go into the top level clasp directory and type ~./waf build_dboehm~ and clasp will build and incorporate all of the extensions in the clasp/extensions directory.
+
+
 
 * Structure of a Binding
-Clasp is able to load c++ libraries. Because C++ has no standard for its name mangling, Clasp needs an entrance point that it can find in every exposed library and from where it can derive the names of all other exposed functionality. This entrance point is provided by an ~extern "C"~ function called ~CLASP_MAIN~. 
-Within this function, packages can be declared that will contain methods exposing the desired functionality within Clasp.
+Clasp is able to load C++ libraries and expose functions, classes, methods and enums to Clasp Common Lisp.
+Clasp needs a function that it can call at startup to expose these library members - it uses the CL_EXPOSE c-preprocessor macro to identify these startup functions.
+Within this function, packages can be declared and functions, classes, methods and enums can be added to the package and they will then
+automatically be available within Clasp.
 
 Thus, code should include a section like this:
 
 
 #+BEGIN_SRC C++
-extern "C" 
-{
-  EXPORT
-  void CLASP_MAIN()
-  {
-    using namespace clbind;
-     package("package-name")
-     [
-       //exposure of classes and functions for use in this package
-     ];
-  }
+
+PACKAGE_USE("COMMON-LISP");                             // (1)
+PACKAGE_NICKNAME("HW");                                 // (2)
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");  // (3)
+
+namespace hw {                                          // (4)
+CL_EXPOSE                                               // (5)
+void hello_world_startup () {                           // (6)
+  using namespace clbind;                               // (7)
+  package_ sc(HWPkg);                                   // (8)
+  sc.def("hello-world"), &helloWorld,                   // (9)
+      "The classic! Print Hello world"_doc );          
 }
 #+END_SRC
 
+1. Declaring a package is done in reverse order here - declare that the COMMON-LISP package will be used by the HELLO-WORLD package.
+2. Declare a nickname "HW" for the package declaration that will follow. PACKAGE_NICKNAME is a cpp macro that will be scraped by the clasp [[file:scraper.org][scraper]].
+3. Declare the package "HELLO-WORLD" and create a global variable that will store its name ~HWPkg~ and associate it with a C++ namespace ~hw~. This will be picked up by the [[file:scraper.org][scraper]].
+4. To avoid symbol clashes in C++ - put your code in a unique C++ namespace.
+5. The ~CL_EXPOSE~ c-preprocessor macro is used to identify the following function as one that exposes functionality to Clasp.
+6. The name of the function is arbitrary.
+7. For convenience we use the clbind package - but you can prefix all clbind identifiers with the clbind:: namespace.
+8. Bind the ~sc~ local variable to the package named "HELLO-WORLD".
+9. Expose a function, provide the name, a pointer to the function and other optional arguments.
+
+After building clasp with this extension added the user can access it so...
+
+#+BEGIN_SRC Lisp
+COMMON-LISP-USER> (hw:hello-world)
+Hello World
+This is C++ code being invoked from Clasp Common Lisp
+COMMON-LISP-USER>
+#+END_SRC
+
 * Include Files
-Compiling the binding requires the inclusion of several header files. Some of those are required, while some are only needed if [[Translators][translators]] are being written or existing translators, e.g. for string conversion are being used. These are the files I currently include, the status is not clear on all of them:
+Compiling the binding requires the inclusion of one header file ~clasp/clasp.h~.
+
 #+BEGIN_SRC C++
-#include "src/clbind/clbind.h"       //required (or really just clbind/clbind.h ?)
-#include "src/core/lispVector.h"     //required, if writing converters
-#include "src/core/vectorObjects.h"  //for automatic conversion from and
-#include "src/core/cons.h"           //into c++ objects.
-#include "src/core/translators.h"    //assorted translators for string etc
+#include <clasp/clasp.h>
 #+END_SRC
 
 * Exposing Functions
 Exposing functions is done via the function ~def~:
 #+BEGIN_SRC C++
-template <typename F, class Policies>
+template <typename F, class... Policies>
 scope def(char     const* name,
           F               f,
-          Policies const& policies,
-          string   const& lambdalist = "",
-          string   const& declares   = "",
-          string   const& docstring  = "" )
+          Policies... policies )
 #+END_SRC
 In this function
-- name :: is the name that the function will have in clasp. It is automatically lispified, i.e. a name  with camel-casing is converted to a downcase name with dashes in between. Using this automatic lispification is optional, and it can be useful to use names following lisp conventions, so that a reader can immediately see how the respective lisp function is called.
+- name :: is the name that the function will have in clasp. It is automatically [[Lispification][lispified]], i.e. a name  with camel-casing is converted to a downcase name with dashes in between. Using this automatic lispification is optional, and it can be useful to use names following lisp conventions, so that a reader can immediately see how the respective lisp function is called.
 - f :: is the function pointer to the c++ function.
-- policies :: Gives additional information about how to handle some parameters (see [[Policies][Policies]]). An overloaded version of def does not have this parameter and uses the standard ~policies<>()~.
-- lambdalist :: This optional parameter is an ordinary [[http://www.lispworks.com/documentation/lw60/CLHS/Body/03_da.htm][lambda-list]] as in Common Lisp's ~defun~. For every binding in the lambda list there has to be a corresponding argument in the C++ function. If the argument is an empty string, every parameter of the C++ function will be a required parameter in Common Lisp, even those that have default initializers. It is highly recommended to not leave the lambda list empty, even if you want to expose all parameters in a standard fashion. The lambda list provided here is used by slime for all kinds of support, e.g. to name and highlight the parameters when writing a function.
-The lambda list is evaluated by lisp. As a consequence having ~&optional~ parameters without an init-form is normally not a good idea, as ~nil~ would be passed to the function. Unless you have written a [[Translators][translator]] that translates from ~nil~ to the required type, this will not work. Specifically, it might be tempting to think that providing an optional parameter in a lambda list for a parameter that has a default value in the C++ function would select that default value. However, this is not the case. You need to provide the lisp equivalent of that default value as an init-form to the optional parameter.
-- declares :: This optional parameter represents the declaration part of a Common Lisp defun, but is currently unused.
-- docstring :: This optional parameter defines the docstring that is used for this function within clasp, e.g. for functions like ~documentation~ and ~describe~. This is currently non-working, due to a bug.
+- policies :: Gives additional information about how to handle some parameters (see [[Policies][Policies]]). 
 
-Suppose a C++ function 
+Suppose we have a C++ function 
 #+BEGIN_SRC C++
-double addThreeNumbers(double x, double y, double z);
+double addThreeNumbers(double x, double y, double z) {
+    return x + y + z;
+}
 #+END_SRC
+
 A complete binding could look like this (only the first two parameters are required) 
 #+BEGIN_SRC C++
-def("addThreeNumbers", &addThreeNumbers, policies<>(),
-    "(x &optional (y 0) (z 0))", "",
-    "Return the addition of all three arguments. y and z are optional and default to 0."),
+PACKAGE_NICKNAME("HW");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");
+
+SYMBOL_EXPORT_SC_(HWPkg,STARcolorTranslatorSTAR);
+CLBIND_TRANSLATE_SYMBOL_TO_ENUM(ColorEnum, hw::_sym_STARcolorTranslatorSTAR );
+
+namespace hw {
+CL_EXPOSE
+void hello_world_startup() {
+  using namespace clbind;
+  package_ sc(HWPkg);
+  sc.def("hello-world",&helloWorld,
+          "The classic! Print Hello-world"_doc);
+  sc.def("addThreeNumbers",&addThreeNumbers,                       // (1)
+         "(x cl:&optional (y 0.0) (z 0.0))"_ll,                    // (2)
+          "Add three numbers and return the result"_doc );         // (3)
 #+END_SRC
+
+1. Only the first two arguments are required, the name of the function that is [[Lispification][lispified]] and a pointer to the function.
+2. The lambda list for the function is provided in a string with the ~_ll~ suffix.
+3. A documentation string is provided with the ~_doc~ suffix.
+
 From clasp, this function can be called with 
-~(add-three-numbers 1)~ or ~(add-three-numbers 1 2)~ or ~(add-three-numbers 1 2 3)~.
+~(hw:add-three-numbers 1)~ or ~(hw:add-three-numbers 1 2)~ or ~(hw:add-three-numbers 1 2 3)~.
 The C++ function is called as ~addThreeNumbers(1,0,0)~, ~addThreeNumbers(1,2,0)~ and ~addThreeNumbers(1,2,3)~, respectively.
 
-** Overloaded Functions
-To expose overloaded functions, you have to cast the function pointer to the correct signature. Suppose the function from the previous example would be overloaded. It would then need an exposure such as this:
-#+BEGIN_SRC C++
-def("addThreeNumbers", (double(*)(double, double, double)) &addThreeNumbers),
+The lambda list and documentation string can be obtained using the Common Lisp function ~describe~.
+
+#+BEGIN_SRC lisp
+
+COMMON-LISP-USER> (describe 'hw:add-three-numbers)
+
+HELLO-WORLD:ADD-THREE-NUMBERS - external symbol in HELLO-WORLD package
+-----------------------------------------------------------------------------
+HELLO-WORLD:ADD-THREE-NUMBERS                                      [Function]
+Documentation: "Add three numbers and return the result"
+Arguments:     (HELLO-WORLD::X &OPTIONAL (HELLO-WORLD::Y 2.0) (HELLO-WORLD::Z 3.0))
+Source:        #P"=external="
+-----------------------------------------------------------------------------
+
 #+END_SRC
+
+** Overloaded Functions
+To expose overloaded functions, you have to cast the function pointer to the correct signature. 
+Suppose the function from the previous example would be overloaded. It would then need an exposure such as below.
+
+#+BEGIN_SRC C++
+def("addThreeNumbers-double", (double(*)(double, double, double)) &addThreeNumbers),
+#+END_SRC
+
+It is important that every function have a unique name - similar to name mangling in C++.
+The convention we adopt in Clasp is to append type names to the original name.
+
 
 * Exposing Classes
 Exposing a class is done via the class ~class_~:
+
+For example - we have the class DoubleVector below:
 #+BEGIN_SRC C++
-class_<CppClassName>("lisp-class-name")
+class DoubleVector {
+private:
+  vector<double>      values;
+public:
+  DoubleVector(int sz) {this->values.resize(sz);};
+  DoubleVector(const vector<double>& arg) {
+    this->fill(arg);
+  }
+//...
+};
 #+END_SRC
-Creates a Binding to the C++ class ~CppClassName~, with the name ~lisp-class-name~ in lisp.
-This automatically creates a binding to the default constructor as well. (?? The default constructor is called ~default_ctor~ - how are default constructors differentiated ??)
+
+#+BEGIN_SRC C++
+PACKAGE_USE("COMMON-LISP");
+PACKAGE_NICKNAME("DV");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"DOUBLE-VECTOR");
+
+namespace dv {
+CL_EXPOSE
+void double_vector_startup() {
+  using namespace clbind;
+  package_ s("DV");
+  class_<DoubleVector>(s,"double-vector" )
+//...
+
+#+END_SRC
+
+Creates a Binding to the C++ class ~DoubleVector~, with the name ~dv:double-vector~ in lisp.
+This automatically creates a binding to the default constructor as well.
 To prevent the automatic creation of a default constructor, use a second parameter:
 #+BEGIN_SRC C++
-class_<CppClassName>("lisp-class-name", no_default_constructor)
+class_<DoubleVector>("double-vector", no_default_constructor)
 #+END_SRC
 
 ** Inheritance
@@ -111,32 +295,47 @@ If a base class is a pure virtual class, i.e. it has only pure virtual functions
 ** Constructors
 Add constructors to exposed classes with the function ~def_constructor~:
 #+BEGIN_SRC C++
-template<typename... Types>
+template<typename... Types, typename... Policies>
 class_& def_constructor(const string&         name,
                         constructor<Types...> sig,
-                        const Policies&       policies,
-                        string const&         arguments = "",
-                        string const&         declares  = "",
-                        string const&         docstring = "")
+                        Policies...           policies)
 #+END_SRC
 In this function
 - name :: is the name of the constructor that will be visible in clasp. Again, it will be lispified.
 - sig :: is the parameter signature of the C++ constructor. Use a comma-separated parameter-list list in the form ~constructor<parameter-list>()~ of all the types used as parameters in the constructor you want to expose.
-- policies, arguments, declares, docstring :: Optional parameters, explained in [[Exposing Functions][Exposing Functions]]
+- policies :: Optional parameters, explained in [[Exposing Functions][Exposing Functions]]
 
 ** Member Functions
 Exposing member functions is similar to exposing free functions. Call the ~class_~ member function ~def~:
 #+BEGIN_SRC C++
-template<class F, class DefaultOrPolicies>
+template<class F, class... Policies>
 class_& def(char const*       name, 
             F                 fn, 
-            DefaultOrPolicies default_or_policies,
-            string const&     arguments = "",
-            string const&     declares  = "",
-            string const&     docstring = "")
+            Policies...       policies )
 #+END_SRC
-Thus exposing a member function is not different from [[Exposing Functions][exposing free functions]], and the same arguments apply. (?? difference between policies and DefaultOrPolicies ??)
+Thus exposing a member function is not different from [[Exposing Functions][exposing free functions]], and the same arguments apply.
 The exception to this rule is the lambda-list (arguments), which always requires ~self~ as its first parameter, which becomes the ~this~ argument within the method.
+
+
+#+BEGIN_SRC C++
+namespace dv {
+CL_EXPOSE
+void double_vector_startup() {
+  using namespace clbind;
+  package_ s("DV");
+  class_<DoubleVector>(s,"double-vector" )
+    .   def_constructor("make-double-vector-with-size",constructor<int>())
+    .   def_constructor("make-double-vector-with-values",constructor<const vector<double>&>())
+    .   def("fill",&DoubleVector::fill)
+    .   def("add",&DoubleVector::add)
+    .   def("dot",&DoubleVector::dot)
+    .   def("at",&DoubleVector::at)
+    .   def("dump",&DoubleVector::dump);
+
+}
+};
+#+END_SRC
+
 
 ** Static Member Function
 As Common Lisp does not have the notion of static member functions, exposing them is similar to [[Exposing Functions][exposing free functions]].
@@ -144,23 +343,96 @@ As Common Lisp does not have the notion of static member functions, exposing the
 ** Public Member Variables
 Exposing public member variables works similar to exposing member functions. 
 
-* Translators
-Translators can be used to automatically convert C++ objects to Common Lisp objects and vice versa. This is mainly a convenience functionality, allowing for easier integration. It is especially useful for small C++ classes and structs that are passed to and from functions and are meant to be created on the fly. Instead of exposing them and then creating and filling them from Common Lisp, it is often easier to write a translator, e.g. from a list, which makes it possible to pass a list as a parameter in place of the object. This list is then automatically converted to the respective C++ object by the translator.
+* Exposing Enums
 
-(?? Translators are missing info on pointer adoption, true_type, false_type,... ??)
+#+BEGIN_SRC C++
+
+enum ColorEnum { red, green, blue  };
+
+void printColor( ColorEnum color ) {
+  switch (color) {
+  case red:
+      printf("red\n");
+      break;
+  case green:
+      printf("green\n");
+      break;
+  case blue:
+      printf("blue\n");
+      break;
+  }
+}
+
+// ...
+// Then - to expose it...
+//
+PACKAGE_NICKNAME("HW");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");
+
+SYMBOL_EXPORT_SC_(HWPkg,STARcolorTranslatorSTAR);                              // (1)
+CLBIND_TRANSLATE_SYMBOL_TO_ENUM(ColorEnum, hw::_sym_STARcolorTranslatorSTAR ); // (2)
+
+namespace hw {
+CL_EXPOSE
+void hello_world_startup() {
+  printf("Entered %s:%d:%s\n", __FILE__, __LINE__, __FUNCTION__ );
+  using namespace clbind;
+  package_ pkg(HWPkg);
+  scope_& s = pkg.scope();
+  //
+  // Other bindings
+  //
+  enum_<ColorEnum>(s,hw::_sym_STARcolorTranslatorSTAR)       // (3)
+      .value("red",red)                                      // (4)
+      .value("green",green)
+      .value("blue",blue);
+  s.def("printColor",&printColor);                           // (5)
+}
+#+END_SRC
+
+1. Export the symbol HW:*COLOR-TRANSLATOR*.
+2. Create a type translator that translates Common Lisp symbols into ColorEnum values and signals errors on illegal values.
+3. Define the enum binding for ColorEnum and bind it to the symbol HW:*COLOR-TRANSLATOR*.
+4. Define one enum value associating ColorEnum::red with the symbol 'HW:RED. The symbols for the enum values will be in the same package as the HW:*COLOR-TRANSLATOR*.
+5. Expose a function that accepts ColorEnum values as the argument.
+
+
+Then to use it from within clasp...
+
+#+BEGIN_SRC lisp
+COMMON-LISP-USER> (hw:print-color 'hw:red)
+red
+
+COMMON-LISP-USER> (hw:print-color 'hw:green)
+green
+
+COMMON-LISP-USER> (hw:print-color 'hw:blue)
+blue
+
+COMMON-LISP-USER> hw:*color-translator*
+
+#<SYMBOL-TO-ENUM-CONVERTER  :info *COLOR-TRANSLATOR* #<entry 1 GREEN> #<entry 0 RED> #<entry 2 BLUE>  >
+COMMON-LISP-USER>
+#+END_SRC
+
+
+* Translators
+Translators are used to automatically convert C++ objects to Common Lisp objects and vice versa. This is a convenience functionality, allowing for easier interoperation. It is especially useful for small C++ classes and structs that are passed to and from functions and are meant to be created on the fly. Instead of exposing them and then creating and filling them from Common Lisp, it is often easier to write a translator, e.g. from a list, which makes it possible to pass a list as a parameter in place of the object. This list is then automatically converted to the respective C++ object by the translator.
 
 ** Translation from C++ objects to Common Lisp objects 
-Translating from C++ to Common Lisp objects is done by specializing the templated struct ~to_object~ in the namespace ~translate~ to the type of the C++ object, with the static function member function convert of that struct taking an object of that type as a parameter and returning the Clasp Common Lisp Object:
+Translating from C++ to Common Lisp objects is done by specializing the templated struct ~to_object~ in the namespace ~translate~ to the type of the C++ object, with the static function member function ~convert~ of that struct taking an object of that type as a parameter and returning the Clasp Common Lisp Object.  The translator must appear in the C++ source code before any functions/methods are exposed that need to use it.  Translators are incorporated into the template code that clbind generates for each exposed function/method.
+
+
 #+BEGIN_SRC C++
 namespace translate
 {
   template <>
-  class to_object<CppTypeToTranslateFrom> 
+  struct to_object<std::pair<int,int>>
   {
-    static core::T_sp convert(CppTypeToTranslateFrom cppObject)
+    static core::T_sp convert(std::pair<int,int> arg)
     {
-       core::Cons_sp cons; //use a cons object in this example
-       //convert cppObject to an object derived from core::T_sp (here: Cons_sp).
+       core::Cons_sp cons = core::Cons_O::create(core::Integer_O::create(arg.first),
+                                                 core::Integer_O::create(arg.second));
        return cons;
     }
   };
@@ -169,27 +441,190 @@ namespace translate
 
 
 ** Translation from Common Lisp objects to C++ objects 
-Translating from Common Lisp to C++ objects is done by specializing the templated struct ~from_object~ in the namespace ~translate~ to the C++ object type and providing a constructor that takes the Common Lisp object as a parameter and writes the result into an object called _v of the C++ object type:
-(?? is the typedef DeclareType a must or just a convention ??)
+Translating from Common Lisp to C++ objects is done by specializing the templated struct ~from_object~ in the namespace ~translate~ to the C++ object type and providing a constructor that takes the Common Lisp object as a parameter and writes the result into an object called ~_v~ of the C++ object type:
+
+The ~DeclareType~ typedef is necessary for the clbind template code to function.
+
 #+BEGIN_SRC C++
 namespace translate
 {
   template <>
-  struct from_object<CppTypeToTranslateTo> 
+  struct from_object<std::pair<int,int>>
   {
-    typedef CppTypeToTranslateTo DeclareType;
-    DeclareType _v;
-    from_object(const core::T_sp& obj)
+    typedef std::pair<int,int> DeclareType;                             // (1)
+    DeclareType _v;                                    
+    from_object(core::T_sp obj)
     {
-      //convert obj and store the result in _v.
+      if (obj.consp()) {                                                // (2)
+          this->_v = std::make_pair(core::clasp_to_int(CONS_CAR(obj)),  // (3)
+                                    core::clasp_to_int(CONS_CDR(obj)));
+      }
+      TYPE_ERROR(obj,cl::_sym_Cons_O);                                  // (4)
     }
   };
 };
 #+END_SRC
 
-* Exposing Enums
-Exposing Enums is not finalized, yet. 
-See [[https://github.com/HeyFlash/SFML/blob/master/include/CLASP-SFML/Window/Event.hpp][ClaspBindingWindow]] and [[https://github.com/HeyFlash/SFML/blob/master/include/CLASP-SFML/Window/Event.hpp][Event translators]] in the SFML binding for currently working translators. This *will break* in future releases of Clasp.
+1. DeclareType is used by clbind - define it to the from_object template type.
+2. In this example we translate (cons <number> <number>) to std::pair<int,int>
+3. We store the translated result in the ~_v~ field this is so that if the argument is used as a return value then the value can be recovered from here.
+4. If the type of ~obj~ doesn't match what this translator handles then signal an appropriate type error telling the user what types are accepted.
+
+
+*** Advanced from_object translators
+
+template <> struct from_object {...} takes a second template argument that can have the value ~std::true_type~ or ~std::false_type~. The default is ~std::true_type~ and
+it means that the ~_v~ instance variable will be initialized by the from_object constructor using the Common Lisp value in the ~T_sp~ constructor argument.
+~std::false_type~ is subtle - it is used to express the ~pureOutValue<N>~ policy. ~std::false_type~ means that the from_object translator does not initialize its ~_v~ field
+but the field can be passed by reference to a function, written in to and then the wrapper will take the result out and return it as a multiple return value.
+
+#+BEGIN_SRC C++
+template <>
+struct from_object<int&,std::true_type> {
+  typedef int DeclareType;
+  int _v;
+  from_object(gctools::smart_ptr<core::T_O> vv) : _v(core::clasp_to_int(vv)) {}; // (1)
+  ~from_object() { /* Non-trivial */ };
+};
+
+template <>
+struct from_object<int&,std::false_type> {
+  typedef int DeclareType;
+  int _v;
+  from_object(gctools::smart_ptr<core::T_O> vv) {
+    (void)vv;
+    // Note - the _v field is NOT initialized!                    // (2)
+  };
+  ~from_object() {                                                // (3)
+    // non-trivial dtor to keep _v around
+  };
+};
+
+#+END_SRC
+
+1. In the first form of from_object the _v field is initialized using a Common Lisp value.
+2. In the second form of the from_object translator the _v field is left uninitialized.
+3. It's really important to define a non-trivial destructor or the _v field gets overwritten by the C++ compiler.
 
 * Policies
-??
+
+Policies tell clbind how to handle return values and C++ arguments.
+
+** pureOutValue<N>
+
+Let's say you have a C++ function like so...
+
+#+BEGIN_SRC lisp
+
+void addMul(int x, int y, int z, int& sum, int& product ) {
+  sum = x + y + z;
+  product = x * y * z;
+}
+#+END_SRC
+
+Common Lisp doesn't have a concept of "pass-by-reference" but it does have a powerful feature of multiple-return-values.
+The ~pureOutValue<N>~ policy tells clbind that the C++ pass by reference values are to be used to return multiple values.
+
+#+BEGIN_SRC C++
+   using namespace clbind;
+   package_ pkg("HELLO-WORLD",{"HW"},{});
+   pkg.scope.def( "addMul", &addMul, pureOutValue<3>(), pureOutValue<4>() ); // 1
+#+END_SRC
+
+1. The ~pureOutValue<3>()~ and ~pureOutValue<4>()~ arguments tell clbind that the third and fourth arguments to the ~addMul~ function are pass by reference.  The argument counting starts at 0.  ~pureOutValue<N>()~ further says that these values can be passed in as undefined and when the function returns the values in sum and product they should be returned in the first and second multiple-return values.
+
+#+BEGIN_SRC lisp
+COMMON-LISP-USER> (hw:add-mul 2 3 4)
+
+9
+24
+#+END_SRC
+
+The function returns two values: 9 and 24.
+
+Clbind knows that if the function returns a value using the normal C++ ~return~ instruction that that becomes the
+first returned value and all other return values follow it.
+
+#+BEGIN_SRC C++
+int returnThreeValues(int& second, int& third)
+{
+  second = 2;
+  third = 3;
+  return 1;
+}
+//...
+  s.def("returnThreeValues",&returnThreeValues,
+        clbind::pureOutValue<0>(),
+        clbind::pureOutValue<1>());
+#+END_SRC
+
+#+BEGIN_SRC lisp
+COMMON-LISP-USER> (multiple-value-bind (a b c) (hw:return-three-values) (list a b c))
+
+(1 2 3)
+#+END_SRC
+
+** outValue<N>
+
+Let's say you have a C++ function like so...
+
+#+BEGIN_SRC lisp
+
+void addMulRunning(int x, int y, int z, int& sum, int& product ) {
+  sum = x + y + z + sum;
+  product = x * y * z * product;
+}
+#+END_SRC
+
+In this case the ~outValue<N>~ policy tells clbind that values will be passed in to these arguments and multiple return values will be returned using these arguments.
+
+#+BEGIN_SRC C++
+   using namespace clbind;
+   package_ pkg("TEACH",{},{});
+   pkg.scope.def( "addMulRunning", &addMulRunning, outValue<3>(), outValue<4>() ); // 1
+#+END_SRC
+
+1. The ~outValue<3>()~ and ~outValue<4>()~ arguments tell clbind that the third
+and fourth arguments to the ~addMulRunning~ function are pass by reference.  The argument counting
+starts at 0.  ~outValue<N>()~ further says that these values will be passed in to the function through these arguments
+and when the function returns the values in sum and product they should be returned in the first
+and second multiple-return values.
+
+#+BEGIN_SRC lisp
+COMMON-LISP-USER> (multiple-value-bind (sum prod) (hw:add-mul-running 2 3 4 5 6)
+                    (format t "Returned ~s~%" (list sum prod)))
+Returned (14 144)
+NIL
+#+END_SRC
+
+Clbind knows that if the function returns a value using the normal C++ ~return~ instruction that that becomes the
+first returned value and all other return values follow it.
+
+
+** adopt<n>
+
+adopt<n> is used to instruct clbind that a pointer to an object that is returned by a function is to be managed by Clasp's
+memory manager.  The template argument for adopt can be "result" as in ~adopt<result>~ to indicate the
+function return value pointer is to be adopted. The template argument can also be an integer 0...N, as in ~adopt<0>~ to indicate that the first argument is a pointer that should be adopted by the memory manager. ~adopt<i>~ when i is an integer must be combined with ~pureOutValue<i>~.
+
+* Lispification
+
+Lispification is a process used to convert strings in C++ code and C++ identifiers into Common Lisp hyphenated names.
+
+** Camel case
+
+Camel case strings are converted to hyphenated names by inserting hyphens into the final name when there is a transition between a lower case character and an upper case character.
+
+A few examples:
+
+1. aCamelCaseName -> a-camel-case-name
+2. ANameWithANumber42 -> aname-with-anumber42
+
+** Underscores become hyphens
+
+Examples:
+
+1. a_name_with_underscores -> a-name-with-underscores
+2. a_nameWithUnderscores -> a-name-with-underscores
+
+Underscores and camel case can be mixed.
