@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-26 Wed 01:01 -->
+<!-- 2021-05-26 Wed 01:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
@@ -491,7 +491,7 @@ CL_EXPOSE                                               // (5)
 void hello_world_startup () {                           // (6)
   using namespace clbind;                               // (7)
   package_ sc(HWPkg);                                   // (8)
-  sc.def("hello-world"), &amp;helloWorld,                   // (9)
+  sc.def("hello-world", &amp;helloWorld,                    // (9)
       "The classic! Print Hello world"_doc );          
 }
 </pre>
