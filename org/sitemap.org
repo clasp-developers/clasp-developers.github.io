@@ -12,6 +12,7 @@
 - [[file:media.org][Media]]
 - [[file:news.org][News]]
 - [[file:projects.org][Projects]]
+- [[file:implementation-details.org][Starting up clasp]]
 - [[file:startup.org][Starting up clasp]]
 - [[file:external-dependencies.org][external-dependencies]]
 - [[file:footer.org][footer]]
