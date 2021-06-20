@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-06-20 Sun 12:15 -->
+<!-- 2021-06-20 Sun 12:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Starting up clasp</title>
@@ -291,24 +291,12 @@ Clasp has a variety of ways that it can startup.
 </p>
 
 <ol class="org-ol">
-<li>Clasp can startup from a "snapshot" - this is the fastest startup.</li>
-</ol>
-<p>
-Snapshots are recordings of memory that were created using a running Clasp.
-<code>(gctools:save-lisp-and-die)</code> creates a snapshot within a running Clasp that 
-is written into "app-fasl:&lt;executable-name&gt;.snapshot".
-</p>
+<li>Clasp can startup from a "snapshot" - this is the fastest startup. :: Snapshots are recordings of memory that were created using a running Clasp. <code>(gctools:save-lisp-and-die)</code> creates a snapshot within a running Clasp that is written into "app-fasl:&lt;executable-name&gt;.snapshot".</li>
 
-<ol class="org-ol">
 <li>Clasp can startup from a snapshot embedded within the executable.</li>
 
-<li>Clasp can startup from an "image" - this is a fasl file that contains compiled</li>
+<li>Clasp can startup from an "image" - this is a fasl file that contains compiled Common Lisp code. :: Clasp replays all of the top level forms when it loads an image. This startup can take anywhere from a few seconds to tens of seconds for cando or other extensions that use lots of quicklisp systems.</li>
 </ol>
-<p>
-Common Lisp code and it replays all of the top level forms when it loads. This
-startup can take anywhere from a few seconds to tens of seconds for cando or other
-extensions that use lots of quicklisp systems.
-</p>
 </div>
 
 
@@ -333,15 +321,11 @@ snapshot file is (in the Common Lisp logical pathname notation) "app-fasl:&lt;ex
 </p>
 
 <p>
-<code>-T image</code> means load the default image file and if that is not found then terminate with an error.
-The default image file is (in the Common Lisp logical pathname notation) "app-fasl:&lt;executable-name&gt;.&lt;fasl-extension&gt;". 
-The &lt;fasl-extension&gt; changes depending on how clasp is built.
+<code>-T image</code> means load the default image file and if that is not found then terminate with an error. The default image file is (in the Common Lisp logical pathname notation) "app-fasl:&lt;executable-name&gt;.&lt;fasl-extension&gt;". The &lt;fasl-extension&gt; changes depending on how clasp is built.
 </p>
 
 <p>
-<code>-i &lt;filename&gt;</code> means if the filename ends in ".snapshot" then load it as a snapshot file.
-   If &lt;filename&gt; does not end in ".snapshot" then load it as an image - otherwise signal an error.
-The -T and -i options are mutually exclusive. The -i option will override the -T option.
+<code>-i &lt;filename&gt;</code> means if the filename ends in ".snapshot" then load it as a snapshot file. If &lt;filename&gt; does not end in ".snapshot" then load it as an image - otherwise signal an error. The -T and -i options are mutually exclusive. The -i option will override the -T option.
 </p>
 
 <p>
@@ -349,9 +333,18 @@ The -T and -i options are mutually exclusive. The -i option will override the -T
 </p>
 
 <p>
-<code>-n</code> Used with -I. If this is passed then don't load the init.lsp file. This will start a very bare 
-bones REPL and load no Common Lisp code.
+<code>-n</code> Used with -I. If this is passed then don't load the init.lsp file. This will start a very bare bones REPL and load no Common Lisp code.
 </p>
+
+<p>
+Examples:
+</p>
+<dl class="org-dl">
+<dt><code>clasp</code></dt><dd>Will try to load "app-fasl:clasp.snapshot" and then "app-fasl:clasp.&lt;fasl&gt;" and if it doesn't find that - it will terminate with an error.</dd>
+<dt><code>clasp -T image</code></dt><dd>Will try to load "app-fasl:clasp.&lt;fasl&gt;" and if it isn't found - clasp will terminate with an error.</dd>
+<dt><code>clasp -I -n</code></dt><dd>Will start a primitive clasp REPL without loading any snapshot, image, or Common Lisp source code. It will start the pidgin Common Lisp interpreter.</dd>
+<dt><code>clasp -I</code></dt><dd>Will load the "sys:kernel;init.lsp" source file and start the pidgin Common Lisp interpreter.</dd>
+</dl>
 </div>
 </div>
 </div>
