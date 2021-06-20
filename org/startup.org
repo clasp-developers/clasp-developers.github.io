@@ -1,0 +1,22 @@
+
+* Command line options that control startup
+- -I/--ignore-image 
+- -i/--image <filename>  
+- -T/--type (default|snapshot|image)
+- -n/--noinit 
+
+-I means don't load snapshot or image files. Instead proceed to load the kernel/init.lsp file.
+-n means don't load the kernel/init.lsp file.
+-T default means try to load the default snapshot file and if its not found proceed 
+   to the default image file and if that is not found then signal an error.
+-T snapshot means load the default snapshot file and if not found error.
+-T image means don't load the snapshot file and load the default image file and if not found error.
+-i <filename> means if the filename ends in ".snapshot" then load it as a snapshot file.
+   If <filename> does not end in ".snapshot" then load it as an image - otherwise signal an error.
+The -T and -i options are mutually exclusive. I can't think of any situation where you would pass them both.
+The -i option will override the -T option.
+
+* Executables with embedded snapshots
+
+Executables with embedded snapshots always use those snapshots.
+

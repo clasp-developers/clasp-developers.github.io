@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-26 Wed 21:57 -->
+<!-- 2021-06-18 Fri 10:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Get Clasp</title>
+<title>Starting up clasp</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="CHRISTIAN SCHAFMEISTER" />
 <style type="text/css">
@@ -193,13 +193,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg-no-toc.css"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -274,11 +268,49 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <div id="content">
-<h1 class="title">Get Clasp</h1>
+<h1 class="title">Starting up clasp</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org8147d95">1. Command line options that control startup</a></li>
+<li><a href="#orgbc33926">2. Executables with embedded snapshots</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8147d95" class="outline-2">
+<h2 id="org8147d95"><span class="section-number-2">1</span> Command line options that control startup</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>-I/&#x2013;ignore-image</li>
+<li>-i/&#x2013;image &lt;filename&gt;</li>
+<li>-T/&#x2013;type (default|snapshot|image)</li>
+<li>-n/&#x2013;noinit</li>
+</ul>
+
 <p>
-Currently, it is required to build Clasp from source, which is available from the <a href="https://github.com/clasp-developers/clasp">Github repository</a> - use the main branch.
-You can ask for help on the irc channel #clasp on Libera.chat.
+-I means don't load snapshot or image files. Instead proceed to load the kernel/init.lsp file.
+-n means don't load the kernel/init.lsp file.
+-T default means try to load the default snapshot file and if its not found proceed 
+   to the default image file and if that is not found then signal an error.
+-T snapshot means load the default snapshot file and if not found error.
+-T image means don't load the snapshot file and load the default image file and if not found error.
+-i &lt;filename&gt; means if the filename ends in ".snapshot" then load it as a snapshot file.
+   If &lt;filename&gt; does not end in ".snapshot" then load it as an image - otherwise signal an error.
+The -T and -i options are mutually exclusive. I can't think of any situation where you would pass them both.
 </p>
+</div>
+</div>
+
+<div id="outline-container-orgbc33926" class="outline-2">
+<h2 id="orgbc33926"><span class="section-number-2">2</span> Executables with embedded snapshots</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Executables with embedded snapshots always use those snapshots.
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <center><p>

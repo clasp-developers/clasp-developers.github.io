@@ -1,0 +1,6 @@
+#+title: Internet Relay Chat
+
+* Clasp on IRC
+
+Clasp is currently on freenode #clasp - but in May 20, 2021 we set up a parallel group on Libera.chat.
+

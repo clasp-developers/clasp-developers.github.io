@@ -66,10 +66,11 @@ def options(cfg):
     pass
 
 def configure(cfg):
+    cfg.extensions_startup_scripts.append("demo-startup.lisp") # (1)
     pass
 
 def build(bld):
-    bld.recurse("src")          # (1)
+    bld.recurse("src")          # (2)
 
 def build3(bld):
     pass
@@ -79,7 +80,9 @@ def build4(bld):
 
 #+END_SRC
 
-1. The bld.recurse("src") call causes waf to recurse into the my-demo/src directory.  Add one of these calls for every source directory that you want to integrate into Clasp.
+1. Add a lisp startup script that is evaluated once clasp has finished initializing. 
+This allows the programmer to add lisp code to clasp.
+2. The bld.recurse("src") call causes waf to recurse into the my-demo/src directory.  Add one of these calls for every source directory that you want to integrate into Clasp.
 
 
 Next you need a wscript file in the src directory - this one is simpler...
@@ -274,11 +277,7 @@ void double_vector_startup() {
 #+END_SRC
 
 Creates a Binding to the C++ class ~DoubleVector~, with the name ~dv:double-vector~ in lisp.
-This automatically creates a binding to the default constructor as well.
-To prevent the automatic creation of a default constructor, use a second parameter:
-#+BEGIN_SRC C++
-class_<DoubleVector>("double-vector", no_default_constructor)
-#+END_SRC
+This does not automatically creates a binding to the default constructor - use def_constructor for constructors.
 
 ** Inheritance
 clbind can handle member functions of derived classes correctly, providing that they are exposed.

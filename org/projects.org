@@ -7,7 +7,7 @@ This website tries to keep a list of projects related to clasp, especially of C+
 
 | Project Name | Description                                 |
 |--------------+---------------------------------------------|
-| Cando        | drmeister's library for designing molecules |
+| Cando        | drmeister's library for computational chemistry |
 | clasp-sfml   | clasp binding for [[http://www.sfml-dev.org][SFML]]                      |
 
 

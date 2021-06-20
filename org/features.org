@@ -1,7 +1,6 @@
 #+TITLE: Features
 #+OPTIONS: toc:nil num:nil
 
-
 * Seamless Integration of Common Lisp and C++
 
 Clasp is a new [[https://common-lisp.net/][Common Lisp]] implementation
@@ -12,6 +11,11 @@ programs, such as out of the scientific computing ecosystem. Embedding
 them in a Common Lisp environment allows you to make use of rapid
 prototyping, incremental development, and other capabilities that make
 it a powerful language.
+
+
+* Implementation Details
+
+[[file:implementation-details][Clasp implementation details]]
 
 
 * Common Lisp Ecosystem Support

@@ -1,10 +1,11 @@
 #+TITLE: Media
 #+OPTIONS: toc:nil num:nil
 
-* Publications
-
-
 * Videos
+
+** 2018 
+
+[[https://www.youtube.com/watch?v=mbdXeRBbgDM][LLVM Developers meeting 2018]]
 
 ** ELS Talk 2016
 [[youtube:5bQhGS8V6dQ][ELS Talk 2016]]
@@ -17,3 +18,7 @@
 
 ** Using Common Lisp to refactor C++
 [[youtube:h31pURzgYX8][Using Common Lisp to refactor C++]]
+
+* Publications
+
+

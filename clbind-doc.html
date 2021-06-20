@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-26 Wed 15:41 -->
+<!-- 2021-06-18 Fri 10:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
@@ -403,10 +403,11 @@ def options(cfg):
     pass
 
 def configure(cfg):
+    cfg.extensions_startup_scripts.append("demo-startup.lisp") # (1)
     pass
 
 def build(bld):
-    bld.recurse("src")          # (1)
+    bld.recurse("src")          # (2)
 
 def build3(bld):
     pass
@@ -417,6 +418,12 @@ def build4(bld):
 </pre>
 </div>
 
+<ol class="org-ol">
+<li>Add a lisp startup script that is evaluated once clasp has finished initializing.</li>
+</ol>
+<p>
+This allows the programmer to add lisp code to clasp.
+</p>
 <ol class="org-ol">
 <li>The bld.recurse("src") call causes waf to recurse into the my-demo/src directory.  Add one of these calls for every source directory that you want to integrate into Clasp.</li>
 </ol>
@@ -689,13 +696,8 @@ void double_vector_startup() {
 
 <p>
 Creates a Binding to the C++ class <code>DoubleVector</code>, with the name <code>dv:double-vector</code> in lisp.
-This automatically creates a binding to the default constructor as well.
-To prevent the automatic creation of a default constructor, use a second parameter:
+This does not automatically creates a binding to the default constructor - use def_constructor for constructors.
 </p>
-<div class="org-src-container">
-<pre class="src src-C++">class_&lt;DoubleVector&gt;("double-vector", no_default_constructor)
-</pre>
-</div>
 </div>
 
 <div id="outline-container-orgfbdd432" class="outline-3">

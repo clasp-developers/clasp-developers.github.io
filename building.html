@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-25 Tue 19:32 -->
+<!-- 2021-06-18 Fri 10:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Building Clasp</title>
@@ -286,18 +286,19 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <p>
-For the forseeable future, Clasp is supported on Linux, Mac OS X, and OpenBSD.
- On these
+Clasp is currently supported on Linux, Mac OS X, and OpenBSD.
+On these
 systems, you should be able to build it from source if a pre-made
 package is not available or workable for you. In case you cannot get it
 to compile even with the instructions below, the quickest way to get
-help is to either <a href="reporting-problems.html">file an issue</a>, or to
-<a href="irc.html">chat with us directly</a>.
+help is to either <a href="https://github.com/clasp-developers/clasp/issues">file an issue</a>, or to
+<a href="irc.html">use irc</a> to 
+chat with us directly]].
 </p>
 
 <p>
 Building on most systems will take around 8GB of RAM and ~30 minutes with a
-relatively modern processor.
+relatively modern processor with eight or more cores.
 </p>
 
 <div id="outline-container-org96c3794" class="outline-2">
@@ -305,22 +306,36 @@ relatively modern processor.
 <div class="outline-text-2" id="text-1">
 <p>
 For most distributions that have the listed
-<a href="external-dependencies">dependencies</a> available as packages, the
-compilation should be straightforward. Simply clone Clasp and run <code>make</code>
-from the root of it.
+<a href="#org49e7762">dependencies</a> available as packages, the
+compilation should be straightforward. Simply clone Clasp and run the following from
+the root directory.
 </p>
 
+<div class="org-src-container">
+<pre class="src src-sh">./waf distclean           # (1)
+./waf configure           # (2)
+./waf build_dboehmprecise # (3)
+
+# or ...
+./waf distclean configure build_dboehmprecise
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>The distclean target cleans out any previous build files.</li>
+<li>The configure target configures the build and checks that all of the dependencies are available.</li>
+<li>The build<sub>dboehmprecise</sub> target tell waf to build all of clasp.</li>
+</ol>
+
 <p>
-If the system is too dumb to find some of the dependencies or fails for
-other reasons, you might have to manually adjust configuration
-variables. For this, copy <code>local.config.template</code> to <code>local.config</code> and
+If you need to make local changes to the configuration copy <code>wscript.config.template</code> to <code>wscript.config</code> and
 edit it as appropriate. If you lack the required dependencies, try
 <a href="building-with-deploy">compiling with deploy</a>.
 </p>
 
 <p>
-The compilation output will be in the <code>build/clasp</code> directory. To launch
-Clasp, run <code>build/clasp/bin/clasp_boehm_o</code>.
+The compilation output will be in the <code>build/boehmprecise</code> directory. To launch
+Clasp, run <code>build/boehmprecise/cclasp-boehmprecise</code>.
 </p>
 
 <p>
@@ -336,7 +351,7 @@ wiki entry</a></li>
 <li><b>Debian Wheezy</b></li>
 <li><b>OpenSuse 13.1</b></li>
 <li><b>Gentoo</b></li>
-<li><b>Arch</b>, currently requires downgrading Clang and LLVM to 3.6 .</li>
+<li><b>Arch</b></li>
 </ul>
 </div>
 </div>
@@ -346,16 +361,14 @@ wiki entry</a></li>
 <div class="outline-text-2" id="text-2">
 <p>
 First you will need what is listed for OS X under the
-<a href="external-dependencies">dependencies</a>. Next you need an additional
+<a href="#org49e7762">dependencies</a>. Next you need an additional
 step that is documented
-<a href="https://github.com/drmeister/clasp/wiki/Building-Clasp-on-OS-X-requires-using-the-open-source-version-of-Clang">on
-the wiki</a>. The rest of the procedure is the same as for
-<a href="building-with-deploy">building with deploy</a>.
+The rest of the procedure is the same as for building on linux.
 </p>
 
 <p>
-The compilation output will be in the <code>build/clasp</code> directory. To launch
-Clasp, run <code>build/clasp/MacOS/clasp_boehm_o</code>.
+The compilation output will be in the <code>build/boehmprecise</code> directory. To launch
+Clasp, run <code>build/boehmprecise/cclasp-boehmprecise</code>.
 </p>
 </div>
 </div>
@@ -393,7 +406,19 @@ to kick off the build process. Simply run <code>make</code> from the Clasp root.
 <div id="outline-container-org49e7762" class="outline-2">
 <h2 id="org49e7762"><span class="section-number-2">4</span> External Dependencies</h2>
 <div class="outline-text-2" id="text-4">
+<p>
+Dependencies that are common to all Clasp builds are:
+</p>
+<ul class="org-ul">
+<li><b>llvm</b> 13 commit hash 972b6a3a3471c2a742c5c5d8ec004ff640d544c4
+<ul class="org-ul">
+<li>This is because Clasp uses cutting edge llvm features of the ORCV2 engine that have not yet made it into a standard llvm release. It will be llvm 13 that includes these new features.</li>
+</ul></li>
+<li><b>gmp</b> The GNU multiple precision math library.</li>
+<li><b>ffi</b></li>
+</ul>
 </div>
+
 <div id="outline-container-orgf8d7fab" class="outline-3">
 <h3 id="orgf8d7fab"><span class="section-number-3">4.1</span> Linux</h3>
 <div class="outline-text-3" id="text-4-1">
@@ -424,12 +449,9 @@ Xcode. Make sure the binaries are in your <code>PATH</code>.
 </p>
 
 <ul class="org-ul">
-<li><b>Xcode</b> 6.4</li>
+<li><b>Xcode</b> 12.4</li>
 <li><b>Xcode command-line tools</b></li>
-<li><b>automake</b></li>
-<li><b>autoconf</b></li>
-<li><b>libtool</b></li>
-<li><b>pkg-config</b></li>
+<li></li>
 </ul>
 </div>
 </div>

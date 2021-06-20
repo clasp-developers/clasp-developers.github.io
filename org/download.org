@@ -2,8 +2,5 @@
 #+OPTIONS: toc:nil num:nil
 
 
-Precompiled and prepackaged versions of Clasp will be available for a
-limited number of distributions in the future. 
-
-Currently, it is required to build Clasp from source, which is available from the [[https://github.com/drmeister/clasp][Github repository]].
-It is recommended that you ask on the irc channel #clasp on freenode regarding which branch to build.
+Currently, it is required to build Clasp from source, which is available from the [[https://github.com/clasp-developers/clasp][Github repository]] - use the main branch.
+You can ask for help on the irc channel #clasp on Libera.chat.

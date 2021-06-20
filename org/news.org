@@ -1,14 +1,16 @@
 #+title: News
 #+OPTIONS: toc:nil num:nil
 
-* <2021-05-25> Prepare for release 1.0
--  Clasp has the ability to save and restart from memory snapshots.
--  Clasp supports the addition of extensions written in C++ by adding them to the extensions directory.
-   The extensions integrate with the clasp build system.
+* <2021-05-25> Release 1.0
+- Clasp has the ability to save and restart from memory snapshots.
+- Clasp supports the addition of extensions written in C++ by adding them to the extensions directory.
+  The extensions integrate with the clasp build system.
+- The Clasp Cleavir compiler now uses basic blocks to do many new optimizations.
+- A multithreaded compiler that compiles abstract-syntax-trees to native code in multiple threads. It speeds up compilation by a factor of 2-3x.
+
 
 * <2015-11-20 Fr> Release 0.4
--  Clasp has a completely new, optimizing/inlining compiler called
-   cclasp!
+-  Clasp has a completely new, optimizing/inlining compiler based on Cleavir.
 -  Fixnum, character and single-float types are immediate values.
 -  General object pointers and cons pointers are tagged for speed.
 -  Lots of bug fixes and stability improvements.

@@ -5,6 +5,6 @@
 
 * Seamless Integration of Common Lisp and C++ 
 
-Updated by Christian Schafmeister
+Updated by Christian Schafmeister May 26, 2021
 
 ** ([[file:news.org][News]]) \nbsp \nbsp ([[file:features.org][Features]]) \nbsp \nbsp ([[file:download.org][Download]])
