@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-06-20 Sun 12:01 -->
+<!-- 2021-06-20 Sun 12:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Starting up clasp</title>
@@ -273,15 +273,48 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgce970ce">1. Command line options that control startup</a></li>
+<li><a href="#orgc5b3976">1. Clasp Startup</a>
+<ul>
+<li><a href="#org74e6c15">1.1. Command Line Options That Control Startup</a></li>
+</ul>
+</li>
 <li><a href="#org3e6d0ba">2. Executables with embedded snapshots</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgce970ce" class="outline-2">
-<h2 id="orgce970ce"><span class="section-number-2">1</span> Command line options that control startup</h2>
+<div id="outline-container-orgc5b3976" class="outline-2">
+<h2 id="orgc5b3976"><span class="section-number-2">1</span> Clasp Startup</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+Clasp has a variety of ways that it can startup.
+</p>
+
+<ol class="org-ol">
+<li>Clasp can startup from a "snapshot" - this is the fastest startup.</li>
+</ol>
+<p>
+Snapshots are recordings of memory that were created using a running Clasp.
+<code>(gctools:save-lisp-and-die)</code> creates a snapshot within a running Clasp that 
+is written into "app-fasl:&lt;executable-name&gt;.snapshot".
+</p>
+
+<ol class="org-ol">
+<li>Clasp can startup from a snapshot embedded within the executable.</li>
+
+<li>Clasp can startup from an "image" - this is a fasl file that contains compiled</li>
+</ol>
+<p>
+Common Lisp code and it replays all of the top level forms when it loads. This
+startup can take anywhere from a few seconds to tens of seconds for cando or other
+extensions that use lots of quicklisp systems.
+</p>
+</div>
+
+
+<div id="outline-container-org74e6c15" class="outline-3">
+<h3 id="org74e6c15"><span class="section-number-3">1.1</span> Command Line Options That Control Startup</h3>
+<div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>-T/&#x2013;type (default|snapshot|image)</li>
 <li>-i/&#x2013;image &lt;filename&gt;</li>
@@ -319,6 +352,7 @@ The -T and -i options are mutually exclusive. The -i option will override the -T
 <code>-n</code> Used with -I. If this is passed then don't load the init.lsp file. This will start a very bare 
 bones REPL and load no Common Lisp code.
 </p>
+</div>
 </div>
 </div>
 

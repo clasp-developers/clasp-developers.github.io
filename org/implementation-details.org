@@ -2,7 +2,24 @@
 #+OPTIONS: ^:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
-* Command line options that control startup
+* Clasp Startup
+
+Clasp has a variety of ways that it can startup.
+
+1. Clasp can startup from a "snapshot" - this is the fastest startup.
+Snapshots are recordings of memory that were created using a running Clasp.
+=(gctools:save-lisp-and-die)= creates a snapshot within a running Clasp that 
+is written into "app-fasl:<executable-name>.snapshot".
+
+2. Clasp can startup from a snapshot embedded within the executable.
+
+3. Clasp can startup from an "image" - this is a fasl file that contains compiled
+Common Lisp code and it replays all of the top level forms when it loads. This
+startup can take anywhere from a few seconds to tens of seconds for cando or other
+extensions that use lots of quicklisp systems.
+
+
+** Command Line Options That Control Startup
 
 - -T/--type (default|snapshot|image)
 - -i/--image <filename>  
