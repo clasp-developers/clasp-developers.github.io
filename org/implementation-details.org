@@ -3,21 +3,30 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
 * Command line options that control startup
-- -I/--ignore-image 
-- -i/--image <filename>  
+
 - -T/--type (default|snapshot|image)
+- -i/--image <filename>  
+- -I/--ignore-image 
 - -n/--noinit 
 
--I means don't load snapshot or image files. Instead proceed to load the kernel/init.lsp file.
--n means don't load the kernel/init.lsp file.
--T default means try to load the default snapshot file and if its not found proceed 
-   to the default image file and if that is not found then signal an error.
--T snapshot means load the default snapshot file and if not found error.
--T image means don't load the snapshot file and load the default image file and if not found error.
--i <filename> means if the filename ends in ".snapshot" then load it as a snapshot file.
+=-T default= (the default) means first attempt to load the default snapshot file and if its not found then proceed 
+   to the default image file and if that is not found then terminate with an error.
+
+=-T snapshot= means load the default snapshot file and if not found then terminate with an error. The default
+snapshot file is (in the Common Lisp logical pathname notation) "app-fasl:<executable-name>.snapshot".
+
+=-T image= means load the default image file and if that is not found then terminate with an error.
+The default image file is (in the Common Lisp logical pathname notation) "app-fasl:<executable-name>.<fasl-extension>". 
+The <fasl-extension> changes depending on how clasp is built.
+
+=-i <filename>= means if the filename ends in ".snapshot" then load it as a snapshot file.
    If <filename> does not end in ".snapshot" then load it as an image - otherwise signal an error.
-The -T and -i options are mutually exclusive. I can't think of any situation where you would pass them both.
-The -i option will override the -T option.
+The -T and -i options are mutually exclusive. The -i option will override the -T option.
+
+=-I= means don't load snapshot or image files. Instead proceed to load the kernel/init.lsp file.
+
+=-n= Used with -I. If this is passed then don't load the init.lsp file. This will start a very bare 
+bones REPL and load no Common Lisp code.
 
 * Executables with embedded snapshots
 
