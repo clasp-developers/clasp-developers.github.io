@@ -100,23 +100,18 @@ POSTFIX is html code that is appended to the menu."
   (create-menu-preamble
    "footer.org" nil "<center>" "</center>"))
 
-(defun make-clasp-website (force)
+(defun make-clasp-website-impl (force base-directory publishing-directory)
   "Create the website for clasp.
 If prefix arg FORCE is non-nil, force rebuild files that were not updated.
 Use FORCE, if you have updated menu.org, in order to update the menu on all files."
-  (interactive "P")
   (let ((org-html-htmlize-output-type 'css)
 	(project-alist
 	 (cons
 	  "clasp-html"
 	  (list
-	   :base-directory
-	   (or clasp-website-source-directory
-	       (read-directory-name "Source (org) directory: " nil nil t nil))
+	   :base-directory base-directory
 	   :base-extension "org"
-	   :publishing-directory
-	   (or clasp-website-target-directory
-	       (read-directory-name "Target (html) directory: "))
+	   :publishing-directory publishing-directory
 	   :recursive t
 	   :publishing-function 'org-html-publish-to-html
 	   :auto-sitemap t
@@ -127,3 +122,16 @@ Use FORCE, if you have updated menu.org, in order to update the menu on all file
 	   :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/htmlize.css\"/>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/readtheorg/css/readtheorg-no-toc.css\"/>\n\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js\"></script>\n<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/lib/js/jquery.stickytableheaders.min.js\"></script>\n<script type=\"text/javascript\" src=\"styles/readtheorg/js/readtheorg.js\"></script>"))))
     (org-publish-project project-alist force)
     (message "Clasp website published.")))
+
+
+(defun make-clasp-website (force)
+  "Create the website for clasp.
+If prefix arg FORCE is non-nil, force rebuild files that were not updated.
+Use FORCE, if you have updated menu.org, in order to update the menu on all files."
+  (interactive "P")
+  (make-clasp-website-impl
+   force
+   (or clasp-website-source-directory
+       (read-directory-name "Source (org) directory: " nil nil t nil))
+   (or clasp-website-target-directory
+       (read-directory-name "Target (html) directory: "))))
