@@ -3,12 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-06-18 Fri 10:54 -->
+<!-- 2021-07-03 Sat 18:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="CHRISTIAN SCHAFMEISTER" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -273,47 +272,47 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgdbb547d">1. General information</a></li>
-<li><a href="#orga2f7ec9">2. Integrating with the clasp build system</a></li>
-<li><a href="#orgd5c80b9">3. Structure of a Binding</a></li>
-<li><a href="#orgcc511b4">4. Include Files</a></li>
-<li><a href="#org00efa02">5. Exposing Functions</a>
+<li><a href="#org3586371">1. General information</a></li>
+<li><a href="#orgb6c80f4">2. Integrating with the clasp build system</a></li>
+<li><a href="#org5cefcdd">3. Structure of a Binding</a></li>
+<li><a href="#org01a8faa">4. Include Files</a></li>
+<li><a href="#orge2c78e7">5. Exposing Functions</a>
 <ul>
-<li><a href="#orge1afc46">5.1. Overloaded Functions</a></li>
+<li><a href="#org42a6057">5.1. Overloaded Functions</a></li>
 </ul>
 </li>
-<li><a href="#org4281507">6. Exposing Classes</a>
+<li><a href="#org9fb59d2">6. Exposing Classes</a>
 <ul>
-<li><a href="#orgfbdd432">6.1. Inheritance</a></li>
-<li><a href="#org7560534">6.2. Constructors</a></li>
-<li><a href="#orge18b0bd">6.3. Member Functions</a></li>
-<li><a href="#orgdce72e2">6.4. Static Member Function</a></li>
-<li><a href="#org59e31cc">6.5. Public Member Variables</a></li>
-<li><a href="#org1795f4c">6.6. Derivable classes</a></li>
+<li><a href="#org6edc150">6.1. Inheritance</a></li>
+<li><a href="#org6de1ee1">6.2. Constructors</a></li>
+<li><a href="#org2460f46">6.3. Member Functions</a></li>
+<li><a href="#org71ee102">6.4. Static Member Function</a></li>
+<li><a href="#org8d2f92a">6.5. Public Member Variables</a></li>
+<li><a href="#org8ac580a">6.6. Derivable classes</a></li>
 </ul>
 </li>
-<li><a href="#org8677bc7">7. Exposing Enums</a></li>
-<li><a href="#org2cf13c3">8. Translators</a>
+<li><a href="#org6dd4a95">7. Exposing Enums</a></li>
+<li><a href="#orgffc8a91">8. Translators</a>
 <ul>
-<li><a href="#org344e0b1">8.1. Translation from C++ objects to Common Lisp objects</a></li>
-<li><a href="#org91a7b49">8.2. Translation from Common Lisp objects to C++ objects</a>
+<li><a href="#org3ce892d">8.1. Translation from C++ objects to Common Lisp objects</a></li>
+<li><a href="#org647a4ab">8.2. Translation from Common Lisp objects to C++ objects</a>
 <ul>
-<li><a href="#org14d9558">8.2.1. Advanced from_object translators</a></li>
+<li><a href="#org2cc66f3">8.2.1. Advanced from_object translators</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orga31fa44">9. Policies</a>
+<li><a href="#org7ff9b4d">9. Policies</a>
 <ul>
-<li><a href="#org42fb255">9.1. pureOutValue&lt;N&gt;</a></li>
-<li><a href="#orge2fe752">9.2. outValue&lt;N&gt;</a></li>
-<li><a href="#org52d6a2b">9.3. adopt&lt;n&gt;</a></li>
+<li><a href="#orga7625ea">9.1. pureOutValue&lt;N&gt;</a></li>
+<li><a href="#org35af480">9.2. outValue&lt;N&gt;</a></li>
+<li><a href="#org9bdc578">9.3. adopt&lt;n&gt;</a></li>
 </ul>
 </li>
-<li><a href="#orgc86a30a">10. Lispification</a>
+<li><a href="#org084cfe7">10. Lispification</a>
 <ul>
-<li><a href="#orga438106">10.1. Camel case</a></li>
-<li><a href="#org1a3c999">10.2. Underscores become hyphens</a></li>
+<li><a href="#org2b8ded0">10.1. Camel case</a></li>
+<li><a href="#org06fd9ee">10.2. Underscores become hyphens</a></li>
 </ul>
 </li>
 </ul>
@@ -321,8 +320,8 @@ for the JavaScript code in this tag.
 </div>
 
 
-<div id="outline-container-orgdbb547d" class="outline-2">
-<h2 id="orgdbb547d"><span class="section-number-2">1</span> General information</h2>
+<div id="outline-container-org3586371" class="outline-2">
+<h2 id="org3586371"><span class="section-number-2">1</span> General information</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 clbind is based on luabind with some ideas borrowed from pybind11 and boost::python.
@@ -330,8 +329,8 @@ clbind is based on luabind with some ideas borrowed from pybind11 and boost::pyt
 </div>
 </div>
 
-<div id="outline-container-orga2f7ec9" class="outline-2">
-<h2 id="orga2f7ec9"><span class="section-number-2">2</span> Integrating with the clasp build system</h2>
+<div id="outline-container-orgb6c80f4" class="outline-2">
+<h2 id="orgb6c80f4"><span class="section-number-2">2</span> Integrating with the clasp build system</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Integrating an external library, or your own C++ code, into Clasp involves integrating into Clasp's build system.
@@ -352,8 +351,8 @@ For instance - suppose you have the following directory structure.
 └── extensions
     ├── wscript             # Provided by Clasp
     └── my-demo
-        └── src
-            └── my-demo.cc
+	└── src
+	    └── my-demo.cc
 </pre>
 </div>
 
@@ -457,10 +456,10 @@ Once these files are added your directory structure will look like&#x2026;
 └── extensions
     ├── wscript
     └── my-demo
-        ├── wscript         # Added above
-        └── src
-            ├── wscript     # Added above
-            └── my-demo.cc
+	├── wscript         # Added above
+	└── src
+	    ├── wscript     # Added above
+	    └── my-demo.cc
 </pre>
 </div>
 
@@ -473,8 +472,8 @@ That's it - once you have added these files you can go into the top level clasp 
 
 
 
-<div id="outline-container-orgd5c80b9" class="outline-2">
-<h2 id="orgd5c80b9"><span class="section-number-2">3</span> Structure of a Binding</h2>
+<div id="outline-container-org5cefcdd" class="outline-2">
+<h2 id="org5cefcdd"><span class="section-number-2">3</span> Structure of a Binding</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Clasp is able to load C++ libraries and expose functions, classes, methods and enums to Clasp Common Lisp.
@@ -531,8 +530,8 @@ COMMON-LISP-USER&gt;
 </div>
 </div>
 
-<div id="outline-container-orgcc511b4" class="outline-2">
-<h2 id="orgcc511b4"><span class="section-number-2">4</span> Include Files</h2>
+<div id="outline-container-org01a8faa" class="outline-2">
+<h2 id="org01a8faa"><span class="section-number-2">4</span> Include Files</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Compiling the binding requires the inclusion of one header file <code>clasp/clasp.h</code>.
@@ -545,8 +544,8 @@ Compiling the binding requires the inclusion of one header file <code>clasp/clas
 </div>
 </div>
 
-<div id="outline-container-org00efa02" class="outline-2">
-<h2 id="org00efa02"><span class="section-number-2">5</span> Exposing Functions</h2>
+<div id="outline-container-orge2c78e7" class="outline-2">
+<h2 id="orge2c78e7"><span class="section-number-2">5</span> Exposing Functions</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Exposing functions is done via the function <code>def</code>:
@@ -554,17 +553,17 @@ Exposing functions is done via the function <code>def</code>:
 <div class="org-src-container">
 <pre class="src src-C++">template &lt;typename F, class... Policies&gt;
 scope def(char     const* name,
-          F               f,
-          Policies... policies )
+	  F               f,
+	  Policies... policies )
 </pre>
 </div>
 <p>
 In this function
 </p>
 <dl class="org-dl">
-<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#orgc86a30a">lispified</a>, i.e. a name  with camel-casing is converted to a downcase name with dashes in between. Using this automatic lispification is optional, and it can be useful to use names following lisp conventions, so that a reader can immediately see how the respective lisp function is called.</dd>
+<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#org084cfe7">lispified</a>, i.e. a name  with camel-casing is converted to a downcase name with dashes in between. Using this automatic lispification is optional, and it can be useful to use names following lisp conventions, so that a reader can immediately see how the respective lisp function is called.</dd>
 <dt>f</dt><dd>is the function pointer to the c++ function.</dd>
-<dt>policies</dt><dd>Gives additional information about how to handle some parameters (see <a href="#orga31fa44">Policies</a>).</dd>
+<dt>policies</dt><dd>Gives additional information about how to handle some parameters (see <a href="#org7ff9b4d">Policies</a>).</dd>
 </dl>
 
 <p>
@@ -593,15 +592,15 @@ void hello_world_startup() {
   using namespace clbind;
   package_ sc(HWPkg);
   sc.def("hello-world",&amp;helloWorld,
-          "The classic! Print Hello-world"_doc);
+	  "The classic! Print Hello-world"_doc);
   sc.def("addThreeNumbers",&amp;addThreeNumbers,                       // (1)
-         "(x cl:&amp;optional (y 0.0) (z 0.0))"_ll,                    // (2)
-          "Add three numbers and return the result"_doc );         // (3)
+	 "(x cl:&amp;optional (y 0.0) (z 0.0))"_ll,                    // (2)
+	  "Add three numbers and return the result"_doc );         // (3)
 </pre>
 </div>
 
 <ol class="org-ol">
-<li>Only the first two arguments are required, the name of the function that is <a href="#orgc86a30a">lispified</a> and a pointer to the function.</li>
+<li>Only the first two arguments are required, the name of the function that is <a href="#org084cfe7">lispified</a> and a pointer to the function.</li>
 <li>The lambda list for the function is provided in a string with the <code>_ll</code> suffix.</li>
 <li>A documentation string is provided with the <code>_doc</code> suffix.</li>
 </ol>
@@ -632,8 +631,8 @@ Source:        #P"=external="
 </div>
 </div>
 
-<div id="outline-container-orge1afc46" class="outline-3">
-<h3 id="orge1afc46"><span class="section-number-3">5.1</span> Overloaded Functions</h3>
+<div id="outline-container-org42a6057" class="outline-3">
+<h3 id="org42a6057"><span class="section-number-3">5.1</span> Overloaded Functions</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 To expose overloaded functions, you have to cast the function pointer to the correct signature. 
@@ -654,8 +653,8 @@ The convention we adopt in Clasp is to append type names to the original name.
 </div>
 
 
-<div id="outline-container-org4281507" class="outline-2">
-<h2 id="org4281507"><span class="section-number-2">6</span> Exposing Classes</h2>
+<div id="outline-container-org9fb59d2" class="outline-2">
+<h2 id="org9fb59d2"><span class="section-number-2">6</span> Exposing Classes</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Exposing a class is done via the class <code>class_</code>:
@@ -700,8 +699,8 @@ This does not automatically creates a binding to the default constructor - use d
 </p>
 </div>
 
-<div id="outline-container-orgfbdd432" class="outline-3">
-<h3 id="orgfbdd432"><span class="section-number-3">6.1</span> Inheritance</h3>
+<div id="outline-container-org6edc150" class="outline-3">
+<h3 id="org6edc150"><span class="section-number-3">6.1</span> Inheritance</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 clbind can handle member functions of derived classes correctly, providing that they are exposed.
@@ -724,8 +723,8 @@ If a base class is a pure virtual class, i.e. it has only pure virtual functions
 </div>
 </div>
 
-<div id="outline-container-org7560534" class="outline-3">
-<h3 id="org7560534"><span class="section-number-3">6.2</span> Constructors</h3>
+<div id="outline-container-org6de1ee1" class="outline-3">
+<h3 id="org6de1ee1"><span class="section-number-3">6.2</span> Constructors</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Add constructors to exposed classes with the function <code>def_constructor</code>:
@@ -733,8 +732,8 @@ Add constructors to exposed classes with the function <code>def_constructor</cod
 <div class="org-src-container">
 <pre class="src src-C++">template&lt;typename... Types, typename... Policies&gt;
 class_&amp; def_constructor(const string&amp;         name,
-                        constructor&lt;Types...&gt; sig,
-                        Policies...           policies)
+			constructor&lt;Types...&gt; sig,
+			Policies...           policies)
 </pre>
 </div>
 <p>
@@ -743,13 +742,13 @@ In this function
 <dl class="org-dl">
 <dt>name</dt><dd>is the name of the constructor that will be visible in clasp. Again, it will be lispified.</dd>
 <dt>sig</dt><dd>is the parameter signature of the C++ constructor. Use a comma-separated parameter-list list in the form <code>constructor&lt;parameter-list&gt;()</code> of all the types used as parameters in the constructor you want to expose.</dd>
-<dt>policies</dt><dd>Optional parameters, explained in <a href="#org00efa02">Exposing Functions</a></dd>
+<dt>policies</dt><dd>Optional parameters, explained in <a href="#orge2c78e7">Exposing Functions</a></dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orge18b0bd" class="outline-3">
-<h3 id="orge18b0bd"><span class="section-number-3">6.3</span> Member Functions</h3>
+<div id="outline-container-org2460f46" class="outline-3">
+<h3 id="org2460f46"><span class="section-number-3">6.3</span> Member Functions</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 Exposing member functions is similar to exposing free functions. Call the <code>class_</code> member function <code>def</code>:
@@ -757,12 +756,12 @@ Exposing member functions is similar to exposing free functions. Call the <code>
 <div class="org-src-container">
 <pre class="src src-C++">template&lt;class F, class... Policies&gt;
 class_&amp; def(char const*       name, 
-            F                 fn, 
-            Policies...       policies )
+	    F                 fn, 
+	    Policies...       policies )
 </pre>
 </div>
 <p>
-Thus exposing a member function is not different from <a href="#org00efa02">exposing free functions</a>, and the same arguments apply.
+Thus exposing a member function is not different from <a href="#orge2c78e7">exposing free functions</a>, and the same arguments apply.
 The exception to this rule is the lambda-list (arguments), which always requires <code>self</code> as its first parameter, which becomes the <code>this</code> argument within the method.
 </p>
 
@@ -789,17 +788,17 @@ void double_vector_startup() {
 </div>
 </div>
 
-<div id="outline-container-orgdce72e2" class="outline-3">
-<h3 id="orgdce72e2"><span class="section-number-3">6.4</span> Static Member Function</h3>
+<div id="outline-container-org71ee102" class="outline-3">
+<h3 id="org71ee102"><span class="section-number-3">6.4</span> Static Member Function</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
-As Common Lisp does not have the notion of static member functions, exposing them is similar to <a href="#org00efa02">exposing free functions</a>.
+As Common Lisp does not have the notion of static member functions, exposing them is similar to <a href="#orge2c78e7">exposing free functions</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org59e31cc" class="outline-3">
-<h3 id="org59e31cc"><span class="section-number-3">6.5</span> Public Member Variables</h3>
+<div id="outline-container-org8d2f92a" class="outline-3">
+<h3 id="org8d2f92a"><span class="section-number-3">6.5</span> Public Member Variables</h3>
 <div class="outline-text-3" id="text-6-5">
 <p>
 Exposing public member variables works similar to exposing member functions. 
@@ -807,8 +806,8 @@ Exposing public member variables works similar to exposing member functions.
 </div>
 </div>
 
-<div id="outline-container-org1795f4c" class="outline-3">
-<h3 id="org1795f4c"><span class="section-number-3">6.6</span> Derivable classes</h3>
+<div id="outline-container-org8ac580a" class="outline-3">
+<h3 id="org8ac580a"><span class="section-number-3">6.6</span> Derivable classes</h3>
 <div class="outline-text-3" id="text-6-6">
 <p>
 Some C++ libraries provide base classes that the library user is meant to subclass to add additional application specific functionality.
@@ -927,8 +926,8 @@ In Common Lisp - to create a derived class one would use&#x2026;
 
 (core:defvirtual ast-tooling:run ((self count-match-callback) match)  ;; (2)
   (let* ((nodes (ast-tooling:nodes match))
-         (id-to-node-map (ast-tooling:idto-node-map nodes))
-         (node (gethash :whole id-to-node-map)))
+	 (id-to-node-map (ast-tooling:idto-node-map nodes))
+	 (node (gethash :whole id-to-node-map)))
     (advance-match-counter)))
 </pre>
 </div>
@@ -943,8 +942,8 @@ In Common Lisp - to create a derived class one would use&#x2026;
 
 
 
-<div id="outline-container-org8677bc7" class="outline-2">
-<h2 id="org8677bc7"><span class="section-number-2">7</span> Exposing Enums</h2>
+<div id="outline-container-org6dd4a95" class="outline-2">
+<h2 id="org6dd4a95"><span class="section-number-2">7</span> Exposing Enums</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-C++">
@@ -1025,16 +1024,16 @@ COMMON-LISP-USER&gt;
 </div>
 
 
-<div id="outline-container-org2cf13c3" class="outline-2">
-<h2 id="org2cf13c3"><span class="section-number-2">8</span> Translators</h2>
+<div id="outline-container-orgffc8a91" class="outline-2">
+<h2 id="orgffc8a91"><span class="section-number-2">8</span> Translators</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Translators are used to automatically convert C++ objects to Common Lisp objects and vice versa. This is a convenience functionality, allowing for easier interoperation. It is especially useful for small C++ classes and structs that are passed to and from functions and are meant to be created on the fly. Instead of exposing them and then creating and filling them from Common Lisp, it is often easier to write a translator, e.g. from a list, which makes it possible to pass a list as a parameter in place of the object. This list is then automatically converted to the respective C++ object by the translator.
 </p>
 </div>
 
-<div id="outline-container-org344e0b1" class="outline-3">
-<h3 id="org344e0b1"><span class="section-number-3">8.1</span> Translation from C++ objects to Common Lisp objects</h3>
+<div id="outline-container-org3ce892d" class="outline-3">
+<h3 id="org3ce892d"><span class="section-number-3">8.1</span> Translation from C++ objects to Common Lisp objects</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 Translating from C++ to Common Lisp objects is done by specializing the templated struct <code>to_object</code> in the namespace <code>translate</code> to the type of the C++ object, with the static function member function <code>convert</code> of that struct taking an object of that type as a parameter and returning the Clasp Common Lisp Object.  The translator must appear in the C++ source code before any functions/methods are exposed that need to use it.  Translators are incorporated into the template code that clbind generates for each exposed function/method.
@@ -1050,7 +1049,7 @@ Translating from C++ to Common Lisp objects is done by specializing the template
     static core::T_sp convert(std::pair&lt;int,int&gt; arg)
     {
        core::Cons_sp cons = core::Cons_O::create(core::Integer_O::create(arg.first),
-                                                 core::Integer_O::create(arg.second));
+						 core::Integer_O::create(arg.second));
        return cons;
     }
   };
@@ -1061,8 +1060,8 @@ Translating from C++ to Common Lisp objects is done by specializing the template
 </div>
 
 
-<div id="outline-container-org91a7b49" class="outline-3">
-<h3 id="org91a7b49"><span class="section-number-3">8.2</span> Translation from Common Lisp objects to C++ objects</h3>
+<div id="outline-container-org647a4ab" class="outline-3">
+<h3 id="org647a4ab"><span class="section-number-3">8.2</span> Translation from Common Lisp objects to C++ objects</h3>
 <div class="outline-text-3" id="text-8-2">
 <p>
 Translating from Common Lisp to C++ objects is done by specializing the templated struct <code>from_object</code> in the namespace <code>translate</code> to the C++ object type and providing a constructor that takes the Common Lisp object as a parameter and writes the result into an object called <code>_v</code> of the C++ object type:
@@ -1083,8 +1082,8 @@ The <code>DeclareType</code> typedef is necessary for the clbind template code t
     from_object(core::T_sp obj)
     {
       if (obj.consp()) {                                                // (2)
-          this-&gt;_v = std::make_pair(core::clasp_to_int(CONS_CAR(obj)),  // (3)
-                                    core::clasp_to_int(CONS_CDR(obj)));
+	  this-&gt;_v = std::make_pair(core::clasp_to_int(CONS_CAR(obj)),  // (3)
+				    core::clasp_to_int(CONS_CDR(obj)));
       }
       TYPE_ERROR(obj,cl::_sym_Cons_O);                                  // (4)
     }
@@ -1102,8 +1101,8 @@ The <code>DeclareType</code> typedef is necessary for the clbind template code t
 </div>
 
 
-<div id="outline-container-org14d9558" class="outline-4">
-<h4 id="org14d9558"><span class="section-number-4">8.2.1</span> Advanced from_object translators</h4>
+<div id="outline-container-org2cc66f3" class="outline-4">
+<h4 id="org2cc66f3"><span class="section-number-4">8.2.1</span> Advanced from_object translators</h4>
 <div class="outline-text-4" id="text-8-2-1">
 <p>
 template &lt;&gt; struct from_object {&#x2026;} takes a second template argument that can have the value <code>std::true_type</code> or <code>std::false_type</code>. The default is <code>std::true_type</code> and
@@ -1147,16 +1146,16 @@ struct from_object&lt;int&amp;,std::false_type&gt; {
 </div>
 </div>
 
-<div id="outline-container-orga31fa44" class="outline-2">
-<h2 id="orga31fa44"><span class="section-number-2">9</span> Policies</h2>
+<div id="outline-container-org7ff9b4d" class="outline-2">
+<h2 id="org7ff9b4d"><span class="section-number-2">9</span> Policies</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Policies tell clbind how to handle return values and C++ arguments.
 </p>
 </div>
 
-<div id="outline-container-org42fb255" class="outline-3">
-<h3 id="org42fb255"><span class="section-number-3">9.1</span> pureOutValue&lt;N&gt;</h3>
+<div id="outline-container-orga7625ea" class="outline-3">
+<h3 id="orga7625ea"><span class="section-number-3">9.1</span> pureOutValue&lt;N&gt;</h3>
 <div class="outline-text-3" id="text-9-1">
 <p>
 Let's say you have a C++ function like so&#x2026;
@@ -1213,8 +1212,8 @@ first returned value and all other return values follow it.
 }
 //...
   s.def("returnThreeValues",&amp;returnThreeValues,
-        clbind::pureOutValue&lt;0&gt;(),
-        clbind::pureOutValue&lt;1&gt;());
+	clbind::pureOutValue&lt;0&gt;(),
+	clbind::pureOutValue&lt;1&gt;());
 </pre>
 </div>
 
@@ -1227,8 +1226,8 @@ first returned value and all other return values follow it.
 </div>
 </div>
 
-<div id="outline-container-orge2fe752" class="outline-3">
-<h3 id="orge2fe752"><span class="section-number-3">9.2</span> outValue&lt;N&gt;</h3>
+<div id="outline-container-org35af480" class="outline-3">
+<h3 id="org35af480"><span class="section-number-3">9.2</span> outValue&lt;N&gt;</h3>
 <div class="outline-text-3" id="text-9-2">
 <p>
 Let's say you have a C++ function like so&#x2026;
@@ -1266,7 +1265,7 @@ and second multiple-return values.
 
 <div class="org-src-container">
 <pre class="src src-lisp">COMMON-LISP-USER&gt; (multiple-value-bind (sum prod) (hw:add-mul-running 2 3 4 5 6)
-                    (format t "Returned ~s~%" (list sum prod)))
+		    (format t "Returned ~s~%" (list sum prod)))
 Returned (14 144)
 NIL
 </pre>
@@ -1280,8 +1279,8 @@ first returned value and all other return values follow it.
 </div>
 
 
-<div id="outline-container-org52d6a2b" class="outline-3">
-<h3 id="org52d6a2b"><span class="section-number-3">9.3</span> adopt&lt;n&gt;</h3>
+<div id="outline-container-org9bdc578" class="outline-3">
+<h3 id="org9bdc578"><span class="section-number-3">9.3</span> adopt&lt;n&gt;</h3>
 <div class="outline-text-3" id="text-9-3">
 <p>
 adopt&lt;n&gt; is used to instruct clbind that a pointer to an object that is returned by a function is to be managed by Clasp's
@@ -1292,16 +1291,16 @@ function return value pointer is to be adopted. The template argument can also b
 </div>
 </div>
 
-<div id="outline-container-orgc86a30a" class="outline-2">
-<h2 id="orgc86a30a"><span class="section-number-2">10</span> Lispification</h2>
+<div id="outline-container-org084cfe7" class="outline-2">
+<h2 id="org084cfe7"><span class="section-number-2">10</span> Lispification</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 Lispification is a process used to convert strings in C++ code and C++ identifiers into Common Lisp hyphenated names.
 </p>
 </div>
 
-<div id="outline-container-orga438106" class="outline-3">
-<h3 id="orga438106"><span class="section-number-3">10.1</span> Camel case</h3>
+<div id="outline-container-org2b8ded0" class="outline-3">
+<h3 id="org2b8ded0"><span class="section-number-3">10.1</span> Camel case</h3>
 <div class="outline-text-3" id="text-10-1">
 <p>
 Camel case strings are converted to hyphenated names by inserting hyphens into the final name when there is a transition between a lower case character and an upper case character.
@@ -1318,8 +1317,8 @@ A few examples:
 </div>
 </div>
 
-<div id="outline-container-org1a3c999" class="outline-3">
-<h3 id="org1a3c999"><span class="section-number-3">10.2</span> Underscores become hyphens</h3>
+<div id="outline-container-org06fd9ee" class="outline-3">
+<h3 id="org06fd9ee"><span class="section-number-3">10.2</span> Underscores become hyphens</h3>
 <div class="outline-text-3" id="text-10-2">
 <p>
 Examples:
