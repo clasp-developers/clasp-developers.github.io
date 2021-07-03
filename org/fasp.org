@@ -1,0 +1,57 @@
+#+title: Exposing C++ Libraries with clbind
+#+OPTIONS: ^:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+
+
+* fasp files are concatentated object files
+
+Fasp files are concatenated object files. Fasp files can be formed by concatenating object files or by concatenating other fasp files. When clasp loads fasp files a run of object files is grouped into a dynamic library.
+
+Say you have a Common Lisp source file like this...
+#+BEGIN_SRC lisp
+(defun eee (x)
+  (declare (ignore x))
+  (error "In eee"))
+(defun ddd (x) (eee x))
+(defun ccc (x) (ddd x))
+(defun bbb (x) (ccc x))
+(defun aaa (x) (bbb x))
+#+END_SRC
+
+We compile-file it using the default parallel compiler. The parallel compiler generates an object file for each top level form. The serial compiler generates on object file for each source file.
+
+#+BEGIN_SRC sh
+COMMON-LISP-USER> (load (compile-file "/tmp/foo.lisp"))
+; Compiling file parallel: /tmp/foo.lisp
+;   (DEFUN EEE ...)
+;   (DEFUN DDD ...)
+;   (DEFUN CCC ...)
+;   (DEFUN BBB ...)
+;   (DEFUN AAA ...)
+Time real(1.623 secs) run(1.623 secs) consed(70675024 bytes) interps(126) unwinds(0)
+T
+COMMON-LISP-USER>
+#+END_SRC
+
+We can extract the object files using clasp.
+#+BEGIN_SRC sh
+(base) meister@hermes:/tmp$ ~/Development/clasp/build/boehm/iclasp-boehm -U foo.fasp
+NumberOfObjectFiles 5
+Object file[0] ObjectId: 0  start-page: 1  bytes: 9208 pages: 3
+Object file[1] ObjectId: 1  start-page: 4  bytes: 9264 pages: 3
+Object file[2] ObjectId: 2  start-page: 7  bytes: 9264 pages: 3
+Object file[3] ObjectId: 3  start-page: 10  bytes: 9288 pages: 3
+Object file[4] ObjectId: 4  start-page: 13  bytes: 9288 pages: 3
+(base) meister@hermes:/tmp$ ls -l foo*.o
+-rw-r--r-- 1 meister meister 9208 Jul  3 12:14 foo-0-0.o
+-rw-r--r-- 1 meister meister 9264 Jul  3 12:14 foo-1-1.o
+-rw-r--r-- 1 meister meister 9264 Jul  3 12:14 foo-2-2.o
+-rw-r--r-- 1 meister meister 9288 Jul  3 12:14 foo-3-3.o
+-rw-r--r-- 1 meister meister 9288 Jul  3 12:14 foo-4-4.o
+(base) meister@hermes:/tmp$
+#+END_SRC
+
+The name of the object files is ~foo-<index>-<objectId>.o~. The ~<index>~ is the index of the object file within the fasp file - it counts from 0 and increases monotonically. The ~<objectId>~ is used to group object files into dynamic libraries. When there is a transition from a high value to a lower one it means a new library is starting. 
+
+You can interogate the object files using standard linux/macOS/llvm tools like objdump, readelf, and llvm-dwarfdump.
+

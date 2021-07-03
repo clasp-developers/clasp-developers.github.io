@@ -6,11 +6,13 @@
 
 Clasp has a variety of ways that it can startup.
 
-1. Clasp can startup from a "snapshot" - this is the fastest startup. :: Snapshots are recordings of memory that were created using a running Clasp. =(gctools:save-lisp-and-die)= creates a snapshot within a running Clasp that is written into "app-fasl:<executable-name>.snapshot".
+1. Clasp can startup from a "snapshot" - this is the fastest startup. 
+  + Snapshots are recordings of memory that were created using a running Clasp. =(gctools:save-lisp-and-die)= creates a snapshot within a running Clasp that is written into "app-fasl:<executable-name>.snapshot".
 
 2. Clasp can startup from a snapshot embedded within the executable.
 
-3. Clasp can startup from an "image" - this is a fasl file that contains compiled Common Lisp code. :: Clasp replays all of the top level forms when it loads an image. This startup can take anywhere from a few seconds to tens of seconds for cando or other extensions that use lots of quicklisp systems.
+3. Clasp can startup from an "image" - this is a fasl file that contains compiled Common Lisp code. 
+  + Clasp replays all of the top level forms when it loads an image. This startup can take anywhere from a few seconds to tens of seconds for cando or other extensions that use lots of quicklisp systems.
 
 
 ** Command Line Options That Control Startup
@@ -44,3 +46,5 @@ Examples:
 
 Executables with embedded snapshots always use those snapshots.
 
+* Fasp files
+See [[file:fasp.org][Fasp files are concatenated object files.]]

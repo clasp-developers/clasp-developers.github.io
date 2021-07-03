@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-06-20 Sun 12:43 -->
+<!-- 2021-07-03 Sat 12:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Starting up clasp</title>
@@ -279,6 +279,7 @@ for the JavaScript code in this tag.
 </ul>
 </li>
 <li><a href="#org3e6d0ba">2. Executables with embedded snapshots</a></li>
+<li><a href="#orga2d3b78">3. Fasp files</a></li>
 </ul>
 </div>
 </div>
@@ -291,11 +292,17 @@ Clasp has a variety of ways that it can startup.
 </p>
 
 <ol class="org-ol">
-<li>Clasp can startup from a "snapshot" - this is the fastest startup. :: Snapshots are recordings of memory that were created using a running Clasp. <code>(gctools:save-lisp-and-die)</code> creates a snapshot within a running Clasp that is written into "app-fasl:&lt;executable-name&gt;.snapshot".</li>
+<li>Clasp can startup from a "snapshot" - this is the fastest startup. 
+<ul class="org-ul">
+<li>Snapshots are recordings of memory that were created using a running Clasp. <code>(gctools:save-lisp-and-die)</code> creates a snapshot within a running Clasp that is written into "app-fasl:&lt;executable-name&gt;.snapshot".</li>
+</ul></li>
 
 <li>Clasp can startup from a snapshot embedded within the executable.</li>
 
-<li>Clasp can startup from an "image" - this is a fasl file that contains compiled Common Lisp code. :: Clasp replays all of the top level forms when it loads an image. This startup can take anywhere from a few seconds to tens of seconds for cando or other extensions that use lots of quicklisp systems.</li>
+<li>Clasp can startup from an "image" - this is a fasl file that contains compiled Common Lisp code. 
+<ul class="org-ul">
+<li>Clasp replays all of the top level forms when it loads an image. This startup can take anywhere from a few seconds to tens of seconds for cando or other extensions that use lots of quicklisp systems.</li>
+</ul></li>
 </ol>
 </div>
 
@@ -354,6 +361,15 @@ Examples:
 <div class="outline-text-2" id="text-2">
 <p>
 Executables with embedded snapshots always use those snapshots.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga2d3b78" class="outline-2">
+<h2 id="orga2d3b78"><span class="section-number-2">3</span> Fasp files</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+See <a href="fasp.html">Fasp files are concatenated object files.</a>
 </p>
 </div>
 </div>
