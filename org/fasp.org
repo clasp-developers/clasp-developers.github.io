@@ -18,7 +18,7 @@ Say you have a Common Lisp source file like this...
 (defun aaa (x) (bbb x))
 #+END_SRC
 
-We compile-file it using the default parallel compiler. The parallel compiler generates an object file for each top level form. The serial compiler generates on object file for each source file.
+We ~compile-file~ it using the default parallel compiler. The parallel compiler generates an object file for each top level form. The serial compiler generates on object file for each source file.
 
 #+BEGIN_SRC sh
 COMMON-LISP-USER> (load (compile-file "/tmp/foo.lisp"))
@@ -51,7 +51,7 @@ Object file[4] ObjectId: 4  start-page: 13  bytes: 9288 pages: 3
 (base) meister@hermes:/tmp$
 #+END_SRC
 
-The name of the object files is ~foo-<index>-<objectId>.o~. The ~<index>~ is the index of the object file within the fasp file - it counts from 0 and increases monotonically. The ~<objectId>~ is used to group object files into dynamic libraries. When there is a transition from a high value to a lower one it means a new library is starting. 
+The name of the object files is ~foo-<index>-<ObjectId>.o~. The ~<index>~ is the index of the object file within the fasp file - it counts from 0 and increases monotonically. The ~<ObjectId>~ is used to group object files into dynamic libraries. When there is a transition from a high value to a lower one it means a new library is starting. 
 
 You can interogate the object files using standard linux/macOS/llvm tools like objdump, readelf, and llvm-dwarfdump.
 
