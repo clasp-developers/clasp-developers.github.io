@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-03 Sat 19:11 -->
+<!-- 2021-07-04 Sun 10:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
@@ -272,17 +272,17 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org1088949">1. fasp files are concatentated object files</a></li>
+<li><a href="#org8461a38">1. Fasp files</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org1088949" class="outline-2">
-<h2 id="org1088949"><span class="section-number-2">1</span> fasp files are concatentated object files</h2>
+<div id="outline-container-org8461a38" class="outline-2">
+<h2 id="org8461a38"><span class="section-number-2">1</span> Fasp files</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Fasp files are concatenated object files. Fasp files can be formed by concatenating object files or by concatenating other fasp files. When clasp loads fasp files a run of object files is grouped into a dynamic library.
+Fasp files are concatenated object files with an index. Object files can be extracted using the <code>-U/--unpack</code> command line argument of clasp.  Fasp files are formed within clasp by concatenating object files or by concatenating other fasp files. Each object file is assigned an index within the fasp file and an <code>ObjectId</code> that is used to group objects files into dynamic libraries. When clasp loads fasp files a run of object files with increasing ObjectId is grouped into a dynamic library.  Object files within one dynamic library need to follow all of the normal rules of shared libraries and every exported symbol must be unique. 
 </p>
 
 <p>
