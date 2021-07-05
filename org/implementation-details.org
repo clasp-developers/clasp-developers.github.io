@@ -49,6 +49,9 @@ Executables with embedded snapshots always use those snapshots.
 * Fasp files
 See [[file:fasp.org][Fasp files are concatenated object files.]]
 * Profiling clasp and C++
+
+You can profile Clasp compiled code and C++ together. On linux we use the ~perf~ tools to generate profile data and on macOS we use ~dtrace~.
+
 ** Profiling on linux
 
 Clasp generates just in time (JIT) code for which we need symbol information. Use the ~(ext:generate-perf-map)~ command within clasp to generate a ~/tmp/perf-<pid>.map file that ~perf~ will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
