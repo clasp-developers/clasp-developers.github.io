@@ -54,7 +54,7 @@ You can profile Clasp compiled code and C++ together. On linux we use the ~perf~
 
 ** Profiling on linux
 
-Clasp generates just in time (JIT) code for which we need symbol information. Use the ~(ext:generate-perf-map)~ command within clasp to generate a ~/tmp/perf-<pid>.map file that ~perf~ will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
+Clasp generates just in time (JIT) code for which we need symbol information. Use the ~(ext:generate-perf-map)~ function within clasp to generate a ~/tmp/perf-<pid>.map~ file that ~perf~ will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
 
 #+BEGIN_SRC lisp
 COMMON-LISP-USER> (ext:getpid)
@@ -84,10 +84,8 @@ COMMON-LISP-USER> (time (dotimes (i 10) (fibonacci 41)))
 
 In another window, within the FlameGraph directory do the following..
 
-The ~perf~ profiling stack is only 127 frames deep by default and that is not enough for many profiling rungs. Use the following command to increase the depth.
-
 #+BEGIN_SRC sh
-$ sudo sysctl -w kernel.perf_event_max_stack=2048              # (1)
+$ sudo sysctl -w kernel.perf_event_max_stack=1024              # (1)
 $ perf record -F 99 -p 33159 -g -o /tmp/perf.data -- sleep 10  # (2) 
 [ perf record: Woken up 4 times to write data ]
 [ perf record: Captured and wrote 0.873 MB perf.data (983 samples) ]
@@ -96,7 +94,7 @@ $ ./flamegraph.pl /tmp/out.perf-folded >/tmp/perf.svg # (4)
 #+END_SRC
 
 1. The profiling stack is only 127 frames deep by default. This will increase it to 2048.
-2. Record the perf data for our process.
+2. Record the perf data for our process. This needs to run during the time consuming process in Clasp.
 3. Generate the backtraces and fold them according to the flame graph instructions.
 4. Generate the flame graph.
 
