@@ -1,4 +1,4 @@
-#+title: Starting up clasp
+#+title: Implementation details
 #+OPTIONS: ^:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
@@ -48,3 +48,53 @@ Executables with embedded snapshots always use those snapshots.
 
 * Fasp files
 See [[file:fasp.org][Fasp files are concatenated object files.]]
+* Profiling clasp and C++
+** Profiling on linux
+
+Clasp generates just in time (JIT) code for which we need symbol information. Use the ~(ext:generate-perf-map)~ command within clasp to generate a ~/tmp/perf-<pid>.map file that ~perf~ will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
+
+#+BEGIN_SRC lisp
+COMMON-LISP-USER> (ext:getpid)
+
+33159
+COMMON-LISP-USER> (defun fibonacci (n)
+  (declare (fixnum n) (optimize (debug 0) (speed 3) (safety 0)))
+  (cond
+   (;; Base case.
+    ;; The first two Fibonacci numbers (indices 1 and 2) are 1 by definition.
+    (<= n 2)  ;; If n <= 2
+    1         ;; then return 1.
+    )
+   (t                               ;; else
+    (+                              ;; return the sum of
+     ;; the results of calling
+     (fibonacci (- n 1))            ;; fibonacci(n-1) and
+     (fibonacci (- n 2))            ;; fibonacci(n-2).
+     ;; This is the recursive case.
+     ))))
+
+FIBONACCI
+COMMON-LISP-USER> (ext:generate-perf-map)
+Writing to /tmp/perf-33159.map
+COMMON-LISP-USER> (time (dotimes (i 10) (fibonacci 41)))
+#+END_SRC
+
+In another window, within the FlameGraph directory do the following..
+
+The ~perf~ profiling stack is only 127 frames deep by default and that is not enough for many profiling rungs. Use the following command to increase the depth.
+
+#+BEGIN_SRC sh
+$ sudo sysctl -w kernel.perf_event_max_stack=2048              # (1)
+$ perf record -F 99 -p 33159 -g -o /tmp/perf.data -- sleep 10  # (2) 
+[ perf record: Woken up 4 times to write data ]
+[ perf record: Captured and wrote 0.873 MB perf.data (983 samples) ]
+$ perf script -i /tmp/perf.data --max-stack 1024 | ./stackcollapse-perf.pl >/tmp/out.perf-folded # (3)
+$ ./flamegraph.pl /tmp/out.perf-folded >/tmp/perf.svg # (4)
+#+END_SRC
+
+1. The profiling stack is only 127 frames deep by default. This will increase it to 2048.
+2. Record the perf data for our process.
+3. Generate the backtraces and fold them according to the flame graph instructions.
+4. Generate the flame graph.
+
+Then open the ~/tmp/perf.svg~ file in a web browser or svg file viewer.
