@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-04 Sun 10:06 -->
+<!-- 2021-07-04 Sun 10:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
@@ -300,7 +300,7 @@ Say you have a Common Lisp source file like this&#x2026;
 </div>
 
 <p>
-We compile-file it using the default parallel compiler. The parallel compiler generates an object file for each top level form. The serial compiler generates on object file for each source file.
+We <code>compile-file</code> it using the default parallel compiler. The parallel compiler generates an object file for each top level form. The serial compiler generates on object file for each source file.
 </p>
 
 <div class="org-src-container">
@@ -339,7 +339,7 @@ Object file[4] ObjectId: 4  start-page: 13  bytes: 9288 pages: 3
 </div>
 
 <p>
-The name of the object files is <code>foo-&lt;index&gt;-&lt;objectId&gt;.o</code>. The <code>&lt;index&gt;</code> is the index of the object file within the fasp file - it counts from 0 and increases monotonically. The <code>&lt;objectId&gt;</code> is used to group object files into dynamic libraries. When there is a transition from a high value to a lower one it means a new library is starting. 
+The name of the object files is <code>foo-&lt;index&gt;-&lt;ObjectId&gt;.o</code>. The <code>&lt;index&gt;</code> is the index of the object file within the fasp file - it counts from 0 and increases monotonically. The <code>&lt;ObjectId&gt;</code> is used to group object files into dynamic libraries. When there is a transition from a high value to a lower one it means a new library is starting. 
 </p>
 
 <p>
