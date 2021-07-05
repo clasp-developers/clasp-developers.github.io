@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-04 Sun 10:15 -->
+<!-- 2021-07-05 Mon 13:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Starting up clasp</title>
+<title>Implementation details</title>
 <meta name="generator" content="Org mode" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -267,7 +267,7 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <div id="content">
-<h1 class="title">Starting up clasp</h1>
+<h1 class="title">Implementation details</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
@@ -279,6 +279,11 @@ for the JavaScript code in this tag.
 </li>
 <li><a href="#org4c56878">2. Executables with embedded snapshots</a></li>
 <li><a href="#orgdd3b2fc">3. Fasp files</a></li>
+<li><a href="#orgd071329">4. Profiling clasp and C++</a>
+<ul>
+<li><a href="#org114ca92">4.1. Profiling on linux</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -370,6 +375,75 @@ Executables with embedded snapshots always use those snapshots.
 <p>
 See <a href="fasp.html">Fasp files are concatenated object files.</a>
 </p>
+</div>
+</div>
+<div id="outline-container-orgd071329" class="outline-2">
+<h2 id="orgd071329"><span class="section-number-2">4</span> Profiling clasp and C++</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org114ca92" class="outline-3">
+<h3 id="org114ca92"><span class="section-number-3">4.1</span> Profiling on linux</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Clasp generates just in time (JIT) code for which we need symbol information. Use the <code>(ext:generate-perf-map)</code> command within clasp to generate a <code>/tmp/perf-&lt;pid&gt;.map file that ~perf</code> will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">COMMON-LISP-USER&gt; (ext:getpid)
+
+33159
+COMMON-LISP-USER&gt; (defun fibonacci (n)
+  (declare (fixnum n) (optimize (debug 0) (speed 3) (safety 0)))
+  (cond
+   (;; Base case.
+    ;; The first two Fibonacci numbers (indices 1 and 2) are 1 by definition.
+    (&lt;= n 2)  ;; If n &lt;= 2
+    1         ;; then return 1.
+    )
+   (t                               ;; else
+    (+                              ;; return the sum of
+     ;; the results of calling
+     (fibonacci (- n 1))            ;; fibonacci(n-1) and
+     (fibonacci (- n 2))            ;; fibonacci(n-2).
+     ;; This is the recursive case.
+     ))))
+
+FIBONACCI
+COMMON-LISP-USER&gt; (ext:generate-perf-map)
+Writing to /tmp/perf-33159.map
+COMMON-LISP-USER&gt; (time (dotimes (i 10) (fibonacci 41)))
+</pre>
+</div>
+
+<p>
+In another window, within the FlameGraph directory do the following..
+</p>
+
+<p>
+The <code>perf</code> profiling stack is only 127 frames deep by default and that is not enough for many profiling rungs. Use the following command to increase the depth.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">$ sudo sysctl -w kernel.perf_event_max_stack=2048              # (1)
+$ perf record -F 99 -p 33159 -g -o /tmp/perf.data -- sleep 10  # (2) 
+[ perf record: Woken up 4 times to write data ]
+[ perf record: Captured and wrote 0.873 MB perf.data (983 samples) ]
+$ perf script -i /tmp/perf.data --max-stack 1024 | ./stackcollapse-perf.pl &gt;/tmp/out.perf-folded # (3)
+$ ./flamegraph.pl /tmp/out.perf-folded &gt;/tmp/perf.svg # (4)
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>The profiling stack is only 127 frames deep by default. This will increase it to 2048.</li>
+<li>Record the perf data for our process.</li>
+<li>Generate the backtraces and fold them according to the flame graph instructions.</li>
+<li>Generate the flame graph.</li>
+</ol>
+
+<p>
+Then open the <code>/tmp/perf.svg</code> file in a web browser or svg file viewer.
+</p>
+</div>
 </div>
 </div>
 </div>
