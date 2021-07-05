@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-05 Mon 13:57 -->
+<!-- 2021-07-05 Mon 13:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementation details</title>
@@ -380,7 +380,11 @@ See <a href="fasp.html">Fasp files are concatenated object files.</a>
 <div id="outline-container-orgd071329" class="outline-2">
 <h2 id="orgd071329"><span class="section-number-2">4</span> Profiling clasp and C++</h2>
 <div class="outline-text-2" id="text-4">
+<p>
+You can profile Clasp compiled code and C++ together. On linux we use the <code>perf</code> tools to generate profile data and on macOS we use <code>dtrace</code>.
+</p>
 </div>
+
 <div id="outline-container-org114ca92" class="outline-3">
 <h3 id="org114ca92"><span class="section-number-3">4.1</span> Profiling on linux</h3>
 <div class="outline-text-3" id="text-4-1">
