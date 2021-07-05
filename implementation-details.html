@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-05 Mon 14:01 -->
+<!-- 2021-07-05 Mon 14:04 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementation details</title>
@@ -389,7 +389,7 @@ You can profile Clasp compiled code and C++ together. On linux we use the <code>
 <h3 id="org114ca92"><span class="section-number-3">4.1</span> Profiling on linux</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
-Clasp generates just in time (JIT) code for which we need symbol information. Use the <code>(ext:generate-perf-map)</code> command within clasp to generate a <code>/tmp/perf-&lt;pid&gt;.map file that ~perf</code> will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
+Clasp generates just in time (JIT) code for which we need symbol information. Use the <code>(ext:generate-perf-map)</code> function within clasp to generate a <code>/tmp/perf-&lt;pid&gt;.map</code> file that <code>perf</code> will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.
 </p>
 
 <div class="org-src-container">
@@ -423,12 +423,8 @@ COMMON-LISP-USER&gt; (time (dotimes (i 10) (fibonacci 41)))
 In another window, within the FlameGraph directory do the following..
 </p>
 
-<p>
-The <code>perf</code> profiling stack is only 127 frames deep by default and that is not enough for many profiling rungs. Use the following command to increase the depth.
-</p>
-
 <div class="org-src-container">
-<pre class="src src-sh">$ sudo sysctl -w kernel.perf_event_max_stack=2048              # (1)
+<pre class="src src-sh">$ sudo sysctl -w kernel.perf_event_max_stack=1024              # (1)
 $ perf record -F 99 -p 33159 -g -o /tmp/perf.data -- sleep 10  # (2) 
 [ perf record: Woken up 4 times to write data ]
 [ perf record: Captured and wrote 0.873 MB perf.data (983 samples) ]
@@ -439,7 +435,7 @@ $ ./flamegraph.pl /tmp/out.perf-folded &gt;/tmp/perf.svg # (4)
 
 <ol class="org-ol">
 <li>The profiling stack is only 127 frames deep by default. This will increase it to 2048.</li>
-<li>Record the perf data for our process.</li>
+<li>Record the perf data for our process. This needs to run during the time consuming process in Clasp.</li>
 <li>Generate the backtraces and fold them according to the flame graph instructions.</li>
 <li>Generate the flame graph.</li>
 </ol>
