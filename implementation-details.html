@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-05 Mon 14:06 -->
+<!-- 2021-07-05 Mon 14:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Implementation details</title>
@@ -272,24 +272,24 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org459cc72">1. Clasp Startup</a>
+<li><a href="#orgd829712">1. Clasp Startup</a>
 <ul>
-<li><a href="#org657620b">1.1. Command Line Options That Control Startup</a></li>
+<li><a href="#org0090f12">1.1. Command Line Options That Control Startup</a></li>
 </ul>
 </li>
-<li><a href="#org4c56878">2. Executables with embedded snapshots</a></li>
-<li><a href="#orgdd3b2fc">3. Fasp files</a></li>
-<li><a href="#orgd071329">4. Profiling clasp and C++</a>
+<li><a href="#org09c3b34">2. Executables with embedded snapshots</a></li>
+<li><a href="#orgc77ff6d">3. Fasp files</a></li>
+<li><a href="#org98e58a2">4. Profiling clasp and C++</a>
 <ul>
-<li><a href="#org114ca92">4.1. Profiling on linux</a></li>
+<li><a href="#org245258a">4.1. Profiling on linux</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org459cc72" class="outline-2">
-<h2 id="org459cc72"><span class="section-number-2">1</span> Clasp Startup</h2>
+<div id="outline-container-orgd829712" class="outline-2">
+<h2 id="orgd829712"><span class="section-number-2">1</span> Clasp Startup</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Clasp has a variety of ways that it can startup.
@@ -311,8 +311,8 @@ Clasp has a variety of ways that it can startup.
 </div>
 
 
-<div id="outline-container-org657620b" class="outline-3">
-<h3 id="org657620b"><span class="section-number-3">1.1</span> Command Line Options That Control Startup</h3>
+<div id="outline-container-org0090f12" class="outline-3">
+<h3 id="org0090f12"><span class="section-number-3">1.1</span> Command Line Options That Control Startup</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>-T/&#x2013;type (default|snapshot|image)</li>
@@ -360,8 +360,8 @@ Examples:
 </div>
 </div>
 
-<div id="outline-container-org4c56878" class="outline-2">
-<h2 id="org4c56878"><span class="section-number-2">2</span> Executables with embedded snapshots</h2>
+<div id="outline-container-org09c3b34" class="outline-2">
+<h2 id="org09c3b34"><span class="section-number-2">2</span> Executables with embedded snapshots</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Executables with embedded snapshots always use those snapshots.
@@ -369,24 +369,24 @@ Executables with embedded snapshots always use those snapshots.
 </div>
 </div>
 
-<div id="outline-container-orgdd3b2fc" class="outline-2">
-<h2 id="orgdd3b2fc"><span class="section-number-2">3</span> Fasp files</h2>
+<div id="outline-container-orgc77ff6d" class="outline-2">
+<h2 id="orgc77ff6d"><span class="section-number-2">3</span> Fasp files</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 See <a href="fasp.html">Fasp files are concatenated object files.</a>
 </p>
 </div>
 </div>
-<div id="outline-container-orgd071329" class="outline-2">
-<h2 id="orgd071329"><span class="section-number-2">4</span> Profiling clasp and C++</h2>
+<div id="outline-container-org98e58a2" class="outline-2">
+<h2 id="org98e58a2"><span class="section-number-2">4</span> Profiling clasp and C++</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 You can profile Clasp compiled code and C++ together. On linux we use the <code>perf</code> tools to generate profile data and on macOS we use <code>dtrace</code>.
 </p>
 </div>
 
-<div id="outline-container-org114ca92" class="outline-3">
-<h3 id="org114ca92"><span class="section-number-3">4.1</span> Profiling on linux</h3>
+<div id="outline-container-org245258a" class="outline-3">
+<h3 id="org245258a"><span class="section-number-3">4.1</span> Profiling on linux</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Clasp generates just in time (JIT) code for which we need symbol information. Use the <code>(ext:generate-perf-map)</code> function within clasp to generate a <code>/tmp/perf-&lt;pid&gt;.map</code> file that <code>perf</code> will use to convert addresses to symbols.  Do this just prior to evaluating the code that you want to profile so that you get the maximum coverage of JITted symbols.

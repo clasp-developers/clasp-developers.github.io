@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-05 Mon 14:06 -->
+<!-- 2021-07-05 Mon 14:54 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Building Clasp</title>
@@ -272,13 +272,13 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org3aae038">1. Building on Linux</a></li>
-<li><a href="#org7051a89">2. Building on OS X</a></li>
-<li><a href="#orge2a9003">3. Building With Externals-Clasp</a></li>
-<li><a href="#org8af67ae">4. External Dependencies</a>
+<li><a href="#orgc090e8e">1. Building on Linux</a></li>
+<li><a href="#orgab2d995">2. Building on OS X</a></li>
+<li><a href="#orgd599867">3. Building With Externals-Clasp</a></li>
+<li><a href="#orge15626a">4. External Dependencies</a>
 <ul>
-<li><a href="#org6b81e80">4.1. Linux</a></li>
-<li><a href="#org1132065">4.2. OS X</a></li>
+<li><a href="#org20f0b44">4.1. Linux</a></li>
+<li><a href="#orgb2f3681">4.2. OS X</a></li>
 </ul>
 </li>
 </ul>
@@ -300,12 +300,12 @@ Building on most systems will take around 8GB of RAM and ~30 minutes with a
 relatively modern processor with eight or more cores.
 </p>
 
-<div id="outline-container-org3aae038" class="outline-2">
-<h2 id="org3aae038"><span class="section-number-2">1</span> Building on Linux</h2>
+<div id="outline-container-orgc090e8e" class="outline-2">
+<h2 id="orgc090e8e"><span class="section-number-2">1</span> Building on Linux</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 For most distributions that have the listed
-<a href="#org8af67ae">dependencies</a> available as packages, the
+<a href="#orge15626a">dependencies</a> available as packages, the
 compilation should be straightforward. Simply clone Clasp and run the following from
 the root directory.
 </p>
@@ -355,12 +355,12 @@ wiki entry</a></li>
 </div>
 </div>
 
-<div id="outline-container-org7051a89" class="outline-2">
-<h2 id="org7051a89"><span class="section-number-2">2</span> Building on OS X</h2>
+<div id="outline-container-orgab2d995" class="outline-2">
+<h2 id="orgab2d995"><span class="section-number-2">2</span> Building on OS X</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 First you will need what is listed for OS X under the
-<a href="#org8af67ae">dependencies</a>. Next you need an additional
+<a href="#orge15626a">dependencies</a>. Next you need an additional
 step that is documented
 The rest of the procedure is the same as for building on linux.
 </p>
@@ -372,8 +372,8 @@ Clasp, run <code>build/boehmprecise/cclasp-boehmprecise</code>.
 </div>
 </div>
 
-<div id="outline-container-orge2a9003" class="outline-2">
-<h2 id="orge2a9003"><span class="section-number-2">3</span> Building With Externals-Clasp</h2>
+<div id="outline-container-orgd599867" class="outline-2">
+<h2 id="orgd599867"><span class="section-number-2">3</span> Building With Externals-Clasp</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 If your system does not provide the <a href="external-dependencies">external dependencies</a> 
@@ -402,8 +402,8 @@ to kick off the build process. Simply run <code>make</code> from the Clasp root.
 </div>
 </div>
 
-<div id="outline-container-org8af67ae" class="outline-2">
-<h2 id="org8af67ae"><span class="section-number-2">4</span> External Dependencies</h2>
+<div id="outline-container-orge15626a" class="outline-2">
+<h2 id="orge15626a"><span class="section-number-2">4</span> External Dependencies</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Dependencies that are common to all Clasp builds are:
@@ -418,8 +418,8 @@ Dependencies that are common to all Clasp builds are:
 </ul>
 </div>
 
-<div id="outline-container-org6b81e80" class="outline-3">
-<h3 id="org6b81e80"><span class="section-number-3">4.1</span> Linux</h3>
+<div id="outline-container-org20f0b44" class="outline-3">
+<h3 id="org20f0b44"><span class="section-number-3">4.1</span> Linux</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Simply install the appropriate packages with your package manager.
@@ -438,8 +438,8 @@ Simply install the appropriate packages with your package manager.
 </div>
 </div>
 
-<div id="outline-container-org1132065" class="outline-3">
-<h3 id="org1132065"><span class="section-number-3">4.2</span> OS X</h3>
+<div id="outline-container-orgb2f3681" class="outline-3">
+<h3 id="orgb2f3681"><span class="section-number-3">4.2</span> OS X</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Use either <a href="http://brew.sh/">brew</a> or
