@@ -1,0 +1,53 @@
+Package: cando
+Source: clasp-cl
+Version: 1.0.0~204~g849ec9358
+Architecture: amd64
+Maintainer: Tarn W. Burton <twburton@gmail.com>
+Installed-Size: 4104413
+Depends: libbsd0 (>= 0.0), libc6 (>= 2.33), libclang-cpp13 (>= 1:13.0.1), libelf1 (>= 0.131), libexpat1 (>= 2.0.1), libffi8 (>= 3.4), libfmt8 (>= 8.1.1+ds1), libgcc-s1 (>= 3.0), libgmp10 (>= 2:6.2.1+dfsg), libgmpxx4ldbl (>= 2:6.2.1+dfsg), libllvm13, libncurses6 (>= 6), libstdc++6 (>= 11), libtinfo6 (>= 6), zlib1g (>= 1:1.1.4), libffi-dev, llvm-13, clang-13, libnetcdf19, libczmq4
+Conflicts: clasp-cl
+Provides: clasp-cl, lisp-compiler
+Filename: ./cando_1.0.0~204~g849ec9358_amd64.deb
+Size: 412613476
+MD5sum: 106b6ae651b37513a3ac487146edd1c1
+SHA1: 39d67a03f541620fdae374996140f311ba46a7b7
+SHA256: d3ff3fcca6a001e163e9003e85028fb1f73bb4e9bc9f80df620c1c708a3528f4
+Section: lisp
+Priority: optional
+Homepage: https://github.com/clasp-developers/clasp
+Description: Common Lisp implementation that brings Common Lisp and C++ Together
+ Clasp is a new Common Lisp implementation that seamlessly interoperates
+ with C++ libraries and programs using LLVM for compilation to native
+ code. This allows Clasp to take advantage of a vast array of preexisting
+ libraries and programs, such as out of the scientific computing
+ ecosystem. Embedding them in a Common Lisp environment allows you to
+ make use of rapid prototyping, incremental development, and other
+ capabilities that make it a powerful language. Include Cando which is an
+ open-source, computational chemistry environment for building and
+ designing functional molecules and materials.
+
+Package: clasp-cl
+Version: 1.0.0~204~g849ec9358
+Architecture: amd64
+Maintainer: Tarn W. Burton <twburton@gmail.com>
+Installed-Size: 1077163
+Depends: libbsd0 (>= 0.0), libc6 (>= 2.33), libclang-cpp13 (>= 1:13.0.1), libelf1 (>= 0.131), libffi8 (>= 3.4), libfmt8 (>= 8.1.1+ds1), libgcc-s1 (>= 3.0), libgmp10 (>= 2:6.2.1+dfsg), libgmpxx4ldbl (>= 2:6.2.1+dfsg), libllvm13, libncurses6 (>= 6), libstdc++6 (>= 11), libtinfo6 (>= 6), zlib1g (>= 1:1.1.4), libffi-dev, llvm-13, clang-13
+Conflicts: cando
+Provides: lisp-compiler
+Filename: ./clasp-cl_1.0.0~204~g849ec9358_amd64.deb
+Size: 99368884
+MD5sum: 2904474736283192de50ba4955f8622c
+SHA1: db60a53ec521115ecddcac933b0db0b7dd34d246
+SHA256: f2f1ad514fd940f4c40f6f178fe0618bc010d83bccc5d02f9185435bc6662799
+Section: lisp
+Priority: optional
+Homepage: https://github.com/clasp-developers/clasp
+Description: Common Lisp implementation that brings Common Lisp and C++ Together
+ Clasp is a new Common Lisp implementation that seamlessly interoperates
+ with C++ libraries and programs using LLVM for compilation to native
+ code. This allows Clasp to take advantage of a vast array of preexisting
+ libraries and programs, such as out of the scientific computing
+ ecosystem. Embedding them in a Common Lisp environment allows you to
+ make use of rapid prototyping, incremental development, and other
+ capabilities that make it a powerful language.
+
