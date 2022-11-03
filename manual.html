@@ -1,0 +1,1206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-11-03 Thu 13:51 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clasp Manual</title>
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div id="top-menu">
+<ul>
+<li><a href="index.html">Clasp</a>
+<ul>
+<li><a href="news.html">News</a></li>
+<li><a href="download.html">Download</a></li>
+</ul></li>
+<li><a href="index.html">Doc</a>
+<ul>
+<li><a href="license.html">License</a></li>
+<li><a href="manual.html">Manual</a></li>
+<li><a href="building.html">Building</a></li>
+<li><a href="clbind-doc.html">Exposing C++ Libraries</a></li>
+</ul></li>
+<li><a href="index.html">Misc</a>
+<ul>
+<li><a href="community.html">Community</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="media.html">Media</a></li>
+<li><a href="acknowlegements.html">Acknowledgements</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="content" class="content">
+<h1 class="title">Clasp Manual</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org98b75d0">1. Introduction</a>
+<ul>
+<li><a href="#orga79df02">1.1. Conformance</a></li>
+<li><a href="#org4c1d9c2">1.2. Distribution</a></li>
+<li><a href="#org041633d">1.3. Building</a></li>
+<li><a href="#orge4c05f4">1.4. Contributing</a></li>
+<li><a href="#orgd60f52d">1.5. Credits</a></li>
+</ul>
+</li>
+<li><a href="#org2696590">2. Starting and Stopping</a></li>
+<li><a href="#orgc476e9d">3. Lisp</a>
+<ul>
+<li><a href="#orgecf7faf">3.1. Evaluation and Compilation</a></li>
+<li><a href="#org2709fa1">3.2. Types and Classes</a>
+<ul>
+<li><a href="#orgc3b7a0f">3.2.1. Disjointness</a></li>
+</ul>
+</li>
+<li><a href="#orgc15e691">3.3. Data and Control Flow</a></li>
+<li><a href="#org1d7b431">3.4. Iteration</a></li>
+<li><a href="#orgd706c78">3.5. Objects</a>
+<ul>
+<li><a href="#orgb8f0cca">3.5.1. Metaobject Protocol</a></li>
+<li><a href="#org1de62b5">3.5.2. Generic function dispatch efficiency</a></li>
+<li><a href="#org73a0753">3.5.3. Miscellany</a></li>
+</ul>
+</li>
+<li><a href="#orgf68b0db">3.6. Structures</a></li>
+<li><a href="#orgb348097">3.7. Conditions</a></li>
+<li><a href="#org0aaa487">3.8. Symbols</a></li>
+<li><a href="#org1b6e00c">3.9. Packages</a></li>
+<li><a href="#org543ee51">3.10. Numbers</a></li>
+<li><a href="#orgade7025">3.11. Characters</a></li>
+<li><a href="#orgd08d193">3.12. Conses</a></li>
+<li><a href="#org8be6467">3.13. Arrays</a></li>
+<li><a href="#org7ace96d">3.14. Strings</a></li>
+<li><a href="#orga83a8eb">3.15. Sequences</a>
+<ul>
+<li><a href="#orge4eec74">3.15.1. Extensible Sequences</a></li>
+</ul>
+</li>
+<li><a href="#org5b03056">3.16. Hash Tables</a></li>
+<li><a href="#org5d7da43">3.17. Filenames</a></li>
+<li><a href="#orgc132e55">3.18. Files</a></li>
+<li><a href="#orgdb4abea">3.19. Streams</a>
+<ul>
+<li><a href="#org706f7e6">3.19.1. Gray streams</a></li>
+</ul>
+</li>
+<li><a href="#org807f845">3.20. Printer</a></li>
+<li><a href="#org8754f59">3.21. Reader</a></li>
+<li><a href="#org39c3aa8">3.22. System Construction</a></li>
+<li><a href="#org636ee91">3.23. Environment</a>
+<ul>
+<li><a href="#org3e84472">3.23.1. Stepper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgb40cedd">4. C++ Interface (clbind)</a></li>
+<li><a href="#org0ec26ab">5. Foreign Function Interface</a></li>
+<li><a href="#org66b9a81">6. REPL</a></li>
+<li><a href="#orgc1695a4">7. Debug interface</a></li>
+<li><a href="#orgeee7b64">8. Multiprocessing</a>
+<ul>
+<li><a href="#orgd01caac">8.1. Processes</a></li>
+<li><a href="#orgddac7b0">8.2. Special variables</a></li>
+<li><a href="#orgfe83e2d">8.3. Mutexes</a></li>
+<li><a href="#orgdbcd4e1">8.4. Shared Mutexes</a></li>
+<li><a href="#org97cbe20">8.5. Condition Variables</a></li>
+<li><a href="#orgc3b9478">8.6. Memory Model</a></li>
+<li><a href="#orgd48000a">8.7. Atomics</a></li>
+<li><a href="#org8bb6ae8">8.8. Compare-and-swap</a></li>
+<li><a href="#org76dfffe">8.9. Fences</a></li>
+</ul>
+</li>
+<li><a href="#orgfeaa6b8">9. Introspection</a></li>
+<li><a href="#org2c70e59">10. Sockets</a></li>
+<li><a href="#org681ea93">11. Serve Event</a></li>
+<li><a href="#orge9e51f6">12. Garbage Collection</a></li>
+<li><a href="#orga495efd">13. POSIX</a>
+<ul>
+<li><a href="#org16daf20">13.1. Signal Handling</a></li>
+<li><a href="#org9cd8776">13.2. Further posix interfaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org98b75d0" class="outline-2">
+<h2 id="org98b75d0"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Clasp is an implementation of Common Lisp primarily designed for compatibility with C++-language programs and libraries.
+</p>
+
+<p>
+Note that Clasp is a work in progress, as is this manual.
+</p>
+</div>
+
+<div id="outline-container-orga79df02" class="outline-3">
+<h3 id="orga79df02"><span class="section-number-3">1.1.</span> Conformance</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Clasp conforms with the requirements of ANSI INCITS 226-1994 (R2004) with some exceptions, listed below in the "Lisp" section. Any deviation from the standard not listed there is a bug, and should be reported (see "Contributing").
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4c1d9c2" class="outline-3">
+<h3 id="org4c1d9c2"><span class="section-number-3">1.2.</span> Distribution</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+At present, the developers do not make Clasp binaries available. Clasp is open source, and available on-line at <a href="https://github.com/clasp-developers/clasp">https://github.com/clasp-developers/clasp</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org041633d" class="outline-3">
+<h3 id="org041633d"><span class="section-number-3">1.3.</span> Building</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+See <a href="building.html">Building</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge4c05f4" class="outline-3">
+<h3 id="orge4c05f4"><span class="section-number-3">1.4.</span> Contributing</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Check <a href="community.html">the community page</a> for instructions on contributing to Clasp.
+</p>
+
+<p>
+Discussions of Clasp development are mostly carried out on Freenode's #clasp channel.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd60f52d" class="outline-3">
+<h3 id="orgd60f52d"><span class="section-number-3">1.5.</span> Credits</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+Clasp is the project of <a href="https://thirdlaw.tech">Dr. Christian Schafmeister</a>. Additional contributions have been made by <a href="https://github.com/yitzchak">Tarn W. Burton</a>, <a href="https://github.com/kpoeck">Karsten Poeck</a>, <a href="https://github.com/Bike">Alex Wood</a>, and many other contributors as seen in the Git history.
+</p>
+
+<p>
+Clasp's source code is derived substantially from that of Embeddable Common Lisp. Code from SBCL and SICL has been incorporated as well. Most notably, the compiler is SICL's Cleavir compiler with some minor customizations.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2696590" class="outline-2">
+<h2 id="org2696590"><span class="section-number-2">2.</span> Starting and Stopping</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The Clasp executable accepts many different command line arguments. You can get the most up to date summary by passing <code>--help</code>. Here are some important ones:
+</p>
+
+<ul class="org-ul">
+<li><code>--noinform</code>: Skip messages at startup.</li>
+<li><code>--noprint</code>: Start a read-eval loop instead of a read-eval-print loop, and don't prompt. This is intended for scripts (e.g. piping a list of forms to Clasp).</li>
+<li><code>--disable-debugger</code>: Set things up so that if the default debugger would be entered, Clasp quits with a backtrace and nonzero exit status instead. <code>*debugger-hook*</code> and <code>ext:*invoke-debugger-hook*</code> (below) work as usual, i.e. this setting does not affect them.</li>
+<li><code>--non-interactive</code>: Rather than starting a REPL, quit. This is intended to be used with <code>--eval</code> and <code>--load</code>. Implies <code>--disable-debugger</code>.</li>
+<li><code>--feature feature</code>: Intern "feature" as a keyword and push it to <code>*features*</code>.</li>
+<li><code>--eval form</code>: Evaluate the given form. <code>--eval</code> and <code>--load</code> options are processed in order from left to right.</li>
+<li><code>--load filename</code>: <code>cl:load</code> the given file. Intended for convenience, since <code>--eval (load ...)</code> could involve annoying quotation issues.</li>
+<li><code>--norc</code>: Do not load <code>~/.clasprc</code> (see below).</li>
+</ul>
+
+<p>
+If the file <code>~/.clasprc</code> exists, Clasp will <code>cl:load</code> it before processing <code>--eval</code> and <code>--load</code> options and starting the REPL.
+</p>
+
+<p>
+To exit Clasp, the <code>ext:quit</code> function can be used. If provided an integer argument, it's used as the exit status; the default is zero.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc476e9d" class="outline-2">
+<h2 id="orgc476e9d"><span class="section-number-2">3.</span> Lisp</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Clasp is an implementation of <a href="https://en.wikipedia.org/wiki/Common_Lisp">ANSI Common Lisp</a>. The following subsections detail intentional deviations from the standard,
+some extensions to standard functionality,
+and notes on optimizing Lisp programs to run well within Clasp.
+(Extensions not closely related to standard systems are explained in their own sections below.)
+</p>
+</div>
+
+<div id="outline-container-orgecf7faf" class="outline-3">
+<h3 id="orgecf7faf"><span class="section-number-3">3.1.</span> Evaluation and Compilation</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Clasp expands compiler macros essentially unconditionally.
+That is, provided the operator is not declared <code>notinline</code>,
+the compiler will attempt to expand compiler macros.
+If compiler macroexpansion signals, this signal will be recorded and reported by the compiler.
+If compiler macroexpansion errors out, the compiler will abandon expansion and use the unexpanded form,
+while noting the error for display.
+</p>
+
+<p>
+<code>ext:with-current-source-form</code> is a useful macro to allow error messages from macroexpanders and compiler-macro-expanders to have more specific source information. See its docstring for more information.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2709fa1" class="outline-3">
+<h3 id="org2709fa1"><span class="section-number-3">3.2.</span> Types and Classes</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+<code>typep</code> calls can be efficiently compiled only if the second argument, the type specifier, is constant.
+Clasp's compiler will process the type specifier and generate code to check for objects of that type
+directly, avoiding the usual runtime cost of interpreting the type.
+</p>
+
+<p>
+Types defined by <code>deftype</code> use a "type expander" function analogous to a macro expander function.
+A type expander is a function of two arguments, a type specifier and an environment. When called on an appropriate specifier and environment, it computes and returns another type specifier. Type expanders are accessible through the <code>ext:type-expander</code> accessor.
+</p>
+</div>
+
+<div id="outline-container-orgc3b7a0f" class="outline-4">
+<h4 id="orgc3b7a0f"><span class="section-number-4">3.2.1.</span> Disjointness</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+Unless otherwise specified, types Clasp defines as extensions can be considered to be in a disjointness
+relationship with standard and other extension types, as in CLHS 4.2.2 "Type Relationships".
+That is, if Clasp defines a type <code>foo</code>, you can assume that <code>foo</code> is not a subtype of <code>hash-table</code>,
+or <code>cons</code>, or so on, and vice versa, unless it is explicitly stated to be.
+But just as in 4.2.2, Clasp extension types may be subtypes of <code>structure-object</code> or <code>standard-object</code>
+without this being explicitly noted here.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc15e691" class="outline-3">
+<h3 id="orgc15e691"><span class="section-number-3">3.3.</span> Data and Control Flow</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+<code>defsetf</code>, <code>define-setf-expander</code> etc. define a "setf expander" function analogous to a macro expander
+function. A setf expander is a function of two arguments, a place and an environment.
+When called an appropriate place and environment, the expander computes and returns the values used by
+<code>setf</code>. Setf expanders are accessible through the <code>ext:setf-expander</code> accessor.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1d7b431" class="outline-3">
+<h3 id="org1d7b431"><span class="section-number-3">3.4.</span> Iteration</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+<code>loop</code> supports iteration over general sequences (see below) through a for-as-sequence subclause.
+This is identical to the subclause in SBCL.
+The syntax is <code>being {each | the} {element | elements} {of | in}</code>.
+For example, <code>(loop for x being each element in '(1 2 3) do (print x))</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd706c78" class="outline-3">
+<h3 id="orgd706c78"><span class="section-number-3">3.5.</span> Objects</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+CLOS, as part of Common Lisp, is fully supported.
+</p>
+</div>
+
+<div id="outline-container-orgb8f0cca" class="outline-4">
+<h4 id="orgb8f0cca"><span class="section-number-4">3.5.1.</span> Metaobject Protocol</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<p>
+The Metaobject Protocol, as described in <a href="http://metamodular.com/CLOS-MOP/">AMOP</a>, is supported.
+Undocumented deviations from AMOP are bugs and should be reported, as with the CL standard.
+</p>
+
+<p>
+Symbols relating to MOP are exported from the "CLOS" package.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1de62b5" class="outline-4">
+<h4 id="org1de62b5"><span class="section-number-4">3.5.2.</span> Generic function dispatch efficiency</h4>
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+Clasp uses a new system for generic function dispatch designed by Dr. Robert Strandh.
+[Paper reference goes here.] Essentially, after a few calls to a generic function,
+a just-in-time compiler will install a discriminating function for it that can pass control to the
+correct effective method very efficiently. This means that calls with arguments that all have the same
+specializers as those of a previous call will in general be more efficient.
+</p>
+
+<p>
+For some applications, the specializers a function will be called with are known beforehand,
+and the runtime overhead of the just-in-time compilation would be unfortunate.
+Clasp defines an interface to take care of most of the compilation early: The <code>clos:satiate</code> function.
+See its docstring for more info.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org73a0753" class="outline-4">
+<h4 id="org73a0753"><span class="section-number-4">3.5.3.</span> Miscellany</h4>
+<div class="outline-text-4" id="text-3-5-3">
+<p>
+A consequence of the dispatch method described above is that obsolete instances are updated as soon as
+they are used as an argument to any generic function call - not just to slot accessors.
+This is allowed by the standard, but may surprise some programmers.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf68b0db" class="outline-3">
+<h3 id="orgf68b0db"><span class="section-number-3">3.6.</span> Structures</h3>
+</div>
+
+<div id="outline-container-orgb348097" class="outline-3">
+<h3 id="orgb348097"><span class="section-number-3">3.7.</span> Conditions</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+In addition to <code>cl:restart-name</code>, Clasp provides some readers to introspect about restarts,
+for advanced users (e.g. writing your own debugger, or the <a href="https://github.com/Shinmera/dissect">Dissect</a> library):
+<code>ext:restart-function</code> returns the function called by <code>cl:invoke-restart</code>, and <code>ext:report-function</code>,
+<code>ext:interactive-function</code>, and <code>ext:interactive-function</code> return the corresponding arguments in
+<code>cl:restart-bind</code>. These will always be appropriate functions, so for example <code>ext:report-function</code> will
+always return a function of one stream argument, but if no <code>:report-function</code> was provided it will report
+the restart in Clasp's default way. The identities of these returned functions cannot be relied on,
+i.e. they may not be identical to those provided to <code>cl:restart-bind</code>.
+</p>
+
+<p>
+There is also <code>ext:restart-associated-conditions</code>, which returns a list of conditions associated
+(by <code>cl:with-condition-restarts</code>) with the restart in the current dynamic environment.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0aaa487" class="outline-3">
+<h3 id="org0aaa487"><span class="section-number-3">3.8.</span> Symbols</h3>
+</div>
+
+<div id="outline-container-org1b6e00c" class="outline-3">
+<h3 id="org1b6e00c"><span class="section-number-3">3.9.</span> Packages</h3>
+<div class="outline-text-3" id="text-3-9">
+<p>
+Clasp supports package-local nicknames, through an interface based on that of SBCL's.
+A package-local nickname is a nickname for a package that is only active when some other package is in
+place as <code>*package*</code>. For example, if the package "FOO" has "B" as a package-local nickname for package
+"BAR", then while <code>*package*</code> is the <code>foo</code> package, the prefix "B:" will be read as if it was "BAR:".
+</p>
+
+<p>
+Local nicknames may be specified in <code>defpackage</code> through the <code>(:local-nicknames (nickname package-name)*)</code>
+extended options. <code>nickname</code> must be a string designator and <code>package-name</code> a package designator - both
+are unevaluated. The functions <code>ext:package-local-nicknames</code>, <code>ext:add-package-local-nickname</code>,
+<code>ext:remove-package-local-nickname</code>, and <code>ext:package-locally-nicknamed-by-list</code> can be used for a more
+programmatic interface.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org543ee51" class="outline-3">
+<h3 id="org543ee51"><span class="section-number-3">3.10.</span> Numbers</h3>
+<div class="outline-text-3" id="text-3-10">
+<p>
+There are two types of floats, <code>single-float</code> and <code>double-float</code>. <code>short-float</code> is synonymous with the
+former and <code>long-float</code> is synonymous with the latter, per the standard's requirements.
+<code>single-float</code> is in the IEEE754 binary32 (single) format, and <code>double-float</code> in binary64 (double) format.
+The representation of a float as bits can be interconverted with a float using the functions
+<code>ext:single-float-to-bits</code>, <code>bits-to-single-float</code>, <code>double-float-to-bits</code>, and <code>bits-to-double-float</code>.
+These functions take or return nonnegative integers;
+for example <code>(logbitp 31 (ext:single-floats-to-bit float))</code> returns whether the sign bit is set.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgade7025" class="outline-3">
+<h3 id="orgade7025"><span class="section-number-3">3.11.</span> Characters</h3>
+<div class="outline-text-3" id="text-3-11">
+<p>
+Clasp supports Unicode by default. <code>code-char</code> and <code>char-code</code> work with Unicode codepoints.
+Unicode character names are also supported, e.g. <code>(princ #\GREEK_SMALL_LETTER_LAMDA) -&gt; λ</code>.
+=(defun λ(n)(* 2 n)) (λ 32) -&gt; 64=is also possible.
+</p>
+
+<p>
+Type <code>character</code> includes all characters in Unicode. Type <code>base-char</code> includes only single byte
+characters, i.e. Basic Latin and Latin-1 Supplement.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd08d193" class="outline-3">
+<h3 id="orgd08d193"><span class="section-number-3">3.12.</span> Conses</h3>
+</div>
+
+<div id="outline-container-org8be6467" class="outline-3">
+<h3 id="org8be6467"><span class="section-number-3">3.13.</span> Arrays</h3>
+<div class="outline-text-3" id="text-3-13">
+<p>
+In Clasp, arrays with no fill-pointer, displacement, or express adjustability are simple
+(as in <code>simple-array</code>), and arrays that have any of these are not.
+Additionally, Clasp implements multidimensional arrays - even ones that are simple in this sense - as
+if they were displaced to an underlying one dimensional array.
+As such, it is most efficient to work with one-dimensional simple arrays directly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7ace96d" class="outline-3">
+<h3 id="org7ace96d"><span class="section-number-3">3.14.</span> Strings</h3>
+</div>
+
+<div id="outline-container-orga83a8eb" class="outline-3">
+<h3 id="orga83a8eb"><span class="section-number-3">3.15.</span> Sequences</h3>
+<div class="outline-text-3" id="text-3-15">
+</div>
+<div id="outline-container-orge4eec74" class="outline-4">
+<h4 id="orge4eec74"><span class="section-number-4">3.15.1.</span> Extensible Sequences</h4>
+<div class="outline-text-4" id="text-3-15-1">
+<p>
+<a href="https://doi.org/10.1145/1622123.1622138">The extensible sequences protocol developed by Christophe Rhodes</a> is supported.
+Symbols related to the protocol are external in Clasp's "SEQUENCE" package.
+This protocol allows programmers to define their own sequence classes that work efficiently with standard
+Common Lisp functions. It is recommended that programmers consult other resources,
+such as Dr. Rhodes' paper, for more information on how to use this protocol effectively.
+</p>
+
+<p>
+To summarize: Programmers wishing to make a custom sequence class must ensure their class has
+<code>cl:sequence</code> as a superclass. (Note that <code>sequence</code> is itself abstract, so if a custom class needs to
+have e.g. slots, it should also be a subclass of <code>standard-object</code> or something like it.)
+Methods on <code>elt</code>, <code>(setf elt)</code>, <code>length</code> applicable to objects of the class must be defined for any
+sequence functions to work; an applicable method on <code>make-sequence-like</code> must be defined for creation
+of this sequence to work; and an applicable method on <code>adjust-sequence</code> must be defined for destructive
+operations to work. Standard sequence functions will then operate correctly with these sequences,
+as will <code>make-sequence</code> and <code>coerce</code>.
+</p>
+
+<p>
+For efficiency, programmers may also define applicable methods on <code>make-sequence-iterator</code>,
+or less efficiently but more simply, on <code>make-simple-sequence-iterator</code>, <code>iterator-step</code>, <code>iterator-endp</code>,
+<code>iterator-element</code>, <code>(setf iterator-element)</code>, <code>iterator-index</code>, and <code>iterator-copy</code>.
+</p>
+
+<p>
+Note that because the <code>sequence:</code> generic function cognates to <code>cl:</code> sequence functions are defined to
+have the same behavior in almost all cases, Clasp takes the view that they need not be called.
+For example, a call to <code>cl:find</code> with a custom sequence object <span class="underline">may</span> result in a call to <code>sequence:find</code>,
+but may not. In other words the cognates are considered optional, and only possibly useful for
+optimization. This is still in flux. If you think it's a bad idea, contact a maintainer to talk.
+</p>
+
+<p>
+As a small extension to the extension, if a custom sequence object does not implement enough of the
+protocol for a sequence function to complete, it will signal an error of type
+<code>sequence:protocol-unimplemented</code>. The reader <code>sequence:protocol-unimplemented-operation</code> can be used to
+get the name of the operation that failed from these conditions.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5b03056" class="outline-3">
+<h3 id="org5b03056"><span class="section-number-3">3.16.</span> Hash Tables</h3>
+<div class="outline-text-3" id="text-3-16">
+<p>
+<code>make-hash-table</code> supports additional keyword arguments.
+</p>
+
+<p>
+<code>:weakness</code> can be used to indicate that the garbage collection may collect individual hash table entries
+even when the hash table itself is live, in certain circumstances. At present, only weak-key hash tables
+are supported: when the weakness argument is <code>:key</code>, the hash table's reference to the key of a table
+entry is <span class="underline">weak</span>, and if there are no non-weak references to a key, it is collectable.
+See the "Garbage Collection" section below for more information on weak references.
+If the weakness parameter is passed as <code>nil</code>, or not passed, the hash table does not contain weak references.
+</p>
+
+<p>
+<code>:thread-safe</code> can be used to make hash table access safe across multiple threads.
+If a thread-safe argument is not passed, or <code>nil</code> is passed, the hash table cannot safely be written to
+or read from multiple threads simultaneously (see "Memory Model", below, for a brief explanation of
+terminology). If the thread-safe argument is true, the implementation will ensure that accesses can be
+carried out from multiple threads simultaneously safely. This does impose a small performance penalty,
+which is why it is not the default.
+</p>
+
+<p>
+If a <code>:test</code> other than a standard equality predicate is passed, <code>:hash-function</code> must be specified as
+well. The hash function should be a designator for a function of one argument that is analogous to
+<code>sxhash</code>, i.e. <code>(funcall test x y)</code> implies <code>(</code> (funcall hash-function x) (funcall hash-function y))=
+and so on. This will create a "custom" hash table that can be used with the standard hash table functions
+like <code>gethash</code>, with the exception that at the moment, attempting to dump a custom hash table has
+undefined consequences.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5d7da43" class="outline-3">
+<h3 id="org5d7da43"><span class="section-number-3">3.17.</span> Filenames</h3>
+</div>
+
+<div id="outline-container-orgc132e55" class="outline-3">
+<h3 id="orgc132e55"><span class="section-number-3">3.18.</span> Files</h3>
+<div class="outline-text-3" id="text-3-18">
+<p>
+<code>ext:rmdir</code> deletes a directory. <code>EXT:RMTREE</code> deletes an entire directory tree.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdb4abea" class="outline-3">
+<h3 id="orgdb4abea"><span class="section-number-3">3.19.</span> Streams</h3>
+<div class="outline-text-3" id="text-3-19">
+</div>
+<div id="outline-container-org706f7e6" class="outline-4">
+<h4 id="org706f7e6"><span class="section-number-4">3.19.1.</span> Gray streams</h4>
+<div class="outline-text-4" id="text-3-19-1">
+<p>
+The Gray stream interface as described in ANSI committee issue "STREAM-DEFINITION-BY-USER"
+(readable, e.g., <a href="http://www.nhplace.com/kent/CL/Issues/stream-definition-by-user.html">on Kent Pitman's website</a>) is supported. Symbols are exported from package "GRAY".
+We recommend programmers use a multi-implementation compatibility layer such as <a href="https://common-lisp.net/project/trivial-gray-streams/">trivial-gray-streams</a>
+rather than use Clasp's implementation directly.
+</p>
+
+<p>
+Gray streams allow programmers to define their own stream classes with custom behavior that work with
+standard Common Lisp functions. It is recommended that programmers consult another resource, such as the
+trivial-gray-streams documentation, for more information on how to use this interface effectively.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org807f845" class="outline-3">
+<h3 id="org807f845"><span class="section-number-3">3.20.</span> Printer</h3>
+<div class="outline-text-3" id="text-3-20">
+<p>
+When <code>format</code>'s control string argument is constant, the compiler will process it early, so that the
+runtime doesn't have to. This improves runtime speed but increases code size.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8754f59" class="outline-3">
+<h3 id="org8754f59"><span class="section-number-3">3.21.</span> Reader</h3>
+</div>
+
+<div id="outline-container-org39c3aa8" class="outline-3">
+<h3 id="org39c3aa8"><span class="section-number-3">3.22.</span> System Construction</h3>
+</div>
+
+<div id="outline-container-org636ee91" class="outline-3">
+<h3 id="org636ee91"><span class="section-number-3">3.23.</span> Environment</h3>
+<div class="outline-text-3" id="text-3-23">
+</div>
+<div id="outline-container-org3e84472" class="outline-4">
+<h4 id="org3e84472"><span class="section-number-4">3.23.1.</span> Stepper</h4>
+<div class="outline-text-4" id="text-3-23-1">
+<p>
+<code>cl:step</code> can be used to step through compiled code as partially described in the standard.
+Currently, the stepper can only stop on forms that happen to be compiled as calls, though this may be
+improved in the future.
+</p>
+
+<p>
+Code is steppable if it is compiled with <code>debug 3</code> optimization settings, or is within the <code>step</code> macro.
+While unsteppable code is being executed, the stepper will not stop.
+</p>
+
+<p>
+Clasp further defines some aspects of stepping for the sake of editor/debugger integration.
+When the stepper pauses execution, a condition of type <code>cl:step</code> is passed to the debugger.
+This condition will print with the source form for the call.
+Similarly to <code>cl:break</code>, <code>*debugger-hook*</code> is bound to <code>nil</code>, but <code>ext:*invoke-debugger-hook*</code>
+(described below) can still be used for interception. The following restarts are available from a <code>step</code>
+condition:
+</p>
+
+<ul class="org-ul">
+<li><code>cl:continue</code>: Continue without stepping. The stepper will not invoke the debugger again.</li>
+<li><code>clasp-debug:step-into</code>: Continue stepping. If the function to be called is steppable,
+the stepper will pause within it, and otherwise stepping will proceed after the call.</li>
+<li><code>clasp-debug:step-over</code>: Continue stepping, but not into the call the stepper is on.
+Stepping will proceed after the call is exited (either by normal return or a non-local exit).</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb40cedd" class="outline-2">
+<h2 id="orgb40cedd"><span class="section-number-2">4.</span> C++ Interface (clbind)</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<a href="clbind-doc.html">Documented here.</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ec26ab" class="outline-2">
+<h2 id="org0ec26ab"><span class="section-number-2">5.</span> Foreign Function Interface</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Clasp can interact with C programs and libraries through its Foreign Function Interface (FFI).
+Symbols relating to this interface are external in package "CLASP-FFI".
+However, it is recommended for most applications that you use a cross-implementation wrapper layer,
+specifically <a href="https://cffi.common-lisp.dev/">CFFI</a>. Clasp's own interface has not yet been documented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org66b9a81" class="outline-2">
+<h2 id="org66b9a81"><span class="section-number-2">6.</span> REPL</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Clasp's built in read-eval-print loop supports various commands in addition to evaluating Lisp forms.
+These commands consist of lines beginning with a Lisp keyword, followed possibly by additional arguments.
+The most up to date documentation for this interface is the on-line help system,
+obtainable with the command <code>:help</code>.
+</p>
+
+<p>
+Clasp has a built in debugger, which will be entered by <code>invoke-debugger</code> by default.
+<code>:help</code> can describe the debugger commands as well. Some basic commands are <code>:b</code> to print a backtrace,
+<code>:rN</code> to invoke the Nth restart, <code>:v</code> to print local variables in the frame, and <code>:up</code>, <code>:down</code>,
+and <code>:go</code> for navigating frames.
+</p>
+
+<p>
+In addition to the standard <code>*debugger-hook*</code>, Clasp has <code>ext:*invoke-debugger-hook*</code>.
+This is a similar hook function, but it will be tried before <code>*debugger-hook*</code>, and importantly,
+will be called even for <code>break</code> (which binds <code>*debugger-hook*</code> to <code>nil</code> per the standard).
+This can be used to set up your own debugger in an IDE.
+</p>
+
+<p>
+In the debugger, the function <code>ext:tpl-frame</code> can be used to return a representation of the current frame
+suitable for the programmatic debug interface described below, and <code>ext:tpl-argument</code> and
+<code>ext:tpl-arguments</code> can be used to retrieve arguments.
+</p>
+
+<p>
+In some applications, it's useful for the program to exit rather than exit a debugger.
+The functions <code>ext:disable-debugger</code> and <code>ext:enable-debugger</code> can be used to set whether the debugger
+will be entered. These only affect the <b><b>built in</b></b> debugger, and they do not affect <code>*debugger-hook*</code>
+or <code>ext:*invoke-debugger-hook*</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc1695a4" class="outline-2">
+<h2 id="orgc1695a4"><span class="section-number-2">7.</span> Debug interface</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+For advanced users, such as those developing development tools such as debuggers to use with Clasp,
+a programmatic interface to debug information is provided by the <code>CLASP-DEBUG</code> package.
+</p>
+
+<p>
+The <code>with-stack</code> and <code>call-with-stack</code> operators allow <code>frame</code> objects, representing part of the current
+control stack, to be interrogated. These frame objects have several readers: <code>frame-function</code>,
+<code>frame-arguments</code>, <code>frame-locals</code>, <code>frame-source-position</code>, and <code>frame-language</code>.
+More specific information about the function can be obtained with <code>frame-function-name</code>,
+<code>frame-function-lambda-list</code>, <code>frame-function-source-position</code>, <code>frame-function-form</code>,
+<code>frame-function-documentation</code>, and <code>disassemble-frame</code>.
+</p>
+
+<p>
+Note that frames necessarily have dynamic extent, because the local variables, arguments, and functions
+they refer to may be dynamic-extent themselves.
+</p>
+
+<p>
+To navigate frames smoothly, a notion of "visibility" exists. Frames can be "invisible" if they aren't of
+interest to users. This includes things like internal system code. Of course, the concept of visiblity
+can change. Frame visibility is controlled by the <code>*frame-filters*</code> variable, which holds a list of
+function designators: a frame is visible if none of the functions return a true value when given the
+frame as an argument. As such, all frames are considered visible if <code>*frame-filters*</code> is bound to <code>nil</code>.
+</p>
+
+<p>
+<code>up</code> and <code>down</code> can be used to navigate visible frames, while <code>frame-up</code> and <code>frame-down</code> ignore
+visibility. <code>map-stack</code>, <code>list-stack</code>, and <code>map-indexed-stack</code> can be used to perform manipulations on
+all frames at once.
+</p>
+
+<p>
+<code>with-truncated-stack</code> and <code>with-capped-stack</code> can be used as hints to <code>with-stack</code>
+(and therefore debuggers) that only a portion of the control stack is of interest. For example, a
+function that signals an error can use <code>with-truncated-stack</code> to ensure that lower debugger frames are
+not included in backtraces.
+</p>
+
+<p>
+<code>print-backtrace</code> is provided as a simple way to print a current backtrace, without needing to use
+<code>with-stack</code> and the other more detailed operators.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgeee7b64" class="outline-2">
+<h2 id="orgeee7b64"><span class="section-number-2">8.</span> Multiprocessing</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+Multiprocessing is supported. Symbols relating to multiprocessing are exported from the "MP" package.
+It is recommended that programmers use the <a href="https://github.com/sionescu/bordeaux-threads">Bordeaux-Threads</a> compatibility library rather than Clasp's
+interface directly when possible.
+</p>
+</div>
+
+<div id="outline-container-orgd01caac" class="outline-3">
+<h3 id="orgd01caac"><span class="section-number-3">8.1.</span> Processes</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+A process is a Lisp object representing a distinct thread of execution. Each process evaluates a call to
+a Lisp function, and exits when that call would finally return values. Processes have names for debugging
+purposes. Processes are "nascent" or "not yet started" if they haven't yet begun evaluating, "active"
+if they have begun evaluating, "suspended" if that evaluation has been paused by <code>process-suspend</code>,
+and "exited" if they have finished evaluation (normally or by aborting).
+</p>
+
+<p>
+Processes have type <code>process</code>. <code>make-process</code> creates a new process but does not start it.
+<code>process-start</code> enables a process, and <code>process-run-function</code> both creates and enables a process.
+The name of a process can be retrieved with <code>process-name</code>. <code>process-active-p</code> can be used to query
+whether a process is active. <code>process-suspend</code>, <code>process-resume</code>, <code>interrupt-process</code>, and
+<code>process-kill</code> interfere with a process's evaluation. <code>process-join</code> waits until a process until it
+completes, and then returns the values its function returned, or signals an error of
+type <code>process-join-error</code> if the process ended abnormally. Within a process, <code>exit-process</code> can be used
+to end the process's evaluation immediately, and <code>abort-process</code> to do so abnormally; in either case the
+dynamic environment is properly unwound. <code>all-processes</code> gets a list of all enabled processes.
+The variable <code>*current-process*</code> is bound in any process to that process. Consult the docstrings of
+these functions for more information.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgddac7b0" class="outline-3">
+<h3 id="orgddac7b0"><span class="section-number-3">8.2.</span> Special variables</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+Bindings of special variables (by <code>let</code>, <code>progv</code>, lambda lists, etc.) are thread-local.
+That is, executing a binding form for a variable will not affect that variable's value in other threads.
+The global value - from <code>symbol-value</code> - is, in contrast, shared between threads.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfe83e2d" class="outline-3">
+<h3 id="orgfe83e2d"><span class="section-number-3">8.3.</span> Mutexes</h3>
+<div class="outline-text-3" id="text-8-3">
+<p>
+A mutex (short for "MUTual EXclusion"), or lock, can be used to control access to a shared resource by
+multiple processes.
+</p>
+
+<p>
+Mutexes have type <code>mutex</code>. A mutex is created with <code>make-lock</code>, or <code>make-recursive-mutex</code> for a recursive
+mutex. <code>get-lock</code> and <code>giveup-lock</code> obtain and release exclusion on a mutex, respectively.
+<code>mutex-name</code> retrieves any name of a mutex given at creation.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdbcd4e1" class="outline-3">
+<h3 id="orgdbcd4e1"><span class="section-number-3">8.4.</span> Shared Mutexes</h3>
+<div class="outline-text-3" id="text-8-4">
+<p>
+Not yet documented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org97cbe20" class="outline-3">
+<h3 id="org97cbe20"><span class="section-number-3">8.5.</span> Condition Variables</h3>
+<div class="outline-text-3" id="text-8-5">
+<p>
+Not yet documented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc3b9478" class="outline-3">
+<h3 id="orgc3b9478"><span class="section-number-3">8.6.</span> Memory Model</h3>
+<div class="outline-text-3" id="text-8-6">
+<p>
+Clasp does not have a formal memory model. Here is a sketch of one: Two accesses of a place are
+<i>concurrent</i> if they take place in different threads and are not excluded from running simultaneously by
+locks. Two concurrent accesses <i>conflict</i> if at least one is a write. If a conflicting access is
+not <i>atomic</i> the program has undefined behavior (e.g. tearing).
+</p>
+
+<p>
+Some accesses are atomic but <i>unordered</i>, meaning that there is not necessarily a modification order to
+the place that is observed by all threads, e.g. one thread may see writes occur in a different order
+from another thread. Some accesses are <i>sequentially consistent</i>, meaning that there is such a globally
+observable modification order, and furthermore that all sequentially consistent accesses have a globally
+observable order.
+</p>
+
+<p>
+Places may be complex, indeed completely custom. Clasp defines atomicity of some simple places;
+other places, and more complex modification operations, should hopefully be understandable from those.
+For example, to setf the <code>second</code> of a list, one <code>cdr</code> must be read before a <code>car</code> is written, and each
+of these individual accesses is atomic while the overall access is not.
+</p>
+
+<p>
+In general Clasp tries to guarantee unordered atomicity, but does not always succeed, and in some cases
+it's probably not possible.
+</p>
+
+<p>
+Note that in this context "atomic" does not necessarily mean "lock-free", although Clasp attempts to make
+atomic operations proceed without locks.
+</p>
+
+<p>
+Places that can be accessed unorderedly are: <code>car</code>, <code>cdr</code>, <code>symbol-value</code>, <code>symbol-plist</code>,
+<code>symbol-function=/=fdefinition</code>, <code>compiler-macro-function</code>, <code>ext:setf-expander</code>, <code>ext:type-expander</code>.
+Access to the elements of simple one-dimensional arrays should be unordered, except for integer element
+types smaller than <code>(unsigned-byte 8)</code>. Access to <code>standard-object</code> and <code>structure-object</code> slots
+(of <code>:instance</code> or <code>:class</code> allocation) should also be unordered.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd48000a" class="outline-3">
+<h3 id="orgd48000a"><span class="section-number-3">8.7.</span> Atomics</h3>
+<div class="outline-text-3" id="text-8-7">
+<p>
+Access can be guaranteed atomic by using the <code>atomic</code> macro. That is, <code>(atomic place)</code> is a place that
+can be accessed atomically, or else an error will be signaled. Clasp defines <code>car</code>, <code>cdr</code>, <code>first</code>,
+<code>rest</code>, <code>symbol-value</code>, special variables, <code>symbol-plist</code>, <code>standard-instance-access</code>, <code>slot-value</code>,
+<code>clos:slot-value-using-class</code>, and <code>svref</code> as atomically accessible, as well as <code>the</code> place or macro
+places that expand to these places. Additional atomically accessible places can be defined with the
+<code>define-atomic-expansion</code> macro. See its documentation string for more information. Additionally,
+documentation on atomic access may be available with kind <code>atomic</code>; e.g.
+try <code>(documentation 'symbol-value 'mp:atomic)</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8bb6ae8" class="outline-3">
+<h3 id="org8bb6ae8"><span class="section-number-3">8.8.</span> Compare-and-swap</h3>
+<div class="outline-text-3" id="text-8-8">
+<p>
+The <code>mp:cas</code> macro can be used to execute an atomic compare-and-swap of atomically accessible places.
+See its docstring for more information. <code>cas</code> is used to define higher order atomic read-modify-write
+operations provided by Clasp: <code>atomic-update</code>, <code>atomic-incf</code>, <code>atomic-decf</code>, <code>atomic-push</code>, <code>atomic-pop</code>,
+and <code>atomic-pushnew</code>. The first is a general operator analogous to what <code>define-modify-macro</code> operators
+do, while the others are analogous to their standard versions. <code>-explicit</code> variants can be used to
+explicitly specify the order of the operation.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org76dfffe" class="outline-3">
+<h3 id="org76dfffe"><span class="section-number-3">8.9.</span> Fences</h3>
+<div class="outline-text-3" id="text-8-9">
+<p>
+The <code>mp:fence</code> function can be used to establish memory fences of a specified order.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfeaa6b8" class="outline-2">
+<h2 id="orgfeaa6b8"><span class="section-number-2">9.</span> Introspection</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Information about objects is stored and accessible. This is primarily intended for editor integration,
+but the functions can be used in any context. It is not recommended that they be used for purposes other
+than human understanding, however - it can sometimes be dropped or inaccurate. These mechanisms are
+similar to the standard <code>documentation</code> function.
+</p>
+
+<p>
+<code>ext:function-lambda-list</code> can be used to get the lambda list of a function object, and
+<code>ext:compiled-function-name</code> its name.
+</p>
+
+<p>
+<code>ext:source-location</code> returns a list of source locations for a symbol or object. Source locations are of
+type <code>ext:source-location</code>; they contain a pathname accessible with <code>ext:source-location-pathname</code>, and a
+file offset (as from <code>file-position</code>) accessible with <code>ext:source-location-offset</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2c70e59" class="outline-2">
+<h2 id="org2c70e59"><span class="section-number-2">10.</span> Sockets</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+A low level networking API based on <a href="http://sbcl.org/manual/index.html#Networking">SBCL's</a> (which is in turn based on BSD sockets) is available in
+package "SB-BSD-SOCKETS". Clasp's interface has not yet been specifically documented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org681ea93" class="outline-2">
+<h2 id="org681ea93"><span class="section-number-2">11.</span> Serve Event</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Not yet documented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge9e51f6" class="outline-2">
+<h2 id="orge9e51f6"><span class="section-number-2">12.</span> Garbage Collection</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+Symbols related to garbage collection are exported from the "GCTOOLS" package.
+</p>
+
+<p>
+The function <code>garbage-collect</code> forces a garbage collection.
+</p>
+
+<p>
+<code>finalize</code> registers a finalizer function for an object. When the object is collected, the function will
+be called with no arguments. Note that this function should not close over the object, because then the
+closure will keep that object alive indefinitely.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga495efd" class="outline-2">
+<h2 id="orga495efd"><span class="section-number-2">13.</span> POSIX</h2>
+<div class="outline-text-2" id="text-13">
+</div>
+<div id="outline-container-org16daf20" class="outline-3">
+<h3 id="org16daf20"><span class="section-number-3">13.1.</span> Signal Handling</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+Handlers for standard POSIX signals can be defined in Clasp using the <code>ext:enable-interrupt</code> function,
+which expects a keyword to identify the type of signal (e.g. <code>:sigpipe</code> for <code>SIGPIPE</code>).
+If a Lisp function is used as the handler, it must be a function of one argument, the signal number.
+<code>ext:enable-interrupt</code>, or <code>ext:ignore-interrupt</code> and <code>ext:default-interrupt</code>, can be used to set the
+handler to the ignore-signal handler or the default handler respectively, analogous to <code>SIG_IGN</code> and
+<code>SIG_DFL</code>. The current handler function, if there is one, can be retrieved with <code>ext:get-signal-handler</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9cd8776" class="outline-3">
+<h3 id="org9cd8776"><span class="section-number-3">13.2.</span> Further posix interfaces</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+<code>ext:stat</code> and <code>ext:fstat</code> wrap the corresponding posix-interfaces. Use <code>ext:file-stream-file-descriptor</code>
+to get the file-descriptor for a stream.
+The environment can be accessed with <code>EXT:SETENV=and =EXT:GETENV</code>
+Working directories can be accessed with <code>EXT:GETCWD=and =EXT:CHDIR</code>.  
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<center><p>
+<a href="sitemap.html">Sitemap</a> &#x2014; <a href="license.html">License</a>
+</p>
+</center>
+</div>
+</body>
+</html>

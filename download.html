@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-07 Wed 18:02 -->
+<!-- 2022-11-03 Thu 13:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Get Clasp</title>
-<meta name="generator" content="Org mode" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -30,8 +30,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,22 +40,22 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
+    overflow: auto;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -190,7 +191,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg-no-toc.css"/>
@@ -199,52 +199,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2020 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -253,13 +207,13 @@ for the JavaScript code in this tag.
 <li><a href="index.html">Clasp</a>
 <ul>
 <li><a href="news.html">News</a></li>
-<li><a href="features.html">Features</a></li>
 <li><a href="download.html">Download</a></li>
 </ul></li>
 <li><a href="index.html">Doc</a>
 <ul>
 <li><a href="license.html">License</a></li>
-<li><a href="building.html">Building Clasp</a></li>
+<li><a href="manual.html">Manual</a></li>
+<li><a href="building.html">Building</a></li>
 <li><a href="clbind-doc.html">Exposing C++ Libraries</a></li>
 </ul></li>
 <li><a href="index.html">Misc</a>
@@ -272,12 +226,204 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Get Clasp</h1>
 <p>
-Currently, it is required to build Clasp from source, which is available from the <a href="https://github.com/clasp-developers/clasp">Github repository</a> - use the main branch.
-You can ask for help on the irc channel #clasp on Libera.chat.
+The most recent version of Clasp is v2.0.0, released October 26, 2022. See <a href="news.html">News</a> for release notes.
 </p>
+
+<div id="outline-container-org873fc80" class="outline-2">
+<h2 id="org873fc80">Binaries</h2>
+<div class="outline-text-2" id="text-org873fc80">
+</div>
+<div id="outline-container-orga7b31e1" class="outline-3">
+<h3 id="orga7b31e1">Installing from the Nightly Homebrew Tap</h3>
+<div class="outline-text-3" id="text-orga7b31e1">
+<p>
+Binary packages for MacOS Catalina, Big Sur and Monterey are available from the
+<code>clasp-developers/clasp</code> tap. Binary packages for Clasp and Cando are built nightly,
+starting about 2:00 AM EST, and take about 4 hours to complete. To install Clasp, do the
+following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">brew install clasp-developers/clasp/clasp-cl
+</pre>
+</div>
+
+<p>
+To install Cando do the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">brew install clasp-developers/clasp/cando
+</pre>
+</div>
+
+<p>
+These Homebrew formula can be built from source by adding the <code>--build-from-source</code> option,
+and can be built directly the most recent commit by adding the <code>--HEAD</code> option.
+</p>
+
+<p>
+After the initial install, to upgrade to the latest nightly build use <code>brew update &amp;&amp; brew upgrade</code>.
+The brew update only needs to be done occasionally, to update homebrew itself.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org169bfd7" class="outline-3">
+<h3 id="org169bfd7">Installing from the Nightly Linux Package Repository</h3>
+<div class="outline-text-3" id="text-org169bfd7">
+<p>
+Binary packages for Clasp and Cando for Linux are built nightly starting about 2:00 AM EST and take about 4 hours to complete.
+Currently packages are built for Ubuntu 22.04, Debian Bookworm (in testing), and Arch.
+To add the package repository to your local system, and install either Clasp or Cando,
+execute one of the following commands in a shell.
+You may need to prefix these commands with <code>sudo</code> for root access.
+</p>
+
+<p>
+Clasp:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">bash -c "$(curl -fsSL https://www.thirdlaw.tech/pkg/clasp.sh)"
+</pre>
+</div>
+
+<p>
+Cando:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">bash -c "$(curl -fsSL https://www.thirdlaw.tech/pkg/cando.sh)"
+</pre>
+</div>
+
+<p>
+If these scripts fail to detect your operating system correctly, then you can install
+manually via one of the following commands:
+</p>
+</div>
+
+<div id="outline-container-org6463a01" class="outline-4">
+<h4 id="org6463a01">Debian Bookworm</h4>
+<div class="outline-text-4" id="text-org6463a01">
+<p>
+Clasp:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./"
+apt-get update
+apt-get install clasp-cl
+</pre>
+</div>
+
+<p>
+Cando:
+</p>
+
+<pre class="example">
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./"
+apt-get update
+apt-get install cando
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgb020dc3" class="outline-4">
+<h4 id="orgb020dc3">Ubunty Jammy</h4>
+<div class="outline-text-4" id="text-orgb020dc3">
+<p>
+Clasp:
+</p>
+
+<pre class="example">
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/jammy/ ./"
+apt-get update
+apt-get install clasp-cl
+</pre>
+
+<p>
+Cando:
+</p>
+
+<pre class="example">
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/jammy/ ./"
+apt-get update
+apt-get install cando
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org1bdb715" class="outline-4">
+<h4 id="org1bdb715">Arch</h4>
+<div class="outline-text-4" id="text-org1bdb715">
+<p>
+Clasp:
+</p>
+
+<pre class="example">
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | pacman-key --add -
+pacman-key --lsign-key 009C1F20737D81230A0928CBC812E10EC39DF202
+echo -e "\n[thirdlaw]\nServer = https://www.thirdlaw.tech/pkg/arch\n" &gt;&gt;/etc/pacman.conf
+pacman -Sy --noconfirm clasp-cl-git
+</pre>
+
+<p>
+Cando:
+</p>
+
+<pre class="example">
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | pacman-key --add -
+pacman-key --lsign-key 009C1F20737D81230A0928CBC812E10EC39DF202
+echo -e "\n[thirdlaw]\nServer = https://www.thirdlaw.tech/pkg/arch\n" &gt;&gt;/etc/pacman.conf
+pacman -Sy --noconfirm cando-git
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgce4ffdc" class="outline-2">
+<h2 id="orgce4ffdc">Source</h2>
+<div class="outline-text-2" id="text-orgce4ffdc">
+<p>
+Clasp's sources can be obtained from <a href="https://github.com/clasp-developers/clasp">GitHub</a> and built, as described in more detail in <a href="building.html">Building</a>.
+</p>
+</div>
+
+<div id="outline-container-orgcca371e" class="outline-3">
+<h3 id="orgcca371e">Arch</h3>
+<div class="outline-text-3" id="text-orgcca371e">
+<p>
+On Arch Linux, an AUR package is available for building from source. An AUR helper such as
+<a href="https://github.com/Jguer/yay">yay</a> may be useful for this. Building in this manner using the <code>clasp-cl-git</code> package
+will build Clasp, while cando-git will build Clasp and Cando.
+If you do not have yay installed, you can install it with the following commands:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+</pre>
+</div>
+
+<p>
+Once yay is installed, you can install Clasp with <code>yay clasp-cl-git</code>, or Clasp and Cando
+with <code>yay cando-git</code>.
+</p>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <center><p>

@@ -2,8 +2,8 @@
 #+OPTIONS: toc:nil num:nil
 
 * IRC Channel
-Clasp has an IRC channel on [[https://freenode.net/][Freenode]] called [[irc://irc.freenode.net/#clasp][#clasp]]. 
-A [[http://log.irc.tymoon.eu/freenode/clasp][chatlog of #clasp]] makes it easy to read up on conversations you have missed.
+Clasp has an IRC channel on [[https://freenode.net/][Libera]] called [[irc://irc.freenode.net/#clasp][#clasp]]. 
+A [[https://irclog.tymoon.eu/libera/clasp][chatlog of #clasp]] makes it easy to read up on conversations you have missed.
 Most of the active conversation between developers happens in this channel, 
 rather than in the [[Mailing List][Mailing List]].
 If you have questions, problems, suggestions, or generally would like to just hang out with the devs, come and stop by!
@@ -13,18 +13,17 @@ The clasp mailing list is reachable at mailto:clasp-devel@common-lisp.net.
 To subscribe or view the archives, view the [[https://mailman.common-lisp.net/listinfo/clasp-devel][mailing list website]].
 
 * Issue Tracker
-If you have noticed a problem with clasp, file an issue on the [[https://github.com/drmeister/clasp/issues][issue tracker]].
+If you have noticed a problem with Clasp, file an issue on the [[https://github.com/drmeister/clasp/issues][issue tracker]].
 If the issue got talked about on IRC, it can be helpful to file an issue and include a chatlog in order to track it and remind everyone of what was being talked about.
 
 In any case, you should have the following pieces handy in order for us to be
 able to help you out as quickly and painlessly as possible.
 
 -  Your operating system name and version.
--  The versions of the [[file:external-dependencies][external libraries]]
-   that you have installed.
 -  A paste of the build log or failure point that you reached.
 -  Patience.
 
+The developers welcome bug reports and patches. Pull requests should be submitted to the GitHub repository.
 
 * Developer Blog
-The main developer of Clasp has [[https://drmeister.wordpress.com][blog]] where he occasionally writes stuff about clasp.
+The main developer of Clasp has a [[https://drmeister.wordpress.com][blog]] where he occasionally writes stuff about clasp.

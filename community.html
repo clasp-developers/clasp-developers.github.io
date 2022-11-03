@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-07 Wed 18:02 -->
+<!-- 2022-11-03 Thu 13:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Community</title>
-<meta name="generator" content="Org mode" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -30,8 +30,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,22 +40,22 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
+    overflow: auto;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -190,7 +191,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg-no-toc.css"/>
@@ -199,52 +199,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2020 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -253,13 +207,13 @@ for the JavaScript code in this tag.
 <li><a href="index.html">Clasp</a>
 <ul>
 <li><a href="news.html">News</a></li>
-<li><a href="features.html">Features</a></li>
 <li><a href="download.html">Download</a></li>
 </ul></li>
 <li><a href="index.html">Doc</a>
 <ul>
 <li><a href="license.html">License</a></li>
-<li><a href="building.html">Building Clasp</a></li>
+<li><a href="manual.html">Manual</a></li>
+<li><a href="building.html">Building</a></li>
 <li><a href="clbind-doc.html">Exposing C++ Libraries</a></li>
 </ul></li>
 <li><a href="index.html">Misc</a>
@@ -272,25 +226,25 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Community</h1>
 
-<div id="outline-container-orgb5eff4a" class="outline-2">
-<h2 id="orgb5eff4a">IRC Channel</h2>
-<div class="outline-text-2" id="text-orgb5eff4a">
+<div id="outline-container-orgdb33ea6" class="outline-2">
+<h2 id="orgdb33ea6">IRC Channel</h2>
+<div class="outline-text-2" id="text-orgdb33ea6">
 <p>
-Clasp has an IRC channel on <a href="https://freenode.net/">Freenode</a> called <a href="irc://irc.freenode.net/#clasp">#clasp</a>. 
-A <a href="http://log.irc.tymoon.eu/freenode/clasp">chatlog of #clasp</a> makes it easy to read up on conversations you have missed.
+Clasp has an IRC channel on <a href="https://freenode.net/">Libera</a> called <a href="irc://irc.freenode.net/#clasp">#clasp</a>. 
+A <a href="https://irclog.tymoon.eu/libera/clasp">chatlog of #clasp</a> makes it easy to read up on conversations you have missed.
 Most of the active conversation between developers happens in this channel, 
-rather than in the <a href="#org08af3f7">Mailing List</a>.
+rather than in the <a href="#org755efd1">Mailing List</a>.
 If you have questions, problems, suggestions, or generally would like to just hang out with the devs, come and stop by!
 </p>
 </div>
 </div>
 
-<div id="outline-container-org08af3f7" class="outline-2">
-<h2 id="org08af3f7">Mailing List</h2>
-<div class="outline-text-2" id="text-org08af3f7">
+<div id="outline-container-org755efd1" class="outline-2">
+<h2 id="org755efd1">Mailing List</h2>
+<div class="outline-text-2" id="text-org755efd1">
 <p>
 The clasp mailing list is reachable at <a href="mailto:clasp-devel@common-lisp.net">mailto:clasp-devel@common-lisp.net</a>.
 To subscribe or view the archives, view the <a href="https://mailman.common-lisp.net/listinfo/clasp-devel">mailing list website</a>.
@@ -298,11 +252,11 @@ To subscribe or view the archives, view the <a href="https://mailman.common-lisp
 </div>
 </div>
 
-<div id="outline-container-org5c2c755" class="outline-2">
-<h2 id="org5c2c755">Issue Tracker</h2>
-<div class="outline-text-2" id="text-org5c2c755">
+<div id="outline-container-org25fcdae" class="outline-2">
+<h2 id="org25fcdae">Issue Tracker</h2>
+<div class="outline-text-2" id="text-org25fcdae">
 <p>
-If you have noticed a problem with clasp, file an issue on the <a href="https://github.com/drmeister/clasp/issues">issue tracker</a>.
+If you have noticed a problem with Clasp, file an issue on the <a href="https://github.com/drmeister/clasp/issues">issue tracker</a>.
 If the issue got talked about on IRC, it can be helpful to file an issue and include a chatlog in order to track it and remind everyone of what was being talked about.
 </p>
 
@@ -313,20 +267,21 @@ able to help you out as quickly and painlessly as possible.
 
 <ul class="org-ul">
 <li>Your operating system name and version.</li>
-<li>The versions of the <a href="external-dependencies">external libraries</a>
-that you have installed.</li>
 <li>A paste of the build log or failure point that you reached.</li>
 <li>Patience.</li>
 </ul>
-</div>
-</div>
 
-
-<div id="outline-container-org9b0e98f" class="outline-2">
-<h2 id="org9b0e98f">Developer Blog</h2>
-<div class="outline-text-2" id="text-org9b0e98f">
 <p>
-The main developer of Clasp has <a href="https://drmeister.wordpress.com">blog</a> where he occasionally writes stuff about clasp.
+The developers welcome bug reports and patches. Pull requests should be submitted to the GitHub repository.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9aa6ea5" class="outline-2">
+<h2 id="org9aa6ea5">Developer Blog</h2>
+<div class="outline-text-2" id="text-org9aa6ea5">
+<p>
+The main developer of Clasp has a <a href="https://drmeister.wordpress.com">blog</a> where he occasionally writes stuff about clasp.
 </p>
 </div>
 </div>

@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-07 Wed 18:02 -->
+<!-- 2022-11-03 Thu 13:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
-<meta name="generator" content="Org mode" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -30,8 +30,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,22 +40,22 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
+    overflow: auto;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -190,55 +191,8 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2020 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -247,13 +201,13 @@ for the JavaScript code in this tag.
 <li><a href="index.html">Clasp</a>
 <ul>
 <li><a href="news.html">News</a></li>
-<li><a href="features.html">Features</a></li>
 <li><a href="download.html">Download</a></li>
 </ul></li>
 <li><a href="index.html">Doc</a>
 <ul>
 <li><a href="license.html">License</a></li>
-<li><a href="building.html">Building Clasp</a></li>
+<li><a href="manual.html">Manual</a></li>
+<li><a href="building.html">Building</a></li>
 <li><a href="clbind-doc.html">Exposing C++ Libraries</a></li>
 </ul></li>
 <li><a href="index.html">Misc</a>
@@ -266,258 +220,135 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Exposing C++ Libraries with clbind</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org65c9d4c">1. General information</a></li>
-<li><a href="#org0b02a09">2. Integrating with the clasp build system</a></li>
-<li><a href="#orgeecc9bb">3. Structure of a Binding</a></li>
-<li><a href="#org1343761">4. Include Files</a></li>
-<li><a href="#org2cd428e">5. Exposing Functions</a>
+<li><a href="#orgae1eba1">1. General information</a></li>
+<li><a href="#orga76e97f">2. Defining bindings</a></li>
+<li><a href="#org7fabb3c">3. Exposing Functions</a>
 <ul>
-<li><a href="#orgabd2c37">5.1. Overloaded Functions</a></li>
+<li><a href="#orgec2eb28">3.1. Overloaded Functions</a></li>
 </ul>
 </li>
-<li><a href="#org2ef0a3f">6. Exposing Classes</a>
+<li><a href="#org36fb2c2">4. Exposing Classes</a>
 <ul>
-<li><a href="#orgba6b4a1">6.1. Inheritance</a></li>
-<li><a href="#org5381a38">6.2. Constructors</a></li>
-<li><a href="#orgef2d169">6.3. Member Functions</a></li>
-<li><a href="#org38a5741">6.4. Static Member Function</a></li>
-<li><a href="#org4008900">6.5. Public Member Variables</a></li>
-<li><a href="#org99d9faa">6.6. Derivable classes</a></li>
+<li><a href="#org82d0a10">4.1. Inheritance</a></li>
+<li><a href="#orgb170448">4.2. Constructors</a></li>
+<li><a href="#orge688be0">4.3. Member Functions</a></li>
+<li><a href="#org626a1a2">4.4. Static Member Function</a></li>
+<li><a href="#orgc0d4595">4.5. Public Member Variables</a></li>
+<li><a href="#orge8b7342">4.6. Derivable classes</a></li>
 </ul>
 </li>
-<li><a href="#orgfa408ed">7. Exposing Enums</a></li>
-<li><a href="#org752d74d">8. Translators</a>
+<li><a href="#orgfdc993a">5. Exposing Enums</a></li>
+<li><a href="#org6ef8584">6. Translators</a>
 <ul>
-<li><a href="#org08a31c0">8.1. Translation from C++ objects to Common Lisp objects</a></li>
-<li><a href="#orgeda6f9e">8.2. Translation from Common Lisp objects to C++ objects</a>
+<li><a href="#org3ccbde2">6.1. Translation from C++ objects to Common Lisp objects</a></li>
+<li><a href="#org40054fe">6.2. Translation from Common Lisp objects to C++ objects</a>
 <ul>
-<li><a href="#orgae63f04">8.2.1. Advanced from_object translators</a></li>
+<li><a href="#orgdd26119">6.2.1. Advanced from_object translators</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org1b12f02">9. Policies</a>
+<li><a href="#org853b8fb">7. Policies</a>
 <ul>
-<li><a href="#org7da6709">9.1. pureOutValue&lt;N&gt;</a></li>
-<li><a href="#org42b66a1">9.2. outValue&lt;N&gt;</a></li>
-<li><a href="#org38247a3">9.3. adopt&lt;n&gt;</a></li>
+<li><a href="#org37551a6">7.1. pureOutValue&lt;N&gt;</a></li>
+<li><a href="#org07a0525">7.2. outValue&lt;N&gt;</a></li>
+<li><a href="#org3ffb273">7.3. adopt&lt;n&gt;</a></li>
+<li><a href="#orgc358c45">7.4. LambdaList</a></li>
+<li><a href="#org7c574b3">7.5. DocString</a></li>
 </ul>
 </li>
-<li><a href="#org55b5d0e">10. Lispification</a>
+<li><a href="#orgc526c23">8. Lispification</a>
 <ul>
-<li><a href="#org77ac4f9">10.1. Camel case</a></li>
-<li><a href="#orgc17f2ea">10.2. Underscores become hyphens</a></li>
+<li><a href="#org3e9f735">8.1. Camel case</a></li>
+<li><a href="#org86d3e3d">8.2. Underscores become hyphens</a></li>
 </ul>
 </li>
+<li><a href="#org4c34748">9. Building</a></li>
 </ul>
 </div>
 </div>
 
-
-<div id="outline-container-org65c9d4c" class="outline-2">
-<h2 id="org65c9d4c"><span class="section-number-2">1</span> General information</h2>
+<div id="outline-container-orgae1eba1" class="outline-2">
+<h2 id="orgae1eba1"><span class="section-number-2">1.</span> General information</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 clbind is based on luabind with some ideas borrowed from pybind11 and boost::python.
 </p>
+
+<p>
+In order to expose C++ code to Lisp, you will need to write a bridge file, which is a C++
+source file. This file uses the Clasp extension API to describe to Clasp exactly what of
+your system should be exposed, and how.
+</p>
 </div>
 </div>
 
-<div id="outline-container-org0b02a09" class="outline-2">
-<h2 id="org0b02a09"><span class="section-number-2">2</span> Integrating with the clasp build system</h2>
+<div id="outline-container-orga76e97f" class="outline-2">
+<h2 id="orga76e97f"><span class="section-number-2">2.</span> Defining bindings</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-Integrating an external library, or your own C++ code, into Clasp involves integrating into Clasp's build system.
-Clasp build system is built on the <a href="http://waf.io">waf</a> build system.
+Clasp is able to load C++ libraries and expose functions, classes, methods and enums to Clasp Common Lisp.
+Clasp needs a function that it can call at startup to expose these library members. This
+function will be present in your bridge file, along with several other markers used to
+inform Clasp of the nature of your library.
 </p>
 
 <p>
-All you need to do is clone your extension into the clasp/extensions directory and create a <code>wscript</code> file in each directory of your extension.
+The <code>CL_EXPOSE</code> preprocessor macro is used to mark the startup function.
+Within the startup function, packages can be declared. Functions, classes, methods and enums
+can be added to packages, and they will then automatically be available within Clasp.
 </p>
 
 <p>
-For instance - suppose you have the following directory structure.
+Here is an example of a simple bridge file. The code for this and further examples is
+available <a href="https://github.com/clasp-developers/demo-clasp-cxx-interoperation/">on GitHub</a>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">clasp
-├── wscript                 # Provided by Clasp
-└── extensions
-    ├── wscript             # Provided by Clasp
-    └── my-demo
-	└── src
-	    └── my-demo.cc
-</pre>
-</div>
+<pre class="src src-C++">#include &lt;clasp/clasp.h&gt;                                  // (1)
 
-<p>
-The my-demo.cc file would look like&#x2026;
-</p>
-
-<div class="org-src-container">
-<pre class="src src-C++">#include &lt;stdio.h&gt;
-#include &lt;clasp/clasp.h&gt;
-
-void my_func()
-{
-  printf("This is not the greatest function in the world. It's just a tribute!\n");
+void helloWorld() {
+    printf("Hello World\nThis is C++ code being invoked from Clasp Common Lisp\n");
 }
 
 PACKAGE_USE("COMMON-LISP");
-PACKAGE_NICKNAME("MD");
-NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"MY-DEMO");
+PACKAGE_NICKNAME("HW");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");    // (2)
 
-namespace md {
-CL_EXPOSE
-void my_demo_startup() {
-  printf("Entered %s:%d:%s\n", __FILE__, __LINE__, __FUNCTION__ );
-  using namespace clbind;
-  package_ sc(HWPkg);
-  sc.def("my-func", &amp;my_func);
-}
-</pre>
-</div>
-
-
-<p>
-In the extensions/my-demo directory you need to add a <code>wscript</code> file that looks like below.
-It looks a bit daunting and we will fill in more information in the future as users request more information.
-For now these functions are required to integrate with the clasp waf build system.
-</p>
-
-<div class="org-src-container">
-<pre class="src src-Python">
-from wscript_utils import *
-
-def analyze_clasp(cfg):
-    pass
-
-def options(cfg):
-    pass
-
-def configure(cfg):
-    cfg.extensions_startup_scripts.append("demo-startup.lisp") # (1)
-    pass
-
-def build(bld):
-    bld.recurse("src")          # (2)
-
-def build3(bld):
-    pass
-
-def build4(bld):
-    pass
-
+namespace hw {                                            // (3)
+  CL_EXPOSE                                               // (4)
+  void hello_world_startup () {                           // (5)
+    using namespace clbind;                               // (6)
+    package_ sc(HWPkg);                                   // (7)
+    sc.def("hello-world", &amp;helloWorld,                    // (8)
+        "The classic! Print Hello world"_docstring);          
+  }
 </pre>
 </div>
 
 <ol class="org-ol">
-<li>Add a lisp startup script that is evaluated once clasp has finished initializing.</li>
-</ol>
-<p>
-This allows the programmer to add lisp code to clasp.
-</p>
-<ol class="org-ol">
-<li>The bld.recurse("src") call causes waf to recurse into the my-demo/src directory.  Add one of these calls for every source directory that you want to integrate into Clasp.</li>
-</ol>
-
-
-<p>
-Next you need a wscript file in the src directory - this one is simpler&#x2026;
-</p>
-
-<div class="org-src-container">
-<pre class="src src-Python">
-def configure(cfg):
-    pass
-
-def build(bld):
-    bld.extensions_source_files.append(bld.path.find_node("my-demo.cc"))    # (1)
-
-</pre>
-</div>
-
-<ol class="org-ol">
-<li>Add one of these lines for every source file that you want to build.  Alternatively you can put the source files in a list and loop over then calling this function. This adds your extension C++ source files to the list of C++ files that clasp builds when it builds itself.</li>
-</ol>
-
-<p>
-Once these files are added your directory structure will look like&#x2026;
-</p>
-<div class="org-src-container">
-<pre class="src src-sh">clasp
-├── wscript
-└── extensions
-    ├── wscript
-    └── my-demo
-	├── wscript         # Added above
-	└── src
-	    ├── wscript     # Added above
-	    └── my-demo.cc
-</pre>
-</div>
-
-
-<p>
-That's it - once you have added these files you can go into the top level clasp directory and type <code>./waf build_dboehm</code> and clasp will build and incorporate all of the extensions in the clasp/extensions directory.
-</p>
-</div>
-</div>
-
-
-
-<div id="outline-container-orgeecc9bb" class="outline-2">
-<h2 id="orgeecc9bb"><span class="section-number-2">3</span> Structure of a Binding</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-Clasp is able to load C++ libraries and expose functions, classes, methods and enums to Clasp Common Lisp.
-Clasp needs a function that it can call at startup to expose these library members - it uses the CL_EXPOSE c-preprocessor macro to identify these startup functions.
-Within this function, packages can be declared and functions, classes, methods and enums can be added to the package and they will then
-automatically be available within Clasp.
-</p>
-
-<p>
-Thus, code should include a section like this:
-</p>
-
-
-<div class="org-src-container">
-<pre class="src src-C++">
-PACKAGE_USE("COMMON-LISP");                             // (1)
-PACKAGE_NICKNAME("HW");                                 // (2)
-NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");  // (3)
-
-namespace hw {                                          // (4)
-CL_EXPOSE                                               // (5)
-void hello_world_startup () {                           // (6)
-  using namespace clbind;                               // (7)
-  package_ sc(HWPkg);                                   // (8)
-  sc.def("hello-world", &amp;helloWorld,                    // (9)
-      "The classic! Print Hello world"_doc );          
-}
-</pre>
-</div>
-
-<ol class="org-ol">
-<li>Declaring a package is done in reverse order here - declare that the COMMON-LISP package will be used by the HELLO-WORLD package.</li>
-<li>Declare a nickname "HW" for the package declaration that will follow. PACKAGE_NICKNAME is a cpp macro that will be scraped by the clasp <a href="scraper.html">scraper</a>.</li>
-<li>Declare the package "HELLO-WORLD" and create a global variable that will store its name <code>HWPkg</code> and associate it with a C++ namespace <code>hw</code>. This will be picked up by the <a href="scraper.html">scraper</a>.</li>
-<li>To avoid symbol clashes in C++ - put your code in a unique C++ namespace.</li>
-<li>The <code>CL_EXPOSE</code> c-preprocessor macro is used to identify the following function as one that exposes functionality to Clasp.</li>
+<li>This header makes the exposure API available.</li>
+<li>These three lines define a Lisp package named <code>HELLO-WORLD</code>, with nickname <code>HW</code>, which uses the standard <code>COMMON-LISP</code> package.
+The <code>HELLO-WORLD</code> package is defined to correspond to the C++ namespace <code>hw</code>, and <code>HWPkg</code>
+is defined to refer to this package from within C++, for subsequent definitions.</li>
+<li>To avoid symbol clashes in C++, we recommend putting your code in a unique C++ namespace.</li>
+<li>The <code>CL_EXPOSE</code> preprocessor macro is used to identify the startup function. This
+function will be run when Clasp starts up to define the package.</li>
 <li>The name of the function is arbitrary.</li>
-<li>For convenience we use the clbind package - but you can prefix all clbind identifiers with the clbind:: namespace.</li>
-<li>Bind the <code>sc</code> local variable to the package named "HELLO-WORLD".</li>
-<li>Expose a function, provide the name, a pointer to the function and other optional arguments.</li>
+<li>For convenience we use the clbind namespace, but you can use explicit prefixes if you like.</li>
+<li>Binds the <code>sc</code> local variable to the Lisp package defined earlier.</li>
+<li>Exposes the C++ function <code>helloWorld</code> to Lisp as <code>hello-world:hello-world</code>, and
+supplies a docstring.</li>
 </ol>
 
 <p>
-After building clasp with this extension added the user can access it so&#x2026;
+After <a href="#org4c34748">building Clasp with this extension</a> it can be accessed from within Lisp.
 </p>
 
 <div class="org-src-container">
@@ -530,45 +361,36 @@ COMMON-LISP-USER&gt;
 </div>
 </div>
 
-<div id="outline-container-org1343761" class="outline-2">
-<h2 id="org1343761"><span class="section-number-2">4</span> Include Files</h2>
-<div class="outline-text-2" id="text-4">
-<p>
-Compiling the binding requires the inclusion of one header file <code>clasp/clasp.h</code>.
-</p>
-
-<div class="org-src-container">
-<pre class="src src-C++">#include &lt;clasp/clasp.h&gt;
-</pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-org2cd428e" class="outline-2">
-<h2 id="org2cd428e"><span class="section-number-2">5</span> Exposing Functions</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org7fabb3c" class="outline-2">
+<h2 id="org7fabb3c"><span class="section-number-2">3.</span> Exposing Functions</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 Exposing functions is done via the function <code>def</code>:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">template &lt;typename F, class... Policies&gt;
 scope def(char     const* name,
-	  F               f,
-	  Policies... policies )
+          F               f,
+          Policies... policies )
 </pre>
 </div>
+
 <p>
 In this function
 </p>
 <dl class="org-dl">
-<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#org55b5d0e">lispified</a>, i.e. a name  with camel-casing is converted to a downcase name with dashes in between. Using this automatic lispification is optional, and it can be useful to use names following lisp conventions, so that a reader can immediately see how the respective lisp function is called.</dd>
-<dt>f</dt><dd>is the function pointer to the c++ function.</dd>
-<dt>policies</dt><dd>Gives additional information about how to handle some parameters (see <a href="#org1b12f02">Policies</a>).</dd>
+<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#orgc526c23">lispified</a>,
+i.e. a name with camel-casing is converted to a downcase name with dashes in between.
+Using this automatic lispification is optional; see the Lispification section for details.</dd>
+<dt>f</dt><dd>a pointer to the C++ function.</dd>
+<dt>policies</dt><dd>Gives additional information (see <a href="#org853b8fb">Policies</a>).</dd>
 </dl>
 
 <p>
-Suppose we have a C++ function 
+For example, suppose we have a C++ function 
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">double addThreeNumbers(double x, double y, double z) {
     return x + y + z;
@@ -577,14 +399,13 @@ Suppose we have a C++ function
 </div>
 
 <p>
-A complete binding could look like this (only the first two parameters are required) 
+and we want to expose this to Lisp, but with only one required parameter, the others
+being optional and defaulting to zero. We could do that like so:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">PACKAGE_NICKNAME("HW");
 NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");
-
-SYMBOL_EXPORT_SC_(HWPkg,STARcolorTranslatorSTAR);
-CLBIND_TRANSLATE_SYMBOL_TO_ENUM(ColorEnum, hw::_sym_STARcolorTranslatorSTAR );
 
 namespace hw {
 CL_EXPOSE
@@ -592,32 +413,36 @@ void hello_world_startup() {
   using namespace clbind;
   package_ sc(HWPkg);
   sc.def("hello-world",&amp;helloWorld,
-	  "The classic! Print Hello-world"_doc);
+         "The classic! Print \"Hello World\""_docstring);
   sc.def("addThreeNumbers",&amp;addThreeNumbers,                       // (1)
-	 "(x cl:&amp;optional (y 0.0) (z 0.0))"_ll,                    // (2)
-	  "Add three numbers and return the result"_doc );         // (3)
+         "(x cl:&amp;optional (y 0.0) (z 0.0))"_ll,                    // (2)
+         "Add three numbers and return the result"_docstring);          // (3)
 </pre>
 </div>
 
 <ol class="org-ol">
-<li>Only the first two arguments are required, the name of the function that is <a href="#org55b5d0e">lispified</a> and a pointer to the function.</li>
-<li>The lambda list for the function is provided in a string with the <code>_ll</code> suffix.</li>
-<li>A documentation string is provided with the <code>_doc</code> suffix.</li>
+<li>Only the first two arguments to <code>def</code> are required: the name of the function
+and a pointer to it.</li>
+<li>The lambda list for the function is provided as a policy, using the <code>_ll</code> user literal
+described below in <a href="#orgc358c45">LambdaList</a>.</li>
+<li>A documentation string is provided with the <code>_docstring</code> user literal.</li>
 </ol>
 
 <p>
-From clasp, this function can be called with 
-<code>(hw:add-three-numbers 1)</code> or <code>(hw:add-three-numbers 1 2)</code> or <code>(hw:add-three-numbers 1 2 3)</code>.
-The C++ function is called as <code>addThreeNumbers(1,0,0)</code>, <code>addThreeNumbers(1,2,0)</code> and <code>addThreeNumbers(1,2,3)</code>, respectively.
+From Clasp, this function can be called with
+<code>(hw:add-three-numbers 1)</code>, <code>(hw:add-three-numbers 1 2)</code>, or <code>(hw:add-three-numbers 1 2 3)</code>.
+clbind performs automatic conversions, similar to C++, in order to translate Lisp numbers
+of different types into C++ numbers.
+The corresponding C++ calls would be <code>addThreeNumbers(1,0,0)</code>, <code>addThreeNumbers(1,2,0)</code>,
+and <code>addThreeNumbers(1,2,3)</code>, respectively.
 </p>
 
 <p>
-The lambda list and documentation string can be obtained using the Common Lisp function <code>describe</code>.
+The lambda list and documentation string can be seen using the Common Lisp function <code>describe</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">
-COMMON-LISP-USER&gt; (describe 'hw:add-three-numbers)
+<pre class="src src-lisp">COMMON-LISP-USER&gt; (describe 'hw:add-three-numbers)
 
 HELLO-WORLD:ADD-THREE-NUMBERS - external symbol in HELLO-WORLD package
 -----------------------------------------------------------------------------
@@ -626,17 +451,17 @@ Documentation: "Add three numbers and return the result"
 Arguments:     (HELLO-WORLD::X &amp;OPTIONAL (HELLO-WORLD::Y 2.0) (HELLO-WORLD::Z 3.0))
 Source:        #P"=external="
 -----------------------------------------------------------------------------
-
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgabd2c37" class="outline-3">
-<h3 id="orgabd2c37"><span class="section-number-3">5.1</span> Overloaded Functions</h3>
-<div class="outline-text-3" id="text-5-1">
+<div id="outline-container-orgec2eb28" class="outline-3">
+<h3 id="orgec2eb28"><span class="section-number-3">3.1.</span> Overloaded Functions</h3>
+<div class="outline-text-3" id="text-3-1">
 <p>
 To expose overloaded functions, you have to cast the function pointer to the correct signature. 
-Suppose the function from the previous example would be overloaded. It would then need an exposure such as below.
+Suppose the function from the previous example was overloaded.
+It would then need to be exposed as follows:
 </p>
 
 <div class="org-src-container">
@@ -645,24 +470,24 @@ Suppose the function from the previous example would be overloaded. It would the
 </div>
 
 <p>
-It is important that every function have a unique name - similar to name mangling in C++.
+It is important that every function have a unique Lisp name - similar to name mangling in C++.
 The convention we adopt in Clasp is to append type names to the original name.
 </p>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-org2ef0a3f" class="outline-2">
-<h2 id="org2ef0a3f"><span class="section-number-2">6</span> Exposing Classes</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org36fb2c2" class="outline-2">
+<h2 id="org36fb2c2"><span class="section-number-2">4.</span> Exposing Classes</h2>
+<div class="outline-text-2" id="text-4">
 <p>
-Exposing a class is done via the class <code>class_</code>:
+Exposing a class is done via the class <code>class_</code>.
 </p>
 
 <p>
-For example - we have the class DoubleVector below:
+For example, say we have the class DoubleVector below:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">class DoubleVector {
 private:
@@ -689,82 +514,97 @@ void double_vector_startup() {
   package_ s("DV");
   class_&lt;DoubleVector&gt;(s,"double-vector" )
 //...
-
 </pre>
 </div>
 
 <p>
-Creates a Binding to the C++ class <code>DoubleVector</code>, with the name <code>dv:double-vector</code> in lisp.
-This does not automatically creates a binding to the default constructor - use def_constructor for constructors.
+This code creates a binding to the C++ class <code>DoubleVector</code>, with the name
+<code>dv:double-vector</code> in Lisp.
+This does not automatically creates a binding to the default constructor - <a href="#orgb170448">use def_constructor for that</a>.
 </p>
 </div>
 
-<div id="outline-container-orgba6b4a1" class="outline-3">
-<h3 id="orgba6b4a1"><span class="section-number-3">6.1</span> Inheritance</h3>
-<div class="outline-text-3" id="text-6-1">
+<div id="outline-container-org82d0a10" class="outline-3">
+<h3 id="org82d0a10"><span class="section-number-3">4.1.</span> Inheritance</h3>
+<div class="outline-text-3" id="text-4-1">
 <p>
-clbind can handle member functions of derived classes correctly, providing that they are exposed.
-To expose the inheritance structure of C++ classes, expose the base class, and use the following format for the derived class:
+clbind can handle member functions of derived classes correctly, provided that they are all exposed.
+To expose the inheritance structure of C++ classes, expose the base class,
+and then use the following definition format for the derived class:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">class_&lt;CppDerivedClassName, CppBaseClassName&gt;("lisp-class-name")
 </pre>
 </div>
+
 <p>
 If multiple inheritance brings in several base classes, use the following format:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">class_&lt;CppDerivedClassName, bases&lt;CppBaseClassName1, CppBaseClassName2&gt;&gt;("lisp-class-name")
 </pre>
 </div>
+
 <p>
-If a base class is a pure virtual class, i.e. it has only pure virtual functions or its constructor is private, make sure to use the <code>no_default_constructor</code> option when exposing the base class, otherwise you will get a compilation error.
+If a base class is a pure virtual class, i.e. it has only pure virtual functions or its
+constructor is private, make sure to use the <code>no_default_constructor</code> option when exposing
+the base class, or you will get a compilation error.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5381a38" class="outline-3">
-<h3 id="org5381a38"><span class="section-number-3">6.2</span> Constructors</h3>
-<div class="outline-text-3" id="text-6-2">
+<div id="outline-container-orgb170448" class="outline-3">
+<h3 id="orgb170448"><span class="section-number-3">4.2.</span> Constructors</h3>
+<div class="outline-text-3" id="text-4-2">
 <p>
 Add constructors to exposed classes with the function <code>def_constructor</code>:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">template&lt;typename... Types, typename... Policies&gt;
 class_&amp; def_constructor(const string&amp;         name,
-			constructor&lt;Types...&gt; sig,
-			Policies...           policies)
+                        constructor&lt;Types...&gt; sig,
+                        Policies...           policies)
 </pre>
 </div>
+
 <p>
 In this function
 </p>
 <dl class="org-dl">
-<dt>name</dt><dd>is the name of the constructor that will be visible in clasp. Again, it will be lispified.</dd>
-<dt>sig</dt><dd>is the parameter signature of the C++ constructor. Use a comma-separated parameter-list list in the form <code>constructor&lt;parameter-list&gt;()</code> of all the types used as parameters in the constructor you want to expose.</dd>
-<dt>policies</dt><dd>Optional parameters, explained in <a href="#org2cd428e">Exposing Functions</a></dd>
+<dt>name</dt><dd>is the name of the constructor that will be visible in clasp. Again, it will be <a href="#orgc526c23">lispified</a>.</dd>
+<dt>sig</dt><dd>is the parameter signature of the C++ constructor.
+Use a comma-separated parameter-list list in the form <code>constructor&lt;parameter-list&gt;()</code>
+ of all the types used as parameters in the constructor you want to expose.</dd>
+<dt>policies</dt><dd><a href="#org853b8fb">7</a>.</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orgef2d169" class="outline-3">
-<h3 id="orgef2d169"><span class="section-number-3">6.3</span> Member Functions</h3>
-<div class="outline-text-3" id="text-6-3">
+<div id="outline-container-orge688be0" class="outline-3">
+<h3 id="orge688be0"><span class="section-number-3">4.3.</span> Member Functions</h3>
+<div class="outline-text-3" id="text-4-3">
 <p>
-Exposing member functions is similar to exposing free functions. Call the <code>class_</code> member function <code>def</code>:
+Exposing member functions is similar to exposing free functions.
+Call the <code>class_</code> member function <code>def</code>:
 </p>
+
 <div class="org-src-container">
 <pre class="src src-C++">template&lt;class F, class... Policies&gt;
 class_&amp; def(char const*       name, 
-	    F                 fn, 
-	    Policies...       policies )
+            F                 fn, 
+            Policies...       policies )
 </pre>
 </div>
-<p>
-Thus exposing a member function is not different from <a href="#org2cd428e">exposing free functions</a>, and the same arguments apply.
-The exception to this rule is the lambda-list (arguments), which always requires <code>self</code> as its first parameter, which becomes the <code>this</code> argument within the method.
-</p>
 
+<p>
+Thus exposing a member function is not different from <a href="#org7fabb3c">exposing free functions</a>, and the same arguments apply.
+The exception to this rule is the lambda-list (arguments),
+which always requires <code>self</code> as its first parameter,
+which becomes the <code>this</code> argument within the method.
+</p>
 
 <div class="org-src-container">
 <pre class="src src-C++">namespace dv {
@@ -788,51 +628,56 @@ void double_vector_startup() {
 </div>
 </div>
 
-<div id="outline-container-org38a5741" class="outline-3">
-<h3 id="org38a5741"><span class="section-number-3">6.4</span> Static Member Function</h3>
-<div class="outline-text-3" id="text-6-4">
+<div id="outline-container-org626a1a2" class="outline-3">
+<h3 id="org626a1a2"><span class="section-number-3">4.4.</span> Static Member Function</h3>
+<div class="outline-text-3" id="text-4-4">
 <p>
-As Common Lisp does not have the notion of static member functions, exposing them is similar to <a href="#org2cd428e">exposing free functions</a>.
+As Common Lisp does not have the notion of static member functions,
+exposing them is similar to <a href="#org7fabb3c">exposing free functions</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org4008900" class="outline-3">
-<h3 id="org4008900"><span class="section-number-3">6.5</span> Public Member Variables</h3>
-<div class="outline-text-3" id="text-6-5">
+<div id="outline-container-orgc0d4595" class="outline-3">
+<h3 id="orgc0d4595"><span class="section-number-3">4.5.</span> Public Member Variables</h3>
+<div class="outline-text-3" id="text-4-5">
 <p>
-Exposing public member variables works similar to exposing member functions. 
+Exposing public member variables works similar to exposing member functions.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org99d9faa" class="outline-3">
-<h3 id="org99d9faa"><span class="section-number-3">6.6</span> Derivable classes</h3>
-<div class="outline-text-3" id="text-6-6">
+<div id="outline-container-orge8b7342" class="outline-3">
+<h3 id="orge8b7342"><span class="section-number-3">4.6.</span> Derivable classes</h3>
+<div class="outline-text-3" id="text-4-6">
 <p>
-Some C++ libraries provide base classes that the library user is meant to subclass to add additional application specific functionality.
-For this situation Clasp allows one to create classes in Common Lisp that derive from these C++ classes and implement methods that get called from
-both C++ and Common Lisp code.
+Some C++ libraries provide base classes that the library user is meant to subclass to add
+additional application specific functionality.
+For this situation Clasp, allows one to create classes in Common Lisp that derive from
+these C++ classes, and implement methods that may be called from both C++ and Common Lisp code.
 </p>
 
 <p>
-An example of this is within Clasp itself - where Clasp exposes the Clang ASTMatcher library.
-Clasp exposes a facility of the Clang ASTMatcher library that evaluates callbacks on Clang C++ Abstract Syntax Tree nodes.
-In the place of <code>class_</code> use <code>derivable_class_</code> and provide two class template arguments.
-The first template argument is a class that needs to be provided to clbind and is shown below (in this case DerivableMatchCallback).  
-The second template argument is the original library class that is to be subclassed (in this case clang::ast_matchers::MatchFinder::MatchCallback).
+An example of this is within Clasp itself - where Clasp exposes <a href="https://clang.llvm.org/docs/LibASTMatchers.html">Clang's ASTMatchers library</a>.
+Clasp exposes a facility of the Clang ASTMatcher library that evaluates callbacks on Clang's abstract syntax trees.
+</p>
+
+<p>
+To make a class derivable, in place of <code>class_</code>, use <code>derivable_class_</code>, and provide two class template arguments.
+The first template argument is a class that needs to be provided to clbind and is shown below (in this case <code>DerivableMatchCallback</code>).
+The second template argument is the original library class that is to be subclassed (in this case <code>clang::ast_matchers::MatchFinder::MatchCallback</code>).
 </p>
 
 <div class="org-src-container">
 <pre class="src src-C++">derivable_class_&lt;DerivableMatchCallback, clang::ast_matchers::MatchFinder::MatchCallback&gt; cl_bc(m,"MatchCallback",create_default_constructor);
 cl_bc.def("run", &amp;DerivableMatchCallback::default_run)
-    .def("onStartOfTranslationUnit", &amp;DerivableMatchCallback::default_onStartOfTranslationUnit)
-    .def("onEndOfTranslationUnit", &amp;DerivableMatchCallback::default_onEndOfTranslationUnit);
+     .def("onStartOfTranslationUnit", &amp;DerivableMatchCallback::default_onStartOfTranslationUnit)
+     .def("onEndOfTranslationUnit", &amp;DerivableMatchCallback::default_onEndOfTranslationUnit);
 </pre>
 </div>
 
 <p>
-The DerivableMatchCallback must be defined before the derivable_class_ declaration above.
+The <code>DerivableMatchCallback</code> must be defined before the <code>derivable_class_</code> declaration above.
 </p>
 
 <div class="org-src-container">
@@ -894,30 +739,43 @@ public:
 </div>
 
 <ol class="org-ol">
-<li>A forward declaration of the DerivableMatchCallback class for the next piece GCInfo</li>
-<li>A gctools::GCInfo template struct is used to tell the Clasp memory manager how to deal with this class.   The NeedsInitialization field tell the memory manager that the DerivableMatchCallback::initialize() function must be called after the object is allocated.  The NeedsFinalization field tells the memory manager that the destructor for this class needs to be registered with a finalizer.  NeedsFinalization is used for resources like streams and anything that needs cleanup when it is collected. The Policy tell the memory manager how the memory for this object is managed.
+<li>A forward declaration of the <code>DerivableMatchCallback</code> class for the next piece, <code>GCInfo</code>.</li>
+<li>A <code>gctools::GCInfo</code> template struct is used to tell the Clasp memory manager how to deal with this class.   The NeedsInitialization field tell the memory manager that the DerivableMatchCallback::initialize() function must be called after the object is allocated.  The NeedsFinalization field tells the memory manager that the destructor for this class needs to be registered with a finalizer.  NeedsFinalization is used for resources like streams and anything that needs cleanup when it is collected. The Policy tell the memory manager how the memory for this object is managed.
 <ol class="org-ol">
-<li>Policy = normal means the object is managed by the memory manager, it can be collected and it can be moved.</li>
+<li>Policy = normal means the object is managed by the memory manager: it can be collected and it can be moved.</li>
 <li>Policy = collectable_immobile means the object can be collected by the memory manager but it cannot be moved.</li>
-<li>Policy = atomic means the object contains no internal pointers (such as strings or integer vectors) and so it can be placed in special memory that doesn't need to be scanned.</li>
-<li>Policy = unmanaged means the object will not be automatically collected and it cannot be moved.  This is used in special cases like static vectors.</li>
+<li>Policy = atomic means the object contains no internal pointers (such as strings or integer vectors) and so it can be placed in special memory that doesn't need to be scanned during garbage collection.</li>
+<li>Policy = unmanaged means the object will not be automatically collected and it cannot be moved.
+This is used in special cases like static vectors.</li>
 </ol></li>
-<li>Instances of DerivableMatchCallback cannot be moved or automatically collected. They need to be managed manually and carefully so that they do not leak memory.</li>
-<li>The DerivableMatchCallback inherits from a special template class clbind::Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt;. This makes it inherit from both the C++ class MatchCallback and the Clasp Instance_O class, which adds Common Lisp slots to the object.</li>
-<li>The AlienBase type needs to be defined for derivable_class_ to function.</li>
-<li>THe virtual void run(&#x2026;) {&#x2026;} method is defined by <code>clang::ast_matchers::MatchFinder::MatchCallback</code> and we need to overload it. The body of this method translates the argument(s) into Common Lisp types and then invokes a Common Lisp function <code>core::eval::funcall(asttooling::_sym_run, this-&gt;asSmartPtr(), val)</code> that the user will define in Common Lisp.</li>
-<li>The void default_run(&#x2026;) method is a non virtual method that is exposed to Common Lisp. If a C++ base class defines the run method then defaul_run should call it.  If no C++ base class defines the run method then an error should be signalled and the user must provide a run function in Common Lisp.</li>
-<li>In this example the <code>onStartOfTranslationUnit~/~default_onStartOfTranslationUnit</code> are another pair of functions that allow the user to overload an on-start-of-translation-unit method from Common Lisp.</li>
-<li>In this example a <code>describe</code> method is provided to print internal information about a <code>DerivableMatchCallback</code> instance.</li>
+<li>Instances of <code>DerivableMatchCallback</code> cannot be moved or automatically collected.
+They need to be managed manually and carefully so that they do not leak memory.</li>
+<li>The <code>DerivableMatchCallback</code> inherits from a special template class, <code>clbind::Derivable&lt;clang::ast_matchers::MatchFinder::MatchCallback&gt;</code>.
+This makes it inherit from both the C++ class <code>MatchCallback</code> and the Clasp <code>Instance_O</code>
+ class, which adds Common Lisp slots to the object.</li>
+<li>The <code>AlienBase</code> type needs to be defined for <code>derivable_class_</code> to function.</li>
+<li>The <code>virtual void run(...) {...}</code> method is defined by <code>clang::ast_matchers::MatchFinder::MatchCallback</code> and we need to overload it.
+The body of this method translates the argument(s) into Common Lisp types and then invokes a Common Lisp function,
+<code>core::eval::funcall(asttooling::_sym_run, this-&gt;asSmartPtr(), val)</code>,
+that the programmer will define in Common Lisp.</li>
+<li>The <code>void default_run(...)</code> method is a non-virtual method that is exposed to Common Lisp.
+If a C++ base class defines the <code>run</code> method, then <code>default_run</code> should call it.
+If no C++ base class defines the run method, then an error should be signalled,
+and the programmer must provide a <code>run</code> method in Common Lisp.</li>
+<li>In this example, the <code>onStartOfTranslationUnit~/~default_onStartOfTranslationUnit</code> are
+another pair of functions that allow the user to overload an
+on-start-of-translation-unit method from Common Lisp.</li>
+<li>A <code>describe</code> method is provided to print internal information about a <code>DerivableMatchCallback</code> instance.</li>
 <li>The <code>DerivableMatchCallback</code> class should have a destructor.</li>
 </ol>
 
 <p>
-In the above example the <code>run~/~default_run</code> pair of methods demonstrate what you need to overload the <code>run</code> C++ method from Common Lisp.
+In the above example, the <code>run~/~default_run</code> pair of methods demonstrate what you need to
+do to overload the <code>run</code> C++ method from Common Lisp.
 </p>
 
 <p>
-In Common Lisp - to create a derived class one would use&#x2026;
+In Common Lisp, to create a derived class one would use
 </p>
 
 <div class="org-src-container">
@@ -926,30 +784,31 @@ In Common Lisp - to create a derived class one would use&#x2026;
 
 (core:defvirtual ast-tooling:run ((self count-match-callback) match)  ;; (2)
   (let* ((nodes (ast-tooling:nodes match))
-	 (id-to-node-map (ast-tooling:idto-node-map nodes))
-	 (node (gethash :whole id-to-node-map)))
+         (id-to-node-map (ast-tooling:idto-node-map nodes))
+         (node (gethash :whole id-to-node-map)))
     (advance-match-counter)))
 </pre>
 </div>
 
 <ol class="org-ol">
-<li>The derived class is defined using <code>defclass</code> inheriting from the exposed class and using the <code>:metaclass core:derivable-cxx-class</code>.</li>
-<li>The <code>core:defvirtual</code> macro is used to overload the <code>asttooling:run</code> method. The overloaded method takes two arguments, the first argument is the instance <code>self</code> and the second argument was passed from the C++ <code>run</code> virtual method.</li>
+<li>The derived class is defined using <code>cl:defclass</code> as usual. It is a subclass of the
+exposed class. It has the special metaclass <code>:metaclass core:derivable-cxx-class</code>.</li>
+<li>The <code>core:defvirtual</code> macro is used to overload the <code>asttooling:run</code> method.
+The overloaded method takes two arguments. The first argument is the instance, <code>self</code>,
+and the second argument was passed from the C++ <code>run</code> virtual method.</li>
 </ol>
 </div>
 </div>
 </div>
 
-
-
-<div id="outline-container-orgfa408ed" class="outline-2">
-<h2 id="orgfa408ed"><span class="section-number-2">7</span> Exposing Enums</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-orgfdc993a" class="outline-2">
+<h2 id="orgfdc993a"><span class="section-number-2">5.</span> Exposing Enums</h2>
+<div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-C++">
-enum ColorEnum { red, green, blue  };
+enum ColorEnum { red, green, blue };
 
-void printColor( ColorEnum color ) {
+void printColor(ColorEnum color) {
   switch (color) {
   case red:
       printf("red\n");
@@ -963,9 +822,8 @@ void printColor( ColorEnum color ) {
   }
 }
 
-// ...
 // Then - to expose it...
-//
+
 PACKAGE_NICKNAME("HW");
 NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"HELLO-WORLD");
 
@@ -977,11 +835,7 @@ CL_EXPOSE
 void hello_world_startup() {
   printf("Entered %s:%d:%s\n", __FILE__, __LINE__, __FUNCTION__ );
   using namespace clbind;
-  package_ pkg(HWPkg);
-  scope_&amp; s = pkg.scope();
-  //
-  // Other bindings
-  //
+  package_ s(HWPkg);
   enum_&lt;ColorEnum&gt;(s,hw::_sym_STARcolorTranslatorSTAR)       // (3)
       .value("red",red)                                      // (4)
       .value("green",green)
@@ -992,16 +846,17 @@ void hello_world_startup() {
 </div>
 
 <ol class="org-ol">
-<li>Export the symbol HW:*COLOR-TRANSLATOR*.</li>
-<li>Create a type translator that translates Common Lisp symbols into ColorEnum values and signals errors on illegal values.</li>
-<li>Define the enum binding for ColorEnum and bind it to the symbol HW:*COLOR-TRANSLATOR*.</li>
-<li>Define one enum value associating ColorEnum::red with the symbol 'HW:RED. The symbols for the enum values will be in the same package as the HW:*COLOR-TRANSLATOR*.</li>
-<li>Expose a function that accepts ColorEnum values as the argument.</li>
+<li>Export the symbol <code>*COLOR-TRANSLATOR*</code> from the <code>HELLO-WORLD</code> package.</li>
+<li>Create a type translator that translates Common Lisp symbols into <code>ColorEnum</code> values.
+If given a symbol without a corresponding enum value, an error is signaled.</li>
+<li>Define the enum binding <code>ColorEnum</code>, and bind it to the symbol <code>HW:*COLOR-TRANSLATOR*</code>.</li>
+<li>Define one enum value associating <code>ColorEnum::red</code> with the Lisp symbol <code>'HW:RED</code>.
+The symbols for the enum values will be in the same package as the <code>HW:*COLOR-TRANSLATOR*</code>.</li>
+<li>Expose a function that accepts <code>ColorEnum</code> values as its argument.</li>
 </ol>
 
-
 <p>
-Then to use it from within clasp&#x2026;
+Then the enum can be used from within Clasp as follows:
 </p>
 
 <div class="org-src-container">
@@ -1016,29 +871,45 @@ blue
 
 COMMON-LISP-USER&gt; hw:*color-translator*
 
-#&lt;SYMBOL-TO-ENUM-CONVERTER  :info *COLOR-TRANSLATOR* #&lt;entry 1 GREEN&gt; #&lt;entry 0 RED&gt; #&lt;entry 2 BLUE&gt;  &gt;
+#&lt;SYMBOL-TO-ENUM-CONVERTER&gt;
 COMMON-LISP-USER&gt;
 </pre>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-org752d74d" class="outline-2">
-<h2 id="org752d74d"><span class="section-number-2">8</span> Translators</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-org6ef8584" class="outline-2">
+<h2 id="org6ef8584"><span class="section-number-2">6.</span> Translators</h2>
+<div class="outline-text-2" id="text-6">
 <p>
-Translators are used to automatically convert C++ objects to Common Lisp objects and vice versa. This is a convenience functionality, allowing for easier interoperation. It is especially useful for small C++ classes and structs that are passed to and from functions and are meant to be created on the fly. Instead of exposing them and then creating and filling them from Common Lisp, it is often easier to write a translator, e.g. from a list, which makes it possible to pass a list as a parameter in place of the object. This list is then automatically converted to the respective C++ object by the translator.
+Translators are used to automatically convert C++ objects to Common Lisp objects and vice
+versa. This is a convenience functionality, allowing for easier interoperation.
+It is especially useful for small C++ classes and structs that are passed to and from
+functions and are meant to be created on the fly. Instead of exposing them and then
+creating and filling them from Common Lisp, it is often easier to write a translator,
+e.g. from a list, which makes it possible to pass a list as a parameter in place of the
+object. This list is then automatically converted to the respective C++ object by the
+translator.
 </p>
 </div>
 
-<div id="outline-container-org08a31c0" class="outline-3">
-<h3 id="org08a31c0"><span class="section-number-3">8.1</span> Translation from C++ objects to Common Lisp objects</h3>
-<div class="outline-text-3" id="text-8-1">
+<div id="outline-container-org3ccbde2" class="outline-3">
+<h3 id="org3ccbde2"><span class="section-number-3">6.1.</span> Translation from C++ objects to Common Lisp objects</h3>
+<div class="outline-text-3" id="text-6-1">
 <p>
-Translating from C++ to Common Lisp objects is done by specializing the templated struct <code>to_object</code> in the namespace <code>translate</code> to the type of the C++ object, with the static function member function <code>convert</code> of that struct taking an object of that type as a parameter and returning the Clasp Common Lisp Object.  The translator must appear in the C++ source code before any functions/methods are exposed that need to use it.  Translators are incorporated into the template code that clbind generates for each exposed function/method.
+Translating from C++ to Common Lisp objects is done by specializing the templated struct
+<code>to_object</code>, in the namespace <code>translate</code>, to the type of the C++ object.
+The static function member function <code>convert</code> of that struct takes an object of that type
+as a parameter, and returns the Common Lisp object.  The translator must appear in the C++
+source code before any functions/methods are exposed that need to use it.  Translators are
+incorporated into the template code that clbind generates for each exposed function/method.
 </p>
 
+<p>
+Here is an example defining a conversion from <code>std::pair&lt;int,int&gt;</code> into a <code>cl:cons</code>. Once
+this definition is in place, <code>def</code> can be used to expose C++ functions that take a
+<code>std::pair&lt;int,int&gt;</code> as a parameter.
+</p>
 
 <div class="org-src-container">
 <pre class="src src-C++">namespace translate
@@ -1049,7 +920,7 @@ Translating from C++ to Common Lisp objects is done by specializing the template
     static core::T_sp convert(std::pair&lt;int,int&gt; arg)
     {
        core::Cons_sp cons = core::Cons_O::create(core::Integer_O::create(arg.first),
-						 core::Integer_O::create(arg.second));
+                                                 core::Integer_O::create(arg.second));
        return cons;
     }
   };
@@ -1060,15 +931,19 @@ Translating from C++ to Common Lisp objects is done by specializing the template
 </div>
 
 
-<div id="outline-container-orgeda6f9e" class="outline-3">
-<h3 id="orgeda6f9e"><span class="section-number-3">8.2</span> Translation from Common Lisp objects to C++ objects</h3>
-<div class="outline-text-3" id="text-8-2">
+<div id="outline-container-org40054fe" class="outline-3">
+<h3 id="org40054fe"><span class="section-number-3">6.2.</span> Translation from Common Lisp objects to C++ objects</h3>
+<div class="outline-text-3" id="text-6-2">
 <p>
-Translating from Common Lisp to C++ objects is done by specializing the templated struct <code>from_object</code> in the namespace <code>translate</code> to the C++ object type and providing a constructor that takes the Common Lisp object as a parameter and writes the result into an object called <code>_v</code> of the C++ object type:
+Translating from Common Lisp to C++ objects is done by specializing the templated struct
+<code>from_object</code>, in the namespace <code>translate</code>, to the C++ object type.
+A constructor must be provided that takes the Common Lisp object as a parameter,
+and writes the resulting C++ object into an object called <code>_v</code>.
+<code>from_object::DeclareType</code> must be defined to be the C++ type in question.
 </p>
 
 <p>
-The <code>DeclareType</code> typedef is necessary for the clbind template code to function.
+Here is the converse of the above example, converting a Lisp cons into a <code>std::pair&lt;int,int&gt;</code>.
 </p>
 
 <div class="org-src-container">
@@ -1081,11 +956,11 @@ The <code>DeclareType</code> typedef is necessary for the clbind template code t
     DeclareType _v;                                    
     from_object(core::T_sp obj)
     {
-      if (obj.consp()) {                                                // (2)
-	  this-&gt;_v = std::make_pair(core::clasp_to_int(CONS_CAR(obj)),  // (3)
-				    core::clasp_to_int(CONS_CDR(obj)));
+      if (obj.consp()) {
+          this-&gt;_v = std::make_pair(core::clasp_to_int(CONS_CAR(obj)),  // (2)
+                                    core::clasp_to_int(CONS_CDR(obj)));
       }
-      TYPE_ERROR(obj,cl::_sym_Cons_O);                                  // (4)
+      TYPE_ERROR(obj,cl::_sym_Cons_O);                                  // (3)
     }
   };
 };
@@ -1093,22 +968,31 @@ The <code>DeclareType</code> typedef is necessary for the clbind template code t
 </div>
 
 <ol class="org-ol">
-<li>DeclareType is used by clbind - define it to the from_object template type.</li>
-<li>In this example we translate (cons &lt;number&gt; &lt;number&gt;) to std::pair&lt;int,int&gt;</li>
-<li>We store the translated result in the <code>_v</code> field this is so that if the argument is used as a return value then the value can be recovered from here.</li>
-<li>If the type of <code>obj</code> doesn't match what this translator handles then signal an appropriate type error telling the user what types are accepted.</li>
+<li><code>DeclareType</code> is used by clbind, and must be defined in to the <code>from_object</code> type.</li>
+<li>We store the translated result into the <code>_v</code> field.
+This is so that if the argument is used as a return value from a Lisp function,
+the value can be recovered from here.</li>
+<li>If the type of <code>obj</code> doesn't match what this translator handles,
+then signal a type error that tells the user what types are accepted.</li>
 </ol>
 </div>
 
 
-<div id="outline-container-orgae63f04" class="outline-4">
-<h4 id="orgae63f04"><span class="section-number-4">8.2.1</span> Advanced from_object translators</h4>
-<div class="outline-text-4" id="text-8-2-1">
+<div id="outline-container-orgdd26119" class="outline-4">
+<h4 id="orgdd26119"><span class="section-number-4">6.2.1.</span> Advanced from_object translators</h4>
+<div class="outline-text-4" id="text-6-2-1">
 <p>
-template &lt;&gt; struct from_object {&#x2026;} takes a second template argument that can have the value <code>std::true_type</code> or <code>std::false_type</code>. The default is <code>std::true_type</code> and
-it means that the <code>_v</code> instance variable will be initialized by the from_object constructor using the Common Lisp value in the <code>T_sp</code> constructor argument.
-<code>std::false_type</code> is subtle - it is used to express the <code>pureOutValue&lt;N&gt;</code> policy. <code>std::false_type</code> means that the from_object translator does not initialize its <code>_v</code> field
-but the field can be passed by reference to a function, written in to and then the wrapper will take the result out and return it as a multiple return value.
+<code>struct from_object</code> takes a second template argument that can have the
+value <code>std::true_type</code> or <code>std::false_type</code>. The default is <code>std::true_type</code>, and
+it means that the <code>_v</code> instance variable will be initialized by the <code>from_object</code>
+</p>
+
+<p>
+constructor using the Common Lisp value in the <code>T_sp</code> constructor argument.
+<code>std::false_type</code> is subtle - it is used to express the <code>pureOutValue&lt;N&gt;</code> <a href="#org853b8fb">policy</a>.
+<code>std::false_type</code> means that the <code>from_object</code> translator does not initialize its <code>_v</code>
+field. Instead, the field can be passed by reference to a function and written in to.
+The wrapper will take the result out and return it as multiple return values.
 </p>
 
 <div class="org-src-container">
@@ -1137,28 +1021,30 @@ struct from_object&lt;int&amp;,std::false_type&gt; {
 </div>
 
 <ol class="org-ol">
-<li>In the first form of from_object the _v field is initialized using a Common Lisp value.</li>
-<li>In the second form of the from_object translator the _v field is left uninitialized.</li>
-<li>It's really important to define a non-trivial destructor or the _v field gets overwritten by the C++ compiler.</li>
+<li>In the first form of from_object the <code>_v</code> field is initialized using a Common Lisp value.</li>
+<li>In the second form of the <code>from_object</code> translator the <code>_v</code> field is left uninitialized.</li>
+<li>It's really important to define a non-trivial destructor. Without one, the <code>_v</code> field
+gets overwritten by the C++ compiler.</li>
 </ol>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org1b12f02" class="outline-2">
-<h2 id="org1b12f02"><span class="section-number-2">9</span> Policies</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-org853b8fb" class="outline-2">
+<h2 id="org853b8fb"><span class="section-number-2">7.</span> Policies</h2>
+<div class="outline-text-2" id="text-7">
 <p>
-Policies tell clbind how to handle return values and C++ arguments.
+Policies tell clbind how to handle return values and C++ arguments, and provide Clasp
+with miscellaneous extra information about the function.
 </p>
 </div>
 
-<div id="outline-container-org7da6709" class="outline-3">
-<h3 id="org7da6709"><span class="section-number-3">9.1</span> pureOutValue&lt;N&gt;</h3>
-<div class="outline-text-3" id="text-9-1">
+<div id="outline-container-org37551a6" class="outline-3">
+<h3 id="org37551a6"><span class="section-number-3">7.1.</span> pureOutValue&lt;N&gt;</h3>
+<div class="outline-text-3" id="text-7-1">
 <p>
-Let's say you have a C++ function like so&#x2026;
+Let's say you have a C++ function that uses reference parameters to output values, like this:
 </p>
 
 <div class="org-src-container">
@@ -1171,8 +1057,9 @@ void addMul(int x, int y, int z, int&amp; sum, int&amp; product ) {
 </div>
 
 <p>
-Common Lisp doesn't have a concept of "pass-by-reference" but it does have a powerful feature of multiple-return-values.
-The <code>pureOutValue&lt;N&gt;</code> policy tells clbind that the C++ pass by reference values are to be used to return multiple values.
+Common Lisp doesn't have a concept of "pass-by-reference", but it does have multiple return
+values. The <code>pureOutValue&lt;N&gt;</code> policy tells clbind that a C++ parameter passed by reference
+should be translated into Lisp multiple return values.
 </p>
 
 <div class="org-src-container">
@@ -1183,7 +1070,11 @@ pkg.scope.def( "addMul", &amp;addMul, pureOutValue&lt;3&gt;(), pureOutValue&lt;4
 </div>
 
 <ol class="org-ol">
-<li>The <code>pureOutValue&lt;3&gt;()</code> and <code>pureOutValue&lt;4&gt;()</code> arguments tell clbind that the third and fourth arguments to the <code>addMul</code> function are pass by reference.  The argument counting starts at 0.  <code>pureOutValue&lt;N&gt;()</code> further says that these values can be passed in as undefined and when the function returns the values in sum and product they should be returned in the first and second multiple-return values.</li>
+<li>The <code>pureOutValue&lt;3&gt;()</code> and <code>pureOutValue&lt;4&gt;()</code> arguments tell clbind that the third
+and fourth arguments to the <code>addMul</code> function references that are written into but not
+read from. The argument counting starts at 0. <code>pureOutValue&lt;N&gt;()</code> further says that
+these values can be passed in uninitialized. When the function returns the values
+in sum and product, they should be returned as the first and second multiple-return values.</li>
 </ol>
 
 <div class="org-src-container">
@@ -1195,12 +1086,13 @@ pkg.scope.def( "addMul", &amp;addMul, pureOutValue&lt;3&gt;(), pureOutValue&lt;4
 </div>
 
 <p>
-The function returns two values: 9 and 24.
+The function returns the two values 9 and 24.
 </p>
 
 <p>
-Clbind knows that if the function returns a value using the normal C++ <code>return</code> instruction that that becomes the
-first returned value and all other return values follow it.
+In that example, the function had <code>void</code> return type, so the references provided all
+return values into Lisp. For other return types, clbind uses the returned value as the
+primary return value into Lisp, and out references provide subsequent return values.
 </p>
 
 <div class="org-src-container">
@@ -1212,13 +1104,13 @@ first returned value and all other return values follow it.
 }
 //...
   s.def("returnThreeValues",&amp;returnThreeValues,
-	clbind::pureOutValue&lt;0&gt;(),
-	clbind::pureOutValue&lt;1&gt;());
+        clbind::pureOutValue&lt;0&gt;(),
+        clbind::pureOutValue&lt;1&gt;());
 </pre>
 </div>
 
 <div class="org-src-container">
-<pre class="src src-lisp">COMMON-LISP-USER&gt; (multiple-value-bind (a b c) (hw:return-three-values) (list a b c))
+<pre class="src src-lisp">COMMON-LISP-USER&gt; (multiple-value-list (hw:return-three-values))
 
 (1 2 3)
 </pre>
@@ -1226,11 +1118,12 @@ first returned value and all other return values follow it.
 </div>
 </div>
 
-<div id="outline-container-org42b66a1" class="outline-3">
-<h3 id="org42b66a1"><span class="section-number-3">9.2</span> outValue&lt;N&gt;</h3>
-<div class="outline-text-3" id="text-9-2">
+<div id="outline-container-org07a0525" class="outline-3">
+<h3 id="org07a0525"><span class="section-number-3">7.2.</span> outValue&lt;N&gt;</h3>
+<div class="outline-text-3" id="text-7-2">
 <p>
-Let's say you have a C++ function like so&#x2026;
+In some cases, a reference parameter may be used both to pass values into a C++ function
+and out of it. For example, let's say you have a C++ function like this:
 </p>
 
 <div class="org-src-container">
@@ -1243,67 +1136,87 @@ void addMulRunning(int x, int y, int z, int&amp; sum, int&amp; product ) {
 </div>
 
 <p>
-In this case the <code>outValue&lt;N&gt;</code> policy tells clbind that values will be passed in to these arguments and multiple return values will be returned using these arguments.
+In this case the <code>outValue&lt;N&gt;</code> policy tells clbind that values will be passed in to these
+arguments and multiple return values will be returned using these arguments.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-C++">using namespace clbind;
 package_ pkg("TEACH",{},{});
-pkg.scope.def( "addMulRunning", &amp;addMulRunning, outValue&lt;3&gt;(), outValue&lt;4&gt;() ); // 1
+pkg.scope.def( "addMulRunning", &amp;addMulRunning, outValue&lt;3&gt;(), outValue&lt;4&gt;() );
 </pre>
 </div>
 
-<ol class="org-ol">
-<li>The <code>outValue&lt;3&gt;()</code> and <code>outValue&lt;4&gt;()</code> arguments tell clbind that the third</li>
-</ol>
 <p>
-and fourth arguments to the <code>addMulRunning</code> function are pass by reference.  The argument counting
-starts at 0.  <code>outValue&lt;N&gt;()</code> further says that these values will be passed in to the function through these arguments
-and when the function returns the values in sum and product they should be returned in the first
-and second multiple-return values.
+The <code>outValue&lt;3&gt;()</code> and <code>outValue&lt;4&gt;()</code> arguments tell clbind that the third and fourth
+arguments to the <code>addMulRunning</code> function are references used as both arguments and return
+values. The argument counting starts at 0.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-lisp">COMMON-LISP-USER&gt; (multiple-value-bind (sum prod) (hw:add-mul-running 2 3 4 5 6)
-		    (format t "Returned ~s~%" (list sum prod)))
-Returned (14 144)
-NIL
+<pre class="src src-lisp">COMMON-LISP-USER&gt; (multiple-value-list (hw:add-mul-running 2 3 4 5 6))
+(14 144)
 </pre>
 </div>
 
 <p>
-Clbind knows that if the function returns a value using the normal C++ <code>return</code> instruction that that becomes the
-first returned value and all other return values follow it.
+As with <code>pureOutValue</code>, for non-<code>void</code> functions, the C++ return value will serve as the
+primary Lisp return value, and the reference parameters will provide subsequent return values.
 </p>
 </div>
 </div>
 
-
-<div id="outline-container-org38247a3" class="outline-3">
-<h3 id="org38247a3"><span class="section-number-3">9.3</span> adopt&lt;n&gt;</h3>
-<div class="outline-text-3" id="text-9-3">
+<div id="outline-container-org3ffb273" class="outline-3">
+<h3 id="org3ffb273"><span class="section-number-3">7.3.</span> adopt&lt;n&gt;</h3>
+<div class="outline-text-3" id="text-7-3">
 <p>
-adopt&lt;n&gt; is used to instruct clbind that a pointer to an object that is returned by a function is to be managed by Clasp's
-memory manager.  The template argument for adopt can be "result" as in <code>adopt&lt;result&gt;</code> to indicate the
-function return value pointer is to be adopted. The template argument can also be an integer 0&#x2026;N, as in <code>adopt&lt;0&gt;</code> to indicate that the first argument is a pointer that should be adopted by the memory manager. <code>adopt&lt;i&gt;</code> when i is an integer must be combined with <code>pureOutValue&lt;i&gt;</code>.
+adopt&lt;n&gt; is used to instruct clbind that a pointer to an object that is returned by a
+function is to be managed by Clasp's memory manager.  The template argument for adopt can
+be "result", as in <code>adopt&lt;result&gt;</code>, to indicate the function return value pointer is to
+be adopted. The template argument can also be an integer 0&#x2026;N, as in <code>adopt&lt;0&gt;</code>, to
+indicate that the first argument is a pointer that should be adopted by the memory manager.
+<code>adopt&lt;i&gt;</code> when i is an integer must be combined with <code>pureOutValue&lt;i&gt;</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc358c45" class="outline-3">
+<h3 id="orgc358c45"><span class="section-number-3">7.4.</span> LambdaList</h3>
+<div class="outline-text-3" id="text-7-4">
+<p>
+A lambda list for the Lisp version of the function to be exposed can be provided as a policy.
+The most convenient way to do this is to use the <code>_ll</code> user literal. The lambda list is
+provided as a string, which clbind will parse as a Common Lisp lambda list. For example,
+<code>"(x y z)"_ll</code> means the Lisp lambda list <code>(x y z)</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7c574b3" class="outline-3">
+<h3 id="org7c574b3"><span class="section-number-3">7.5.</span> DocString</h3>
+<div class="outline-text-3" id="text-7-5">
+<p>
+A documentation string, accessible by <code>cl:documentation</code>, can be provided as a policy.
+Just pass <code>"documentation string here"_docstring</code> as an argument to <code>def</code>.
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org55b5d0e" class="outline-2">
-<h2 id="org55b5d0e"><span class="section-number-2">10</span> Lispification</h2>
-<div class="outline-text-2" id="text-10">
+<div id="outline-container-orgc526c23" class="outline-2">
+<h2 id="orgc526c23"><span class="section-number-2">8.</span> Lispification</h2>
+<div class="outline-text-2" id="text-8">
 <p>
-Lispification is a process used to convert strings in C++ code and C++ identifiers into Common Lisp hyphenated names.
+Lispification is a process used to convert C++ identifiers into Common Lisp hyphenated names.
 </p>
 </div>
 
-<div id="outline-container-org77ac4f9" class="outline-3">
-<h3 id="org77ac4f9"><span class="section-number-3">10.1</span> Camel case</h3>
-<div class="outline-text-3" id="text-10-1">
+<div id="outline-container-org3e9f735" class="outline-3">
+<h3 id="org3e9f735"><span class="section-number-3">8.1.</span> Camel case</h3>
+<div class="outline-text-3" id="text-8-1">
 <p>
-Camel case strings are converted to hyphenated names by inserting hyphens into the final name when there is a transition between a lower case character and an upper case character.
+Camel case strings are converted to hyphenated names by inserting hyphens into the final
+name whenever there is a transition between a lower case character and an upper case character.
 </p>
 
 <p>
@@ -1317,9 +1230,9 @@ A few examples:
 </div>
 </div>
 
-<div id="outline-container-orgc17f2ea" class="outline-3">
-<h3 id="orgc17f2ea"><span class="section-number-3">10.2</span> Underscores become hyphens</h3>
-<div class="outline-text-3" id="text-10-2">
+<div id="outline-container-org86d3e3d" class="outline-3">
+<h3 id="org86d3e3d"><span class="section-number-3">8.2.</span> Underscores become hyphens</h3>
+<div class="outline-text-3" id="text-8-2">
 <p>
 Examples:
 </p>
@@ -1333,6 +1246,88 @@ Examples:
 Underscores and camel case can be mixed.
 </p>
 </div>
+</div>
+</div>
+
+<div id="outline-container-org4c34748" class="outline-2">
+<h2 id="org4c34748"><span class="section-number-2">9.</span> Building</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Integrating an external library, or your own C++ code,
+into Clasp involves integrating it into Clasp's build system.
+The build system is described in more detail on <a href="building.html">its page</a>, but briefly, here is how extensions
+can be integrated.
+</p>
+
+<p>
+All you need to do is clone your extension into the clasp/extensions directory, and create
+a <code>cscript.lisp</code> file in each directory of your extension.
+</p>
+
+<p>
+For instance - suppose you have the following directory structure.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">clasp
+└── extensions
+    └── my-demo
+        └── src
+            └── my-demo.cc
+</pre>
+</div>
+
+<p>
+The my-demo.cc file might look like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C++">#include &lt;stdio.h&gt;
+#include &lt;clasp/clasp.h&gt;
+
+void my_func()
+{
+  printf("This is not the greatest function in the world. It's just a tribute!\n");
+}
+
+PACKAGE_USE("COMMON-LISP");
+PACKAGE_NICKNAME("MD");
+NAMESPACE_PACKAGE_ASSOCIATION(hw,HWPkg,"MY-DEMO");
+
+namespace md {
+CL_EXPOSE
+void my_demo_startup() {
+  printf("Entered %s:%d:%s\n", __FILE__, __LINE__, __FUNCTION__ );
+  using namespace clbind;
+  package_ sc(HWPkg);
+  sc.def("my-func", &amp;my_func);
+}
+</pre>
+</div>
+
+<p>
+In the extensions/my-demo directory you need to add a <code>cscript.lisp</code> file that looks like so.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-Lisp">
+(k:sources :iclasp #~"my-demo.cc")
+
+(k:systems :my-demo)
+</pre>
+</div>
+
+<p>
+This informs Koga how to build your demo. Add a filename to `k:sources` for each source file.
+More information is available in the Koga documentation.
+</p>
+
+<p>
+To actually build, run Koga and inform it of the extension. This can be done by running it
+with an <code>--extensions=</code> parameter, or by mentioning the extension in your <code>config.sexp</code>.
+For this example, you could use <code>./koga --extensions=my-demo</code> for example. Once Koga has
+configured things, simply build Clasp normally with <code>ninja -C build</code>.
+</p>
 </div>
 </div>
 </div>

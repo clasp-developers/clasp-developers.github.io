@@ -1,115 +1,193 @@
 #+title: Building Clasp
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 
-Clasp is currently supported on Linux, Mac OS X, and OpenBSD.
-On these
-systems, you should be able to build it from source if a pre-made
-package is not available or workable for you. In case you cannot get it
-to compile even with the instructions below, the quickest way to get
-help is to either [[https://github.com/clasp-developers/clasp/issues][file an issue]], or to
-[[file:irc.org][use irc]] to 
-chat with us directly]].
+This page documents the steps needed to build and install Clasp using the source build system which uses a Lisp based metabuilder called koga that outputs [[https://ninja-build.org/][Ninja]] build files.
 
-Building on most systems will take around 8GB of RAM and ~30 minutes with a
-relatively modern processor with eight or more cores.
+* Requirements
 
-* Building on Linux
+The build requirements of clasp must be installed before beginning the build. For each OS listed below install the packages as listed. Currently, LLVM-14 is required. If your system does not provide LLVM-14 via its package manager then you will need to build it first.
 
-For most distributions that have the listed
-[[External Dependencies][dependencies]] available as packages, the
-compilation should be straightforward. Simply clone Clasp and run the following from
-the root directory.
-
-#+BEGIN_SRC sh
-./waf distclean           # (1)
-./waf configure           # (2)
-./waf build_dboehmprecise # (3)
-
-# or ...
-./waf distclean configure build_dboehmprecise
+** Arch
+#+BEGIN_SRC shell
+pacman -S binutils boost clang gmp fmt libunwind llvm ninja sbcl
 #+END_SRC
 
-1. The distclean target cleans out any previous build files.
-2. The configure target configures the build and checks that all of the dependencies are available.
-3. The build_dboehmprecise target tell waf to build all of clasp.
+** Debian/Ubuntu
+#+BEGIN_SRC shell
+apt install -y binutils-gold clang-14 libclang-14-dev libfmt-dev libboost-dev libclang-cpp14-dev libelf-dev libgmp-dev libunwind-dev llvm-14 ninja-build sbcl pkg-config
+#+END_SRC
 
-If you need to make local changes to the configuration copy =wscript.config.template= to =wscript.config= and
-edit it as appropriate. If you lack the required dependencies, try
-[[file:building-with-deploy][compiling with deploy]].
+** Fedora
+#+BEGIN_SRC shell
+dnf install boost-devel clang elfutils-libelf-devel fmt-devel gmp-devel libunwind-devel llvm-devel ninja-build sbcl
+#+END_SRC
 
-The compilation output will be in the =build/boehmprecise= directory. To launch
-Clasp, run =build/boehmprecise/cclasp-boehmprecise=.
+** MacOS 
+#+BEGIN_SRC shell
+brew install boost gmp fmt libunwind-headers llvm ninja pkg-config sbcl
+#+END_SRC
 
-Clasp has been successfully built on
+* Building and Installing
 
--  *Ubuntu 14.04*, see
-   [[https://github.com/drmeister/clasp/wiki/Building-Clasp-0.4-on-Ubuntu][this
-   wiki entry]]
--  *Debian Jessie*
--  *Debian Sid*
--  *Debian Wheezy*
--  *OpenSuse 13.1*
--  *Gentoo*
--  *Arch*
+Start with a clean Clasp clone (https://github.com/clasp-developers/clasp) on the =main= branch. Then execute the following steps...
 
-* Building on OS X
+1. Configure the system and create the build files with =./koga=. ArchLinux may require =./koga --broken-stdlib= due an outstanding issue with LLVM14's JSON implementation.
+2. Build the system with =ninja -C build=
+3. Install the system with =sudo ninja -C build install=
 
-First you will need what is listed for OS X under the
-[[External Dependencies][dependencies]]. Next you need an additional
-step that is documented
-The rest of the procedure is the same as for building on linux.
+** WSL2 (Windows Subsystem For Linux 2) notes
+=exposeClasses1.cc= uses a lot of memory to compile.  On Windows machines with 16GB running WSL2 we see that compilation get killed because it uses too much memory.  Try =ninja -j 4 -C build= or =ninja -j 2 -C build= to see if it will build without getting killed.
 
-The compilation output will be in the =build/boehmprecise= directory. To launch
-Clasp, run =build/boehmprecise/cclasp-boehmprecise=.
+* Variants
 
-* Building With Externals-Clasp
+The default build target is =cclasp-boehmprecise=. This builds iclasp, then aclasp, then bclasp, then cclasp using the Boehm garbage collector in precise mode. The suffix after the dash is a called a variant. The current available variants are:
 
-If your system does not provide the [[file:external-dependencies][external dependencies]] 
-as required by Clasp, you can use this approach instead,
-which will compile them for you.
+- boehm - Boehm garbage collector
+- boehmprecise - Boehm garbage collector in precise mode
+- boehm-d - Boehm garbage collector with debugging symbols
+- boehmprecise-d - Boehm garbage collector in precise mode with debugging symbols
+- preciseprep - MPS garbage collector. This is only used to analyze Clasp in preparation for the static analyzer.
+- preciseprep-d - MPS garbage collector with debugging symbols. This is only used to analyze Clasp in preparation for the static analyzer.
 
-Clone [[https://github.com/drmeister/externals-clasp][externals-clasp]]
-to a directory on your system. Next, create a =local.config= containing
-=export GCC_TOOLCHAIN = /usr= if you are on Linux and
-=export TOOLSET = clang= if you are on OS X. Next, simply run =make=
-from the root of it. This will take some time to complete; maybe play a
-round of pinball or [[file:irc.org][chat on IRC for a bit]].
+* Targets
 
-The next step is building Clasp itself. For this, clone it to a
-different folder and copy the =local.config.template= file within it to
-=local.config=. Next, open it up and make sure to uncomment and adapt
-the =EXTERNALS_CLASP_DIR= line to point to the location where you
-compiled externals-clasp. Something like
-=export EXTERNALS_CLASP_DIR = /opt/externals-clasp=. Finally it's time
-to kick off the build process. Simply run =make= from the Clasp root.
+There are many intermediate and additional targets available in the Ninja build files. The following is a list of some of the significant ones.
 
-* External Dependencies
+- install: Install the default target. If Jupyter was enabled by koga then this will install Jupyter system kernels also.
+- test-[variant]: Run the Clasp regression tests on the specified variant.
+- jupyter-[variant]: Install Jupyter user kernels for the specified variant. The clasp binaries used will be the ones in the build directory. This target is primarily used for using JupyterLab in a development repository.
+- analyze-[boehm|boehm-d]: Run the static analyzer on the Boehm collector.
 
-Dependencies that are common to all Clasp builds are:
--  *llvm* 13 commit hash 972b6a3a3471c2a742c5c5d8ec004ff640d544c4
-   + This is because Clasp uses cutting edge llvm features of the ORCV2 engine that have not yet made it into a standard llvm release. It will be llvm 13 that includes these new features.
--  *gmp* The GNU multiple precision math library.
--  *ffi* 
+* Extensions
 
-** Linux
+The [[https://github.com/clasp-developers/seqan-clasp/][seqan-clasp]] and [[https://github.com/cando-developers/cando/][cando]] extensions are compatible with koga. To enable these extensions, create a file =config.sexp= in the root of the clasp directory with the following contents, then execute the build instructions listed in the previous section.
 
-Simply install the appropriate packages with your package manager.
+#+BEGIN_SRC lisp
+(:extensions (:cando :seqan-clasp))
+#+END_SRC
 
--  *llvm* 3.6
--  *clang* 3.6, including headers.
--  *boost*
--  *autoreconf* (dh-autoreconf on Ubuntu)
--  *gmp* 6.0.0, compiled with --enable-cxx
--  *expat* 2.0.1
--  *zlib* 1.2.8
--  *readline* 6.2
+* Configuration
 
-** OS X
+If the configure script does not succeed in configuring the build or if you want to adjust the settings you use a plist in =config.sexp=
+with the following values. These options can also be passed directly to koga via command line options. For example executing =./koga --debug-lexical-depth= is equivalent to adding =:debug-lexical-depth t= to the plist in =config.sexp=. Extensions can be enabled by passing the names separated with commas, i.e. =./koga --extensions=cando,seqan-clasp=
 
-Use either [[http://brew.sh/][brew]] or
-[[https://www.macports.org/][ports]] to install the dependencies besides
-Xcode. Make sure the binaries are in your =PATH=.
-
--  *Xcode* 12.4
--  *Xcode command-line tools*
--  
+- =:skip-sync= — A list of repository names to avoid syncing. This is useful if you are doing development on an extension such as Cando.
+- =:build-mode= — Define how clasp is built. [default :faso]
+  - =:bitcode= compiles to bitcode and thinLTO is used to link everything.
+    This gives the fastest product but linking takes a long time.
+  - =:object= produces object files and regular linking is used.
+    This is probably not as fast as bitcode (maybe a few percent slower)
+    but it links fast.
+  - =:faso= generates faso files. This is good for development.
+  - =:fasobc= generates fasobc files.
+  - =:fasoll= generates fasoll files.
+  - =:fasl= generates fasl files.
+- =:build-path= — The path for build files such as the Ninja build file. 
+  [default #P"build/"]
+- =:parallel-build= — Build clasp in parallel. [default t]
+- =:prefix= — Where Clasp is install. [default "/usr/"]
+- =:extensions= — A list of extensions. [default nil]
+- =:jupyter= — Enable installation of Jupyter kernels. [default nil]
+- =:cst= — [default t]
+- =:clang-cpp= — If t use clang-cpp otherwise use the individual clang 
+  libraries. [default t]
+- =:compile-file-parallel= — [default t]
+- =:force-startup-external-linkage= — Use external-linkage for startup 
+  functions. [default t]
+- =:unwinder= — [default :gcc]
+- =:jobs= — The number of jobs during build. If not specified then a value will
+  be picked based on the number of CPU cores. [default nil]
+- =:always-inline-mps-allocations)= —
+- =:address-sanitizer= — [default nil]
+- =:memory-sanitizer= — [default nil]
+- =:thread-sanitizer= — [default nil]
+- =:debug-dtree-interpreter= — Generate dtree interpreter log [default nil]
+- =:debug-dtrace-lock-probe= — Add a Dtrace probe for mutex lock acquisition
+  [default nil]
+- =:debug-stackmaps= — print messages about stackmap registration [default nil]
+- =:debug-assert= — Turn on DEBUG_ASSERT [default t]
+- =:debug-assert-type-cast= — Turn on type checking when passing arguments
+  [default nil]
+- =:source-debug= — Allow LOG messages to print - works with CLASP_DEBUG 
+  environment variable [default nil]
+- =:debug-jit-log-symbols= — Generate a log of JITted symbols in 
+  =/tmp/clasp-symbols-<pid>= [default nil]
+- =:debug-guard= — Add guards around allocated objects [default nil]
+- =:debug-guard-validate= — Add quick checking of guards [default nil]
+- =:debug-guard-backtrace= — Add allocation backtraces to guards [default nil]
+- =:debug-guard-exhaustive-validate= — Add exhaustive, slow, checks of guards
+  [default nil]
+- =:debug-trace-interpreted-closures= — [default nil]
+- =:debug-environments= — [default nil]
+- =:debug-release= — Turn off optimization for a few C++ functions; undef this 
+  to optimize everything [default nil]
+- =:debug-cache= — Debug the dispatch caches - see cache.cc [default nil]
+- =:debug-bitunit-container= — Prints debug info for bitunit containers 
+  [default nil]
+- =:debug-lexical-depth= — Generate tests for lexical closure depths 
+  [default nil]
+- =:debug-flow-tracker= — Record small backtraces to track flow [default nil]
+- =:debug-dynamic-binding-stack= — dynamic variable binding debugging
+  [default nil] 
+- =:debug-values= — turn on printing =(values x y z)= values when 
+  =core:*debug-values*= is not nil [default nil]
+- =:debug-ihs= — [default nil]
+- =:debug-track-unwinds= — Count cc_unwind calls and report in TIME 
+  [default nil]
+- =:debug-no-unwind= — Debug intrinsics that say they don't unwind but actually 
+  do. [default nil]
+- =:debug-startup= — Generate per-thread logs in =/tmp/dispatch-history/**= of 
+  the slow path of fastgf [default nil]
+- =:debug-rehash-count= — Keep track of the number of times each hash table has 
+  been rehashed [default nil]
+- =:debug-monitor= — generate logging messages to a file in /tmp for non-hot 
+  code [default nil]
+- =:debug-monitor-support= — Must be enabled with other options - do this 
+  automatically? [default nil]
+- =:debug-memory-profile= — Profile memory allocations total size and counter
+  [default nil]
+- =:debug-bclasp-lisp= — Generate debugging frames for all bclasp code - like 
+  declaim [default nil]
+- =:debug-cclasp-lisp= — Generate debugging frames for all cclasp code - like 
+  declaim [default t]
+- =:debug-count-allocations= — count per-thread allocations of instances of 
+  classes [default nil]
+- =:debug-compiler= — Turn on compiler debugging [default nil]
+- =:debug-verify-modules= — Verify LLVM modules before using them [default nil]
+- =:debug-long-call-history= — The GF call histories used to blow up - this 
+  triggers an error if they get too long [default nil]
+- =:debug-bounds-assert= — check bounds [default t]
+- =:debug-gfdispatch= — debug call history manipulation [default nil]
+- =:debug-fastgf= — generate slow gf dispatch logging and write out dispatch 
+  functions to =/tmp/dispatch-history-**= [default nil]
+- =:debug-slot-accessors= — GF accessors have extra debugging added to them
+  [default nil]
+- =:debug-threads= — [default nil]
+- =:debug-stores= — insert a call to =cc_validate_tagged_pointer= everytime 
+  something is written to memory [default nil]
+- =:debug-ensure-valid-object= — Defines =ENSURE_VALID_OBJECT(x)->x= macro - 
+  sprinkle these around to run checks on objects [default nil]
+- =:debug-quick-validate= — quick/cheap validate if on and comprehensive 
+  validate if not [default nil]
+- =:debug-mps-size= — check that the size of the MPS object will be calculated 
+  properly by obj_skip [default nil]
+- =:debug-mps-underscanning= — Very expensive - does a 
+  =mps_arena_collect=/=mps_arena_release= for each allocation [default nil]
+- =:debug-dont-optimize-bclasp= — Optimize bclasp by editing llvm-ir 
+  [default nil]
+- =:debug-recursive-allocations= — Catch allocations within allocations - MPS 
+  hates these [default nil]
+- =:debug-alloc-alignment= — catch misaligned allocations [default nil]
+- =:debug-llvm-optimization-level-0= — [default nil]
+- =:debug-slow= — Code runs slower due to checks - undefine to remove checks
+  [default nil]
+- =:human-readable-bitcode= — [default nil]
+- =:debug-compile-file-output-info= — [default nil]
+- =:config-var-cool= — mps setting [default t]
+- =:ar= — Pathname of ar binary. [default nil]
+- =:cc= — Pathname of cc binary. [default nil]
+- =:cxx= — Pathname of cxx binary. [default nil]
+- =:git= — Pathname of git binary. [default nil]
+- =:llvm-config= — Pathname of llvm-config binary. [default nil]
+- =:nm= — Pathname of nm binary. [default nil]
+- =:pkg-config= — Pathname of pkg-config binary. [default nil]

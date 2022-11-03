@@ -5,6 +5,16 @@
 
 * Seamless Integration of Common Lisp and C++ 
 
-Updated by Christian Schafmeister May 26, 2021
+** ([[file:news.org][News]]) \nbsp \nbsp ([[file:download.org][Download]]) \nbsp \nbsp ([[file:manual.org][Manual]])
 
-** ([[file:news.org][News]]) \nbsp \nbsp ([[file:features.org][Features]]) \nbsp \nbsp ([[file:download.org][Download]])
+Clasp is a new [[https://common-lisp.net/][Common Lisp]] implementation
+that seamlessly interoperates with C++ libraries and programs using
+[[https://llvm.org/][LLVM]] for compilation to native code. This allows
+Clasp to take advantage of a vast array of preexisting libraries and
+programs, such as out of the scientific computing ecosystem. Embedding
+them in a Common Lisp environment allows you to make use of rapid
+prototyping, incremental development, and other capabilities that make
+it a powerful language.
+
+Clasp supports [[https://common-lisp.net/project/slime/][SLIME]], [[https://common-lisp.net/project/asdf/][ASDF]], and [[https://www.quicklisp.org/beta/][Quicklisp]]. The usual language extensions, such as
+[[https://cffi.common-lisp.dev][CFFI]], [[https://github.com/sionescu/bordeaux-threads][Bordeaux-Threads]], and [[https://unicode.org/main.html][Unicode]] characters are supported as well.

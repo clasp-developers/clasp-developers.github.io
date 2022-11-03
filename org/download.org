@@ -1,6 +1,133 @@
 #+TITLE: Get Clasp
 #+OPTIONS: toc:nil num:nil
 
+The most recent version of Clasp is v2.0.0, released October 26, 2022. See [[file:news.org][News]] for release notes.
 
-Currently, it is required to build Clasp from source, which is available from the [[https://github.com/clasp-developers/clasp][Github repository]] - use the main branch.
-You can ask for help on the irc channel #clasp on Libera.chat.
+* Binaries
+
+** Installing from the Nightly Homebrew Tap
+
+Binary packages for MacOS Catalina, Big Sur and Monterey are available from the
+~clasp-developers/clasp~ tap. Binary packages for Clasp and Cando are built nightly,
+starting about 2:00 AM EST, and take about 4 hours to complete. To install Clasp, do the
+following:
+
+#+BEGIN_SRC shell
+brew install clasp-developers/clasp/clasp-cl
+#+END_SRC
+
+To install Cando do the following:
+
+#+BEGIN_SRC shell
+brew install clasp-developers/clasp/cando
+#+END_SRC
+
+These Homebrew formula can be built from source by adding the ~--build-from-source~ option,
+and can be built directly the most recent commit by adding the ~--HEAD~ option.
+
+After the initial install, to upgrade to the latest nightly build use ~brew update && brew upgrade~.
+The brew update only needs to be done occasionally, to update homebrew itself.
+
+** Installing from the Nightly Linux Package Repository
+
+Binary packages for Clasp and Cando for Linux are built nightly starting about 2:00 AM EST and take about 4 hours to complete.
+Currently packages are built for Ubuntu 22.04, Debian Bookworm (in testing), and Arch.
+To add the package repository to your local system, and install either Clasp or Cando,
+execute one of the following commands in a shell.
+You may need to prefix these commands with ~sudo~ for root access.
+
+Clasp:
+
+#+BEGIN_SRC shell
+bash -c "$(curl -fsSL https://www.thirdlaw.tech/pkg/clasp.sh)"
+#+END_SRC
+
+Cando:
+
+#+BEGIN_SRC shell
+bash -c "$(curl -fsSL https://www.thirdlaw.tech/pkg/cando.sh)"
+#+END_SRC
+
+If these scripts fail to detect your operating system correctly, then you can install
+manually via one of the following commands:
+
+*** Debian Bookworm
+
+Clasp:
+
+#+BEGIN_SRC shell
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./"
+apt-get update
+apt-get install clasp-cl
+#+END_SRC
+
+Cando:
+
+#+BEGIN_SRC
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/bookworm/ ./"
+apt-get update
+apt-get install cando
+#+END_SRC
+
+*** Ubunty Jammy
+
+Clasp:
+
+#+BEGIN_SRC
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/jammy/ ./"
+apt-get update
+apt-get install clasp-cl
+#+END_SRC
+
+Cando:
+
+#+BEGIN_SRC
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | gpg --yes --dearmor --output /etc/apt/trusted.gpg.d/thirdlaw.gpg
+add-apt-repository "deb https://www.thirdlaw.tech/pkg/jammy/ ./"
+apt-get update
+apt-get install cando
+#+END_SRC
+
+*** Arch
+
+Clasp:
+
+#+BEGIN_SRC
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | pacman-key --add -
+pacman-key --lsign-key 009C1F20737D81230A0928CBC812E10EC39DF202
+echo -e "\n[thirdlaw]\nServer = https://www.thirdlaw.tech/pkg/arch\n" >>/etc/pacman.conf
+pacman -Sy --noconfirm clasp-cl-git
+#+END_SRC
+
+Cando:
+
+#+BEGIN_SRC
+curl -fsSL https://www.thirdlaw.tech/pkg/key.gpg | pacman-key --add -
+pacman-key --lsign-key 009C1F20737D81230A0928CBC812E10EC39DF202
+echo -e "\n[thirdlaw]\nServer = https://www.thirdlaw.tech/pkg/arch\n" >>/etc/pacman.conf
+pacman -Sy --noconfirm cando-git
+#+END_SRC
+
+* Source
+
+Clasp's sources can be obtained from [[https://github.com/clasp-developers/clasp][GitHub]] and built, as described in more detail in [[file:building.org][Building]].
+
+** Arch
+
+On Arch Linux, an AUR package is available for building from source. An AUR helper such as
+[[https://github.com/Jguer/yay][yay]] may be useful for this. Building in this manner using the ~clasp-cl-git~ package
+will build Clasp, while cando-git will build Clasp and Cando.
+If you do not have yay installed, you can install it with the following commands:
+
+#+BEGIN_SRC shell
+pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+#+END_SRC
+
+Once yay is installed, you can install Clasp with ~yay clasp-cl-git~, or Clasp and Cando
+with ~yay cando-git~.

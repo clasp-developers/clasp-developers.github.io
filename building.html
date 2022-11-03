@@ -3,13 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-07-07 Wed 18:02 -->
+<!-- 2022-11-03 Thu 13:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Building Clasp</title>
-<meta name="generator" content="Org mode" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -30,8 +30,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -39,22 +40,22 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
-    padding-top: 1.2em;
+    overflow: auto;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -190,55 +191,8 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
-<script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2020 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>
 </head>
 <body>
 <div id="preamble" class="status">
@@ -247,13 +201,13 @@ for the JavaScript code in this tag.
 <li><a href="index.html">Clasp</a>
 <ul>
 <li><a href="news.html">News</a></li>
-<li><a href="features.html">Features</a></li>
 <li><a href="download.html">Download</a></li>
 </ul></li>
 <li><a href="index.html">Doc</a>
 <ul>
 <li><a href="license.html">License</a></li>
-<li><a href="building.html">Building Clasp</a></li>
+<li><a href="manual.html">Manual</a></li>
+<li><a href="building.html">Building</a></li>
 <li><a href="clbind-doc.html">Exposing C++ Libraries</a></li>
 </ul></li>
 <li><a href="index.html">Misc</a>
@@ -266,193 +220,289 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Building Clasp</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc090e8e">1. Building on Linux</a></li>
-<li><a href="#orgab2d995">2. Building on OS X</a></li>
-<li><a href="#orgd599867">3. Building With Externals-Clasp</a></li>
-<li><a href="#orge15626a">4. External Dependencies</a>
+<li><a href="#orge90f80b">1. Requirements</a>
 <ul>
-<li><a href="#org20f0b44">4.1. Linux</a></li>
-<li><a href="#orgb2f3681">4.2. OS X</a></li>
+<li><a href="#orgfd3aedb">1.1. Arch</a></li>
+<li><a href="#org2023858">1.2. Debian/Ubuntu</a></li>
+<li><a href="#orgc17a96f">1.3. Fedora</a></li>
+<li><a href="#orgde54c81">1.4. MacOS</a></li>
 </ul>
 </li>
+<li><a href="#org5e1ae57">2. Building and Installing</a>
+<ul>
+<li><a href="#orgb0121f6">2.1. WSL2 (Windows Subsystem For Linux 2) notes</a></li>
+</ul>
+</li>
+<li><a href="#org5aeeae6">3. Variants</a></li>
+<li><a href="#org00d75b3">4. Targets</a></li>
+<li><a href="#orgd6a67fd">5. Extensions</a></li>
+<li><a href="#orge29a033">6. Configuration</a></li>
 </ul>
 </div>
 </div>
 <p>
-Clasp is currently supported on Linux, Mac OS X, and OpenBSD.
-On these
-systems, you should be able to build it from source if a pre-made
-package is not available or workable for you. In case you cannot get it
-to compile even with the instructions below, the quickest way to get
-help is to either <a href="https://github.com/clasp-developers/clasp/issues">file an issue</a>, or to
-<a href="irc.html">use irc</a> to 
-chat with us directly]].
+This page documents the steps needed to build and install Clasp using the source build system which uses a Lisp based metabuilder called koga that outputs <a href="https://ninja-build.org/">Ninja</a> build files.
 </p>
 
-<p>
-Building on most systems will take around 8GB of RAM and ~30 minutes with a
-relatively modern processor with eight or more cores.
-</p>
-
-<div id="outline-container-orgc090e8e" class="outline-2">
-<h2 id="orgc090e8e"><span class="section-number-2">1</span> Building on Linux</h2>
+<div id="outline-container-orge90f80b" class="outline-2">
+<h2 id="orge90f80b"><span class="section-number-2">1.</span> Requirements</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-For most distributions that have the listed
-<a href="#orge15626a">dependencies</a> available as packages, the
-compilation should be straightforward. Simply clone Clasp and run the following from
-the root directory.
+The build requirements of clasp must be installed before beginning the build. For each OS listed below install the packages as listed. Currently, LLVM-14 is required. If your system does not provide LLVM-14 via its package manager then you will need to build it first.
+</p>
+</div>
+
+<div id="outline-container-orgfd3aedb" class="outline-3">
+<h3 id="orgfd3aedb"><span class="section-number-3">1.1.</span> Arch</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+<pre class="src src-shell">pacman -S binutils boost clang gmp fmt libunwind llvm ninja sbcl
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2023858" class="outline-3">
+<h3 id="org2023858"><span class="section-number-3">1.2.</span> Debian/Ubuntu</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+<pre class="src src-shell">apt install -y binutils-gold clang-14 libclang-14-dev libfmt-dev libboost-dev libclang-cpp14-dev libelf-dev libgmp-dev libunwind-dev llvm-14 ninja-build sbcl pkg-config
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc17a96f" class="outline-3">
+<h3 id="orgc17a96f"><span class="section-number-3">1.3.</span> Fedora</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<pre class="src src-shell">dnf install boost-devel clang elfutils-libelf-devel fmt-devel gmp-devel libunwind-devel llvm-devel ninja-build sbcl
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgde54c81" class="outline-3">
+<h3 id="orgde54c81"><span class="section-number-3">1.4.</span> MacOS</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+<pre class="src src-shell">brew install boost gmp fmt libunwind-headers llvm ninja pkg-config sbcl
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5e1ae57" class="outline-2">
+<h2 id="org5e1ae57"><span class="section-number-2">2.</span> Building and Installing</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Start with a clean Clasp clone (<a href="https://github.com/clasp-developers/clasp">https://github.com/clasp-developers/clasp</a>) on the <code>main</code> branch. Then execute the following steps&#x2026;
+</p>
+
+<ol class="org-ol">
+<li>Configure the system and create the build files with <code>./koga</code>. ArchLinux may require <code>./koga --broken-stdlib</code> due an outstanding issue with LLVM14's JSON implementation.</li>
+<li>Build the system with <code>ninja -C build</code></li>
+<li>Install the system with <code>sudo ninja -C build install</code></li>
+</ol>
+</div>
+
+<div id="outline-container-orgb0121f6" class="outline-3">
+<h3 id="orgb0121f6"><span class="section-number-3">2.1.</span> WSL2 (Windows Subsystem For Linux 2) notes</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+<code>exposeClasses1.cc</code> uses a lot of memory to compile.  On Windows machines with 16GB running WSL2 we see that compilation get killed because it uses too much memory.  Try <code>ninja -j 4 -C build</code> or <code>ninja -j 2 -C build</code> to see if it will build without getting killed.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5aeeae6" class="outline-2">
+<h2 id="org5aeeae6"><span class="section-number-2">3.</span> Variants</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The default build target is <code>cclasp-boehmprecise</code>. This builds iclasp, then aclasp, then bclasp, then cclasp using the Boehm garbage collector in precise mode. The suffix after the dash is a called a variant. The current available variants are:
+</p>
+
+<ul class="org-ul">
+<li>boehm - Boehm garbage collector</li>
+<li>boehmprecise - Boehm garbage collector in precise mode</li>
+<li>boehm-d - Boehm garbage collector with debugging symbols</li>
+<li>boehmprecise-d - Boehm garbage collector in precise mode with debugging symbols</li>
+<li>preciseprep - MPS garbage collector. This is only used to analyze Clasp in preparation for the static analyzer.</li>
+<li>preciseprep-d - MPS garbage collector with debugging symbols. This is only used to analyze Clasp in preparation for the static analyzer.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org00d75b3" class="outline-2">
+<h2 id="org00d75b3"><span class="section-number-2">4.</span> Targets</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+There are many intermediate and additional targets available in the Ninja build files. The following is a list of some of the significant ones.
+</p>
+
+<ul class="org-ul">
+<li>install: Install the default target. If Jupyter was enabled by koga then this will install Jupyter system kernels also.</li>
+<li>test-[variant]: Run the Clasp regression tests on the specified variant.</li>
+<li>jupyter-[variant]: Install Jupyter user kernels for the specified variant. The clasp binaries used will be the ones in the build directory. This target is primarily used for using JupyterLab in a development repository.</li>
+<li>analyze-[boehm|boehm-d]: Run the static analyzer on the Boehm collector.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd6a67fd" class="outline-2">
+<h2 id="orgd6a67fd"><span class="section-number-2">5.</span> Extensions</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+The <a href="https://github.com/clasp-developers/seqan-clasp/">seqan-clasp</a> and <a href="https://github.com/cando-developers/cando/">cando</a> extensions are compatible with koga. To enable these extensions, create a file <code>config.sexp</code> in the root of the clasp directory with the following contents, then execute the build instructions listed in the previous section.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">./waf distclean           # (1)
-./waf configure           # (2)
-./waf build_dboehmprecise # (3)
-
-# or ...
-./waf distclean configure build_dboehmprecise
+<pre class="src src-lisp">(:extensions (:cando :seqan-clasp))
 </pre>
 </div>
+</div>
+</div>
 
-<ol class="org-ol">
-<li>The distclean target cleans out any previous build files.</li>
-<li>The configure target configures the build and checks that all of the dependencies are available.</li>
-<li>The build<sub>dboehmprecise</sub> target tell waf to build all of clasp.</li>
-</ol>
-
+<div id="outline-container-orge29a033" class="outline-2">
+<h2 id="orge29a033"><span class="section-number-2">6.</span> Configuration</h2>
+<div class="outline-text-2" id="text-6">
 <p>
-If you need to make local changes to the configuration copy <code>wscript.config.template</code> to <code>wscript.config</code> and
-edit it as appropriate. If you lack the required dependencies, try
-<a href="building-with-deploy">compiling with deploy</a>.
-</p>
-
-<p>
-The compilation output will be in the <code>build/boehmprecise</code> directory. To launch
-Clasp, run <code>build/boehmprecise/cclasp-boehmprecise</code>.
-</p>
-
-<p>
-Clasp has been successfully built on
+If the configure script does not succeed in configuring the build or if you want to adjust the settings you use a plist in <code>config.sexp</code>
+with the following values. These options can also be passed directly to koga via command line options. For example executing <code>./koga --debug-lexical-depth</code> is equivalent to adding <code>:debug-lexical-depth t</code> to the plist in <code>config.sexp</code>. Extensions can be enabled by passing the names separated with commas, i.e. <code>./koga --extensions=cando,seqan-clasp</code>
 </p>
 
 <ul class="org-ul">
-<li><b>Ubuntu 14.04</b>, see
-<a href="https://github.com/drmeister/clasp/wiki/Building-Clasp-0.4-on-Ubuntu">this
-wiki entry</a></li>
-<li><b>Debian Jessie</b></li>
-<li><b>Debian Sid</b></li>
-<li><b>Debian Wheezy</b></li>
-<li><b>OpenSuse 13.1</b></li>
-<li><b>Gentoo</b></li>
-<li><b>Arch</b></li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-orgab2d995" class="outline-2">
-<h2 id="orgab2d995"><span class="section-number-2">2</span> Building on OS X</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-First you will need what is listed for OS X under the
-<a href="#orge15626a">dependencies</a>. Next you need an additional
-step that is documented
-The rest of the procedure is the same as for building on linux.
-</p>
-
-<p>
-The compilation output will be in the <code>build/boehmprecise</code> directory. To launch
-Clasp, run <code>build/boehmprecise/cclasp-boehmprecise</code>.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orgd599867" class="outline-2">
-<h2 id="orgd599867"><span class="section-number-2">3</span> Building With Externals-Clasp</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-If your system does not provide the <a href="external-dependencies">external dependencies</a> 
-as required by Clasp, you can use this approach instead,
-which will compile them for you.
-</p>
-
-<p>
-Clone <a href="https://github.com/drmeister/externals-clasp">externals-clasp</a>
-to a directory on your system. Next, create a <code>local.config</code> containing
-<code>export GCC_TOOLCHAIN = /usr</code> if you are on Linux and
-<code>export TOOLSET = clang</code> if you are on OS X. Next, simply run <code>make</code>
-from the root of it. This will take some time to complete; maybe play a
-round of pinball or <a href="irc.html">chat on IRC for a bit</a>.
-</p>
-
-<p>
-The next step is building Clasp itself. For this, clone it to a
-different folder and copy the <code>local.config.template</code> file within it to
-<code>local.config</code>. Next, open it up and make sure to uncomment and adapt
-the <code>EXTERNALS_CLASP_DIR</code> line to point to the location where you
-compiled externals-clasp. Something like
-<code>export EXTERNALS_CLASP_DIR = /opt/externals-clasp</code>. Finally it's time
-to kick off the build process. Simply run <code>make</code> from the Clasp root.
-</p>
-</div>
-</div>
-
-<div id="outline-container-orge15626a" class="outline-2">
-<h2 id="orge15626a"><span class="section-number-2">4</span> External Dependencies</h2>
-<div class="outline-text-2" id="text-4">
-<p>
-Dependencies that are common to all Clasp builds are:
-</p>
+<li><code>:skip-sync</code> — A list of repository names to avoid syncing. This is useful if you are doing development on an extension such as Cando.</li>
+<li><code>:build-mode</code> — Define how clasp is built. [default :faso]
 <ul class="org-ul">
-<li><b>llvm</b> 13 commit hash 972b6a3a3471c2a742c5c5d8ec004ff640d544c4
-<ul class="org-ul">
-<li>This is because Clasp uses cutting edge llvm features of the ORCV2 engine that have not yet made it into a standard llvm release. It will be llvm 13 that includes these new features.</li>
+<li><code>:bitcode</code> compiles to bitcode and thinLTO is used to link everything.
+This gives the fastest product but linking takes a long time.</li>
+<li><code>:object</code> produces object files and regular linking is used.
+This is probably not as fast as bitcode (maybe a few percent slower)
+but it links fast.</li>
+<li><code>:faso</code> generates faso files. This is good for development.</li>
+<li><code>:fasobc</code> generates fasobc files.</li>
+<li><code>:fasoll</code> generates fasoll files.</li>
+<li><code>:fasl</code> generates fasl files.</li>
 </ul></li>
-<li><b>gmp</b> The GNU multiple precision math library.</li>
-<li><b>ffi</b></li>
+<li><code>:build-path</code> — The path for build files such as the Ninja build file. 
+[default #P"build/"]</li>
+<li><code>:parallel-build</code> — Build clasp in parallel. [default t]</li>
+<li><code>:prefix</code> — Where Clasp is install. [default "<i>usr</i>"]</li>
+<li><code>:extensions</code> — A list of extensions. [default nil]</li>
+<li><code>:jupyter</code> — Enable installation of Jupyter kernels. [default nil]</li>
+<li><code>:cst</code> — [default t]</li>
+<li><code>:clang-cpp</code> — If t use clang-cpp otherwise use the individual clang 
+libraries. [default t]</li>
+<li><code>:compile-file-parallel</code> — [default t]</li>
+<li><code>:force-startup-external-linkage</code> — Use external-linkage for startup 
+functions. [default t]</li>
+<li><code>:unwinder</code> — [default :gcc]</li>
+<li><code>:jobs</code> — The number of jobs during build. If not specified then a value will
+be picked based on the number of CPU cores. [default nil]</li>
+<li><code>:always-inline-mps-allocations)</code> —</li>
+<li><code>:address-sanitizer</code> — [default nil]</li>
+<li><code>:memory-sanitizer</code> — [default nil]</li>
+<li><code>:thread-sanitizer</code> — [default nil]</li>
+<li><code>:debug-dtree-interpreter</code> — Generate dtree interpreter log [default nil]</li>
+<li><code>:debug-dtrace-lock-probe</code> — Add a Dtrace probe for mutex lock acquisition
+[default nil]</li>
+<li><code>:debug-stackmaps</code> — print messages about stackmap registration [default nil]</li>
+<li><code>:debug-assert</code> — Turn on DEBUG<sub>ASSERT</sub> [default t]</li>
+<li><code>:debug-assert-type-cast</code> — Turn on type checking when passing arguments
+[default nil]</li>
+<li><code>:source-debug</code> — Allow LOG messages to print - works with CLASP<sub>DEBUG</sub> 
+environment variable [default nil]</li>
+<li><code>:debug-jit-log-symbols</code> — Generate a log of JITted symbols in 
+<code>/tmp/clasp-symbols-&lt;pid&gt;</code> [default nil]</li>
+<li><code>:debug-guard</code> — Add guards around allocated objects [default nil]</li>
+<li><code>:debug-guard-validate</code> — Add quick checking of guards [default nil]</li>
+<li><code>:debug-guard-backtrace</code> — Add allocation backtraces to guards [default nil]</li>
+<li><code>:debug-guard-exhaustive-validate</code> — Add exhaustive, slow, checks of guards
+[default nil]</li>
+<li><code>:debug-trace-interpreted-closures</code> — [default nil]</li>
+<li><code>:debug-environments</code> — [default nil]</li>
+<li><code>:debug-release</code> — Turn off optimization for a few C++ functions; undef this 
+to optimize everything [default nil]</li>
+<li><code>:debug-cache</code> — Debug the dispatch caches - see cache.cc [default nil]</li>
+<li><code>:debug-bitunit-container</code> — Prints debug info for bitunit containers 
+[default nil]</li>
+<li><code>:debug-lexical-depth</code> — Generate tests for lexical closure depths 
+[default nil]</li>
+<li><code>:debug-flow-tracker</code> — Record small backtraces to track flow [default nil]</li>
+<li><code>:debug-dynamic-binding-stack</code> — dynamic variable binding debugging
+[default nil]</li>
+<li><code>:debug-values</code> — turn on printing <code>(values x y z)</code> values when 
+<code>core:*debug-values*</code> is not nil [default nil]</li>
+<li><code>:debug-ihs</code> — [default nil]</li>
+<li><code>:debug-track-unwinds</code> — Count cc<sub>unwind</sub> calls and report in TIME 
+[default nil]</li>
+<li><code>:debug-no-unwind</code> — Debug intrinsics that say they don't unwind but actually 
+do. [default nil]</li>
+<li><code>:debug-startup</code> — Generate per-thread logs in <code>/tmp/dispatch-history/**</code> of 
+the slow path of fastgf [default nil]</li>
+<li><code>:debug-rehash-count</code> — Keep track of the number of times each hash table has 
+been rehashed [default nil]</li>
+<li><code>:debug-monitor</code> — generate logging messages to a file in /tmp for non-hot 
+code [default nil]</li>
+<li><code>:debug-monitor-support</code> — Must be enabled with other options - do this 
+automatically? [default nil]</li>
+<li><code>:debug-memory-profile</code> — Profile memory allocations total size and counter
+[default nil]</li>
+<li><code>:debug-bclasp-lisp</code> — Generate debugging frames for all bclasp code - like 
+declaim [default nil]</li>
+<li><code>:debug-cclasp-lisp</code> — Generate debugging frames for all cclasp code - like 
+declaim [default t]</li>
+<li><code>:debug-count-allocations</code> — count per-thread allocations of instances of 
+classes [default nil]</li>
+<li><code>:debug-compiler</code> — Turn on compiler debugging [default nil]</li>
+<li><code>:debug-verify-modules</code> — Verify LLVM modules before using them [default nil]</li>
+<li><code>:debug-long-call-history</code> — The GF call histories used to blow up - this 
+triggers an error if they get too long [default nil]</li>
+<li><code>:debug-bounds-assert</code> — check bounds [default t]</li>
+<li><code>:debug-gfdispatch</code> — debug call history manipulation [default nil]</li>
+<li><code>:debug-fastgf</code> — generate slow gf dispatch logging and write out dispatch 
+functions to <code>/tmp/dispatch-history-**</code> [default nil]</li>
+<li><code>:debug-slot-accessors</code> — GF accessors have extra debugging added to them
+[default nil]</li>
+<li><code>:debug-threads</code> — [default nil]</li>
+<li><code>:debug-stores</code> — insert a call to <code>cc_validate_tagged_pointer</code> everytime 
+something is written to memory [default nil]</li>
+<li><code>:debug-ensure-valid-object</code> — Defines <code>ENSURE_VALID_OBJECT(x)-&gt;x</code> macro - 
+sprinkle these around to run checks on objects [default nil]</li>
+<li><code>:debug-quick-validate</code> — quick/cheap validate if on and comprehensive 
+validate if not [default nil]</li>
+<li><code>:debug-mps-size</code> — check that the size of the MPS object will be calculated 
+properly by obj<sub>skip</sub> [default nil]</li>
+<li><code>:debug-mps-underscanning</code> — Very expensive - does a 
+<code>mps_arena_collect=/=mps_arena_release</code> for each allocation [default nil]</li>
+<li><code>:debug-dont-optimize-bclasp</code> — Optimize bclasp by editing llvm-ir 
+[default nil]</li>
+<li><code>:debug-recursive-allocations</code> — Catch allocations within allocations - MPS 
+hates these [default nil]</li>
+<li><code>:debug-alloc-alignment</code> — catch misaligned allocations [default nil]</li>
+<li><code>:debug-llvm-optimization-level-0</code> — [default nil]</li>
+<li><code>:debug-slow</code> — Code runs slower due to checks - undefine to remove checks
+[default nil]</li>
+<li><code>:human-readable-bitcode</code> — [default nil]</li>
+<li><code>:debug-compile-file-output-info</code> — [default nil]</li>
+<li><code>:config-var-cool</code> — mps setting [default t]</li>
+<li><code>:ar</code> — Pathname of ar binary. [default nil]</li>
+<li><code>:cc</code> — Pathname of cc binary. [default nil]</li>
+<li><code>:cxx</code> — Pathname of cxx binary. [default nil]</li>
+<li><code>:git</code> — Pathname of git binary. [default nil]</li>
+<li><code>:llvm-config</code> — Pathname of llvm-config binary. [default nil]</li>
+<li><code>:nm</code> — Pathname of nm binary. [default nil]</li>
+<li><code>:pkg-config</code> — Pathname of pkg-config binary. [default nil]</li>
 </ul>
-</div>
-
-<div id="outline-container-org20f0b44" class="outline-3">
-<h3 id="org20f0b44"><span class="section-number-3">4.1</span> Linux</h3>
-<div class="outline-text-3" id="text-4-1">
-<p>
-Simply install the appropriate packages with your package manager.
-</p>
-
-<ul class="org-ul">
-<li><b>llvm</b> 3.6</li>
-<li><b>clang</b> 3.6, including headers.</li>
-<li><b>boost</b></li>
-<li><b>autoreconf</b> (dh-autoreconf on Ubuntu)</li>
-<li><b>gmp</b> 6.0.0, compiled with &#x2013;enable-cxx</li>
-<li><b>expat</b> 2.0.1</li>
-<li><b>zlib</b> 1.2.8</li>
-<li><b>readline</b> 6.2</li>
-</ul>
-</div>
-</div>
-
-<div id="outline-container-orgb2f3681" class="outline-3">
-<h3 id="orgb2f3681"><span class="section-number-3">4.2</span> OS X</h3>
-<div class="outline-text-3" id="text-4-2">
-<p>
-Use either <a href="http://brew.sh/">brew</a> or
-<a href="https://www.macports.org/">ports</a> to install the dependencies besides
-Xcode. Make sure the binaries are in your <code>PATH</code>.
-</p>
-
-<ul class="org-ul">
-<li><b>Xcode</b> 12.4</li>
-<li><b>Xcode command-line tools</b></li>
-<li></li>
-</ul>
-</div>
 </div>
 </div>
 </div>
