@@ -3,10 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-03 Thu 13:51 -->
+<!-- 2025-01-24 Fri 10:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Exposing C++ Libraries with clbind</title>
+<meta name="author" content="Alex Wood" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -190,7 +191,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 </head>
@@ -226,56 +227,56 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgae1eba1">1. General information</a></li>
-<li><a href="#orga76e97f">2. Defining bindings</a></li>
-<li><a href="#org7fabb3c">3. Exposing Functions</a>
+<li><a href="#orgd23b560">1. General information</a></li>
+<li><a href="#org0048718">2. Defining bindings</a></li>
+<li><a href="#orgfe9b330">3. Exposing Functions</a>
 <ul>
-<li><a href="#orgec2eb28">3.1. Overloaded Functions</a></li>
+<li><a href="#org9128413">3.1. Overloaded Functions</a></li>
 </ul>
 </li>
-<li><a href="#org36fb2c2">4. Exposing Classes</a>
+<li><a href="#org50cf406">4. Exposing Classes</a>
 <ul>
-<li><a href="#org82d0a10">4.1. Inheritance</a></li>
-<li><a href="#orgb170448">4.2. Constructors</a></li>
-<li><a href="#orge688be0">4.3. Member Functions</a></li>
-<li><a href="#org626a1a2">4.4. Static Member Function</a></li>
-<li><a href="#orgc0d4595">4.5. Public Member Variables</a></li>
-<li><a href="#orge8b7342">4.6. Derivable classes</a></li>
+<li><a href="#org489072c">4.1. Inheritance</a></li>
+<li><a href="#org5401a4e">4.2. Constructors</a></li>
+<li><a href="#orgf1d88c8">4.3. Member Functions</a></li>
+<li><a href="#org82565d9">4.4. Static Member Function</a></li>
+<li><a href="#orgc515c5d">4.5. Public Member Variables</a></li>
+<li><a href="#org34ba3e9">4.6. Derivable classes</a></li>
 </ul>
 </li>
-<li><a href="#orgfdc993a">5. Exposing Enums</a></li>
-<li><a href="#org6ef8584">6. Translators</a>
+<li><a href="#org2e18ff8">5. Exposing Enums</a></li>
+<li><a href="#org4f9e726">6. Translators</a>
 <ul>
-<li><a href="#org3ccbde2">6.1. Translation from C++ objects to Common Lisp objects</a></li>
-<li><a href="#org40054fe">6.2. Translation from Common Lisp objects to C++ objects</a>
+<li><a href="#orgb3ca3e4">6.1. Translation from C++ objects to Common Lisp objects</a></li>
+<li><a href="#org50ed06f">6.2. Translation from Common Lisp objects to C++ objects</a>
 <ul>
-<li><a href="#orgdd26119">6.2.1. Advanced from_object translators</a></li>
+<li><a href="#orge14f3b2">6.2.1. Advanced from_object translators</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org853b8fb">7. Policies</a>
+<li><a href="#org5880dea">7. Policies</a>
 <ul>
-<li><a href="#org37551a6">7.1. pureOutValue&lt;N&gt;</a></li>
-<li><a href="#org07a0525">7.2. outValue&lt;N&gt;</a></li>
-<li><a href="#org3ffb273">7.3. adopt&lt;n&gt;</a></li>
-<li><a href="#orgc358c45">7.4. LambdaList</a></li>
-<li><a href="#org7c574b3">7.5. DocString</a></li>
+<li><a href="#org2147839">7.1. pureOutValue&lt;N&gt;</a></li>
+<li><a href="#orgfe36ee6">7.2. outValue&lt;N&gt;</a></li>
+<li><a href="#orgffb2dba">7.3. adopt&lt;n&gt;</a></li>
+<li><a href="#org8af2a34">7.4. LambdaList</a></li>
+<li><a href="#org78438e8">7.5. DocString</a></li>
 </ul>
 </li>
-<li><a href="#orgc526c23">8. Lispification</a>
+<li><a href="#org6d0a485">8. Lispification</a>
 <ul>
-<li><a href="#org3e9f735">8.1. Camel case</a></li>
-<li><a href="#org86d3e3d">8.2. Underscores become hyphens</a></li>
+<li><a href="#org78e956b">8.1. Camel case</a></li>
+<li><a href="#orgece7402">8.2. Underscores become hyphens</a></li>
 </ul>
 </li>
-<li><a href="#org4c34748">9. Building</a></li>
+<li><a href="#orgfa2d68b">9. Building</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgae1eba1" class="outline-2">
-<h2 id="orgae1eba1"><span class="section-number-2">1.</span> General information</h2>
+<div id="outline-container-orgd23b560" class="outline-2">
+<h2 id="orgd23b560"><span class="section-number-2">1.</span> General information</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 clbind is based on luabind with some ideas borrowed from pybind11 and boost::python.
@@ -289,8 +290,8 @@ your system should be exposed, and how.
 </div>
 </div>
 
-<div id="outline-container-orga76e97f" class="outline-2">
-<h2 id="orga76e97f"><span class="section-number-2">2.</span> Defining bindings</h2>
+<div id="outline-container-org0048718" class="outline-2">
+<h2 id="org0048718"><span class="section-number-2">2.</span> Defining bindings</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Clasp is able to load C++ libraries and expose functions, classes, methods and enums to Clasp Common Lisp.
@@ -348,7 +349,7 @@ supplies a docstring.</li>
 </ol>
 
 <p>
-After <a href="#org4c34748">building Clasp with this extension</a> it can be accessed from within Lisp.
+After <a href="#orgfa2d68b">building Clasp with this extension</a> it can be accessed from within Lisp.
 </p>
 
 <div class="org-src-container">
@@ -361,8 +362,8 @@ COMMON-LISP-USER&gt;
 </div>
 </div>
 
-<div id="outline-container-org7fabb3c" class="outline-2">
-<h2 id="org7fabb3c"><span class="section-number-2">3.</span> Exposing Functions</h2>
+<div id="outline-container-orgfe9b330" class="outline-2">
+<h2 id="orgfe9b330"><span class="section-number-2">3.</span> Exposing Functions</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Exposing functions is done via the function <code>def</code>:
@@ -380,11 +381,11 @@ scope def(char     const* name,
 In this function
 </p>
 <dl class="org-dl">
-<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#orgc526c23">lispified</a>,
+<dt>name</dt><dd>is the name that the function will have in clasp. It is automatically <a href="#org6d0a485">lispified</a>,
 i.e. a name with camel-casing is converted to a downcase name with dashes in between.
 Using this automatic lispification is optional; see the Lispification section for details.</dd>
 <dt>f</dt><dd>a pointer to the C++ function.</dd>
-<dt>policies</dt><dd>Gives additional information (see <a href="#org853b8fb">Policies</a>).</dd>
+<dt>policies</dt><dd>Gives additional information (see <a href="#org5880dea">Policies</a>).</dd>
 </dl>
 
 <p>
@@ -424,7 +425,7 @@ void hello_world_startup() {
 <li>Only the first two arguments to <code>def</code> are required: the name of the function
 and a pointer to it.</li>
 <li>The lambda list for the function is provided as a policy, using the <code>_ll</code> user literal
-described below in <a href="#orgc358c45">LambdaList</a>.</li>
+described below in <a href="#org8af2a34">LambdaList</a>.</li>
 <li>A documentation string is provided with the <code>_docstring</code> user literal.</li>
 </ol>
 
@@ -455,8 +456,8 @@ Source:        #P"=external="
 </div>
 </div>
 
-<div id="outline-container-orgec2eb28" class="outline-3">
-<h3 id="orgec2eb28"><span class="section-number-3">3.1.</span> Overloaded Functions</h3>
+<div id="outline-container-org9128413" class="outline-3">
+<h3 id="org9128413"><span class="section-number-3">3.1.</span> Overloaded Functions</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 To expose overloaded functions, you have to cast the function pointer to the correct signature. 
@@ -477,8 +478,8 @@ The convention we adopt in Clasp is to append type names to the original name.
 </div>
 </div>
 
-<div id="outline-container-org36fb2c2" class="outline-2">
-<h2 id="org36fb2c2"><span class="section-number-2">4.</span> Exposing Classes</h2>
+<div id="outline-container-org50cf406" class="outline-2">
+<h2 id="org50cf406"><span class="section-number-2">4.</span> Exposing Classes</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Exposing a class is done via the class <code>class_</code>.
@@ -520,12 +521,12 @@ void double_vector_startup() {
 <p>
 This code creates a binding to the C++ class <code>DoubleVector</code>, with the name
 <code>dv:double-vector</code> in Lisp.
-This does not automatically creates a binding to the default constructor - <a href="#orgb170448">use def_constructor for that</a>.
+This does not automatically creates a binding to the default constructor - <a href="#org5401a4e">use def_constructor for that</a>.
 </p>
 </div>
 
-<div id="outline-container-org82d0a10" class="outline-3">
-<h3 id="org82d0a10"><span class="section-number-3">4.1.</span> Inheritance</h3>
+<div id="outline-container-org489072c" class="outline-3">
+<h3 id="org489072c"><span class="section-number-3">4.1.</span> Inheritance</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 clbind can handle member functions of derived classes correctly, provided that they are all exposed.
@@ -555,8 +556,8 @@ the base class, or you will get a compilation error.
 </div>
 </div>
 
-<div id="outline-container-orgb170448" class="outline-3">
-<h3 id="orgb170448"><span class="section-number-3">4.2.</span> Constructors</h3>
+<div id="outline-container-org5401a4e" class="outline-3">
+<h3 id="org5401a4e"><span class="section-number-3">4.2.</span> Constructors</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Add constructors to exposed classes with the function <code>def_constructor</code>:
@@ -574,17 +575,17 @@ class_&amp; def_constructor(const string&amp;         name,
 In this function
 </p>
 <dl class="org-dl">
-<dt>name</dt><dd>is the name of the constructor that will be visible in clasp. Again, it will be <a href="#orgc526c23">lispified</a>.</dd>
+<dt>name</dt><dd>is the name of the constructor that will be visible in clasp. Again, it will be <a href="#org6d0a485">lispified</a>.</dd>
 <dt>sig</dt><dd>is the parameter signature of the C++ constructor.
 Use a comma-separated parameter-list list in the form <code>constructor&lt;parameter-list&gt;()</code>
  of all the types used as parameters in the constructor you want to expose.</dd>
-<dt>policies</dt><dd><a href="#org853b8fb">7</a>.</dd>
+<dt>policies</dt><dd><a href="#org5880dea">7</a>.</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-orge688be0" class="outline-3">
-<h3 id="orge688be0"><span class="section-number-3">4.3.</span> Member Functions</h3>
+<div id="outline-container-orgf1d88c8" class="outline-3">
+<h3 id="orgf1d88c8"><span class="section-number-3">4.3.</span> Member Functions</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 Exposing member functions is similar to exposing free functions.
@@ -600,7 +601,7 @@ class_&amp; def(char const*       name,
 </div>
 
 <p>
-Thus exposing a member function is not different from <a href="#org7fabb3c">exposing free functions</a>, and the same arguments apply.
+Thus exposing a member function is not different from <a href="#orgfe9b330">exposing free functions</a>, and the same arguments apply.
 The exception to this rule is the lambda-list (arguments),
 which always requires <code>self</code> as its first parameter,
 which becomes the <code>this</code> argument within the method.
@@ -628,18 +629,18 @@ void double_vector_startup() {
 </div>
 </div>
 
-<div id="outline-container-org626a1a2" class="outline-3">
-<h3 id="org626a1a2"><span class="section-number-3">4.4.</span> Static Member Function</h3>
+<div id="outline-container-org82565d9" class="outline-3">
+<h3 id="org82565d9"><span class="section-number-3">4.4.</span> Static Member Function</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
 As Common Lisp does not have the notion of static member functions,
-exposing them is similar to <a href="#org7fabb3c">exposing free functions</a>.
+exposing them is similar to <a href="#orgfe9b330">exposing free functions</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc0d4595" class="outline-3">
-<h3 id="orgc0d4595"><span class="section-number-3">4.5.</span> Public Member Variables</h3>
+<div id="outline-container-orgc515c5d" class="outline-3">
+<h3 id="orgc515c5d"><span class="section-number-3">4.5.</span> Public Member Variables</h3>
 <div class="outline-text-3" id="text-4-5">
 <p>
 Exposing public member variables works similar to exposing member functions.
@@ -647,8 +648,8 @@ Exposing public member variables works similar to exposing member functions.
 </div>
 </div>
 
-<div id="outline-container-orge8b7342" class="outline-3">
-<h3 id="orge8b7342"><span class="section-number-3">4.6.</span> Derivable classes</h3>
+<div id="outline-container-org34ba3e9" class="outline-3">
+<h3 id="org34ba3e9"><span class="section-number-3">4.6.</span> Derivable classes</h3>
 <div class="outline-text-3" id="text-4-6">
 <p>
 Some C++ libraries provide base classes that the library user is meant to subclass to add
@@ -801,8 +802,8 @@ and the second argument was passed from the C++ <code>run</code> virtual method.
 </div>
 </div>
 
-<div id="outline-container-orgfdc993a" class="outline-2">
-<h2 id="orgfdc993a"><span class="section-number-2">5.</span> Exposing Enums</h2>
+<div id="outline-container-org2e18ff8" class="outline-2">
+<h2 id="org2e18ff8"><span class="section-number-2">5.</span> Exposing Enums</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-C++">
@@ -878,8 +879,8 @@ COMMON-LISP-USER&gt;
 </div>
 </div>
 
-<div id="outline-container-org6ef8584" class="outline-2">
-<h2 id="org6ef8584"><span class="section-number-2">6.</span> Translators</h2>
+<div id="outline-container-org4f9e726" class="outline-2">
+<h2 id="org4f9e726"><span class="section-number-2">6.</span> Translators</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Translators are used to automatically convert C++ objects to Common Lisp objects and vice
@@ -893,8 +894,8 @@ translator.
 </p>
 </div>
 
-<div id="outline-container-org3ccbde2" class="outline-3">
-<h3 id="org3ccbde2"><span class="section-number-3">6.1.</span> Translation from C++ objects to Common Lisp objects</h3>
+<div id="outline-container-orgb3ca3e4" class="outline-3">
+<h3 id="orgb3ca3e4"><span class="section-number-3">6.1.</span> Translation from C++ objects to Common Lisp objects</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Translating from C++ to Common Lisp objects is done by specializing the templated struct
@@ -931,8 +932,8 @@ this definition is in place, <code>def</code> can be used to expose C++ function
 </div>
 
 
-<div id="outline-container-org40054fe" class="outline-3">
-<h3 id="org40054fe"><span class="section-number-3">6.2.</span> Translation from Common Lisp objects to C++ objects</h3>
+<div id="outline-container-org50ed06f" class="outline-3">
+<h3 id="org50ed06f"><span class="section-number-3">6.2.</span> Translation from Common Lisp objects to C++ objects</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Translating from Common Lisp to C++ objects is done by specializing the templated struct
@@ -978,8 +979,8 @@ then signal a type error that tells the user what types are accepted.</li>
 </div>
 
 
-<div id="outline-container-orgdd26119" class="outline-4">
-<h4 id="orgdd26119"><span class="section-number-4">6.2.1.</span> Advanced from_object translators</h4>
+<div id="outline-container-orge14f3b2" class="outline-4">
+<h4 id="orge14f3b2"><span class="section-number-4">6.2.1.</span> Advanced from_object translators</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <p>
 <code>struct from_object</code> takes a second template argument that can have the
@@ -989,7 +990,7 @@ it means that the <code>_v</code> instance variable will be initialized by the <
 
 <p>
 constructor using the Common Lisp value in the <code>T_sp</code> constructor argument.
-<code>std::false_type</code> is subtle - it is used to express the <code>pureOutValue&lt;N&gt;</code> <a href="#org853b8fb">policy</a>.
+<code>std::false_type</code> is subtle - it is used to express the <code>pureOutValue&lt;N&gt;</code> <a href="#org5880dea">policy</a>.
 <code>std::false_type</code> means that the <code>from_object</code> translator does not initialize its <code>_v</code>
 field. Instead, the field can be passed by reference to a function and written in to.
 The wrapper will take the result out and return it as multiple return values.
@@ -1031,8 +1032,8 @@ gets overwritten by the C++ compiler.</li>
 </div>
 </div>
 
-<div id="outline-container-org853b8fb" class="outline-2">
-<h2 id="org853b8fb"><span class="section-number-2">7.</span> Policies</h2>
+<div id="outline-container-org5880dea" class="outline-2">
+<h2 id="org5880dea"><span class="section-number-2">7.</span> Policies</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Policies tell clbind how to handle return values and C++ arguments, and provide Clasp
@@ -1040,8 +1041,8 @@ with miscellaneous extra information about the function.
 </p>
 </div>
 
-<div id="outline-container-org37551a6" class="outline-3">
-<h3 id="org37551a6"><span class="section-number-3">7.1.</span> pureOutValue&lt;N&gt;</h3>
+<div id="outline-container-org2147839" class="outline-3">
+<h3 id="org2147839"><span class="section-number-3">7.1.</span> pureOutValue&lt;N&gt;</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 Let's say you have a C++ function that uses reference parameters to output values, like this:
@@ -1118,8 +1119,8 @@ primary return value into Lisp, and out references provide subsequent return val
 </div>
 </div>
 
-<div id="outline-container-org07a0525" class="outline-3">
-<h3 id="org07a0525"><span class="section-number-3">7.2.</span> outValue&lt;N&gt;</h3>
+<div id="outline-container-orgfe36ee6" class="outline-3">
+<h3 id="orgfe36ee6"><span class="section-number-3">7.2.</span> outValue&lt;N&gt;</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 In some cases, a reference parameter may be used both to pass values into a C++ function
@@ -1166,8 +1167,8 @@ primary Lisp return value, and the reference parameters will provide subsequent 
 </div>
 </div>
 
-<div id="outline-container-org3ffb273" class="outline-3">
-<h3 id="org3ffb273"><span class="section-number-3">7.3.</span> adopt&lt;n&gt;</h3>
+<div id="outline-container-orgffb2dba" class="outline-3">
+<h3 id="orgffb2dba"><span class="section-number-3">7.3.</span> adopt&lt;n&gt;</h3>
 <div class="outline-text-3" id="text-7-3">
 <p>
 adopt&lt;n&gt; is used to instruct clbind that a pointer to an object that is returned by a
@@ -1180,8 +1181,8 @@ indicate that the first argument is a pointer that should be adopted by the memo
 </div>
 </div>
 
-<div id="outline-container-orgc358c45" class="outline-3">
-<h3 id="orgc358c45"><span class="section-number-3">7.4.</span> LambdaList</h3>
+<div id="outline-container-org8af2a34" class="outline-3">
+<h3 id="org8af2a34"><span class="section-number-3">7.4.</span> LambdaList</h3>
 <div class="outline-text-3" id="text-7-4">
 <p>
 A lambda list for the Lisp version of the function to be exposed can be provided as a policy.
@@ -1192,8 +1193,8 @@ provided as a string, which clbind will parse as a Common Lisp lambda list. For 
 </div>
 </div>
 
-<div id="outline-container-org7c574b3" class="outline-3">
-<h3 id="org7c574b3"><span class="section-number-3">7.5.</span> DocString</h3>
+<div id="outline-container-org78438e8" class="outline-3">
+<h3 id="org78438e8"><span class="section-number-3">7.5.</span> DocString</h3>
 <div class="outline-text-3" id="text-7-5">
 <p>
 A documentation string, accessible by <code>cl:documentation</code>, can be provided as a policy.
@@ -1203,16 +1204,16 @@ Just pass <code>"documentation string here"_docstring</code> as an argument to <
 </div>
 </div>
 
-<div id="outline-container-orgc526c23" class="outline-2">
-<h2 id="orgc526c23"><span class="section-number-2">8.</span> Lispification</h2>
+<div id="outline-container-org6d0a485" class="outline-2">
+<h2 id="org6d0a485"><span class="section-number-2">8.</span> Lispification</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Lispification is a process used to convert C++ identifiers into Common Lisp hyphenated names.
 </p>
 </div>
 
-<div id="outline-container-org3e9f735" class="outline-3">
-<h3 id="org3e9f735"><span class="section-number-3">8.1.</span> Camel case</h3>
+<div id="outline-container-org78e956b" class="outline-3">
+<h3 id="org78e956b"><span class="section-number-3">8.1.</span> Camel case</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 Camel case strings are converted to hyphenated names by inserting hyphens into the final
@@ -1230,8 +1231,8 @@ A few examples:
 </div>
 </div>
 
-<div id="outline-container-org86d3e3d" class="outline-3">
-<h3 id="org86d3e3d"><span class="section-number-3">8.2.</span> Underscores become hyphens</h3>
+<div id="outline-container-orgece7402" class="outline-3">
+<h3 id="orgece7402"><span class="section-number-3">8.2.</span> Underscores become hyphens</h3>
 <div class="outline-text-3" id="text-8-2">
 <p>
 Examples:
@@ -1249,8 +1250,8 @@ Underscores and camel case can be mixed.
 </div>
 </div>
 
-<div id="outline-container-org4c34748" class="outline-2">
-<h2 id="org4c34748"><span class="section-number-2">9.</span> Building</h2>
+<div id="outline-container-orgfa2d68b" class="outline-2">
+<h2 id="orgfa2d68b"><span class="section-number-2">9.</span> Building</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Integrating an external library, or your own C++ code,

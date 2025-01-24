@@ -1,7 +1,7 @@
 #+TITLE: Get Clasp
 #+OPTIONS: toc:nil num:nil
 
-The most recent version of Clasp is v2.0.0, released October 26, 2022. See [[file:news.org][News]] for release notes.
+The most recent version of Clasp is v2.7.0, released January 21, 2025. See [[file:news.org][News]] for release notes.
 
 * Binaries
 

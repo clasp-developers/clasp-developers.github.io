@@ -3,6 +3,7 @@
 - [[file:acknowlegements.org][Acknowlegements]]
 - [[file:building.org][Building Clasp]]
 - [[file:index.org][Clasp]]
+- [[file:manual.org][Clasp Manual]]
 - [[file:community.org][Community]]
 - [[file:clbind-doc.org][Exposing C++ Libraries with clbind]]
 - [[file:download.org][Get Clasp]]
@@ -11,5 +12,4 @@
 - [[file:news.org][News]]
 - [[file:projects.org][Projects]]
 - [[file:footer.org][footer]]
-- [[file:manual.org][manual]]
 - [[file:menu.org][menu]]

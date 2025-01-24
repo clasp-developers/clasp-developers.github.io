@@ -3,10 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-03 Thu 13:51 -->
+<!-- 2025-01-24 Fri 10:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clasp Manual</title>
+<meta name="author" content="Alex Wood" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -190,7 +191,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/><link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg.css"/><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><script type="text/javascript" src="styles/lib/js/jquery.stickytableheaders.min.js"></script><script type="text/javascript" src="styles/readtheorg/js/readtheorg.js"></script>
 </head>
@@ -226,98 +227,98 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org98b75d0">1. Introduction</a>
+<li><a href="#orga0c7d20">1. Introduction</a>
 <ul>
-<li><a href="#orga79df02">1.1. Conformance</a></li>
-<li><a href="#org4c1d9c2">1.2. Distribution</a></li>
-<li><a href="#org041633d">1.3. Building</a></li>
-<li><a href="#orge4c05f4">1.4. Contributing</a></li>
-<li><a href="#orgd60f52d">1.5. Credits</a></li>
+<li><a href="#org7c305c3">1.1. Conformance</a></li>
+<li><a href="#org0593848">1.2. Distribution</a></li>
+<li><a href="#org5f8a7df">1.3. Building</a></li>
+<li><a href="#org0da5b65">1.4. Contributing</a></li>
+<li><a href="#org02aec25">1.5. Credits</a></li>
 </ul>
 </li>
-<li><a href="#org2696590">2. Starting and Stopping</a></li>
-<li><a href="#orgc476e9d">3. Lisp</a>
+<li><a href="#org0ec8abd">2. Starting and Stopping</a></li>
+<li><a href="#orgf48f546">3. Lisp</a>
 <ul>
-<li><a href="#orgecf7faf">3.1. Evaluation and Compilation</a></li>
-<li><a href="#org2709fa1">3.2. Types and Classes</a>
+<li><a href="#org9a8293c">3.1. Evaluation and Compilation</a></li>
+<li><a href="#orga6c469d">3.2. Types and Classes</a>
 <ul>
-<li><a href="#orgc3b7a0f">3.2.1. Disjointness</a></li>
+<li><a href="#org07246e6">3.2.1. Disjointness</a></li>
 </ul>
 </li>
-<li><a href="#orgc15e691">3.3. Data and Control Flow</a></li>
-<li><a href="#org1d7b431">3.4. Iteration</a></li>
-<li><a href="#orgd706c78">3.5. Objects</a>
+<li><a href="#org45a45ad">3.3. Data and Control Flow</a></li>
+<li><a href="#org36b0865">3.4. Iteration</a></li>
+<li><a href="#org19cc97d">3.5. Objects</a>
 <ul>
-<li><a href="#orgb8f0cca">3.5.1. Metaobject Protocol</a></li>
-<li><a href="#org1de62b5">3.5.2. Generic function dispatch efficiency</a></li>
-<li><a href="#org73a0753">3.5.3. Miscellany</a></li>
+<li><a href="#orgb9e9d39">3.5.1. Metaobject Protocol</a></li>
+<li><a href="#org7da3acf">3.5.2. Generic function dispatch efficiency</a></li>
+<li><a href="#org6157fe5">3.5.3. Miscellany</a></li>
 </ul>
 </li>
-<li><a href="#orgf68b0db">3.6. Structures</a></li>
-<li><a href="#orgb348097">3.7. Conditions</a></li>
-<li><a href="#org0aaa487">3.8. Symbols</a></li>
-<li><a href="#org1b6e00c">3.9. Packages</a></li>
-<li><a href="#org543ee51">3.10. Numbers</a></li>
-<li><a href="#orgade7025">3.11. Characters</a></li>
-<li><a href="#orgd08d193">3.12. Conses</a></li>
-<li><a href="#org8be6467">3.13. Arrays</a></li>
-<li><a href="#org7ace96d">3.14. Strings</a></li>
-<li><a href="#orga83a8eb">3.15. Sequences</a>
+<li><a href="#org317aaa9">3.6. Structures</a></li>
+<li><a href="#orgb8aabdd">3.7. Conditions</a></li>
+<li><a href="#orgff59aab">3.8. Symbols</a></li>
+<li><a href="#org05f0493">3.9. Packages</a></li>
+<li><a href="#orga015640">3.10. Numbers</a></li>
+<li><a href="#orgca58f61">3.11. Characters</a></li>
+<li><a href="#orgf8619f3">3.12. Conses</a></li>
+<li><a href="#org39ae6b2">3.13. Arrays</a></li>
+<li><a href="#org0ffaa93">3.14. Strings</a></li>
+<li><a href="#orgc2fdf12">3.15. Sequences</a>
 <ul>
-<li><a href="#orge4eec74">3.15.1. Extensible Sequences</a></li>
+<li><a href="#org2083348">3.15.1. Extensible Sequences</a></li>
 </ul>
 </li>
-<li><a href="#org5b03056">3.16. Hash Tables</a></li>
-<li><a href="#org5d7da43">3.17. Filenames</a></li>
-<li><a href="#orgc132e55">3.18. Files</a></li>
-<li><a href="#orgdb4abea">3.19. Streams</a>
+<li><a href="#org808c9e2">3.16. Hash Tables</a></li>
+<li><a href="#org8cebe85">3.17. Filenames</a></li>
+<li><a href="#org8b2f91f">3.18. Files</a></li>
+<li><a href="#org26ac30a">3.19. Streams</a>
 <ul>
-<li><a href="#org706f7e6">3.19.1. Gray streams</a></li>
+<li><a href="#org1684136">3.19.1. Gray streams</a></li>
 </ul>
 </li>
-<li><a href="#org807f845">3.20. Printer</a></li>
-<li><a href="#org8754f59">3.21. Reader</a></li>
-<li><a href="#org39c3aa8">3.22. System Construction</a></li>
-<li><a href="#org636ee91">3.23. Environment</a>
+<li><a href="#orgba02f72">3.20. Printer</a></li>
+<li><a href="#org85f13e0">3.21. Reader</a></li>
+<li><a href="#org563ce55">3.22. System Construction</a></li>
+<li><a href="#org38f1fea">3.23. Environment</a>
 <ul>
-<li><a href="#org3e84472">3.23.1. Stepper</a></li>
+<li><a href="#orgc61246d">3.23.1. Stepper</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgb40cedd">4. C++ Interface (clbind)</a></li>
-<li><a href="#org0ec26ab">5. Foreign Function Interface</a></li>
-<li><a href="#org66b9a81">6. REPL</a></li>
-<li><a href="#orgc1695a4">7. Debug interface</a></li>
-<li><a href="#orgeee7b64">8. Multiprocessing</a>
+<li><a href="#orgbc21741">4. C++ Interface (clbind)</a></li>
+<li><a href="#orga5b38bd">5. Foreign Function Interface</a></li>
+<li><a href="#orgda813fc">6. REPL</a></li>
+<li><a href="#orge670187">7. Debug interface</a></li>
+<li><a href="#org8b07d65">8. Multiprocessing</a>
 <ul>
-<li><a href="#orgd01caac">8.1. Processes</a></li>
-<li><a href="#orgddac7b0">8.2. Special variables</a></li>
-<li><a href="#orgfe83e2d">8.3. Mutexes</a></li>
-<li><a href="#orgdbcd4e1">8.4. Shared Mutexes</a></li>
-<li><a href="#org97cbe20">8.5. Condition Variables</a></li>
-<li><a href="#orgc3b9478">8.6. Memory Model</a></li>
-<li><a href="#orgd48000a">8.7. Atomics</a></li>
-<li><a href="#org8bb6ae8">8.8. Compare-and-swap</a></li>
-<li><a href="#org76dfffe">8.9. Fences</a></li>
+<li><a href="#org3c00ed3">8.1. Processes</a></li>
+<li><a href="#org70e328d">8.2. Special variables</a></li>
+<li><a href="#org69b788b">8.3. Mutexes</a></li>
+<li><a href="#org421abb5">8.4. Shared Mutexes</a></li>
+<li><a href="#org48cab55">8.5. Condition Variables</a></li>
+<li><a href="#org73a5092">8.6. Memory Model</a></li>
+<li><a href="#org87b49c6">8.7. Atomics</a></li>
+<li><a href="#orgea21694">8.8. Compare-and-swap</a></li>
+<li><a href="#org7d1123e">8.9. Fences</a></li>
 </ul>
 </li>
-<li><a href="#orgfeaa6b8">9. Introspection</a></li>
-<li><a href="#org2c70e59">10. Sockets</a></li>
-<li><a href="#org681ea93">11. Serve Event</a></li>
-<li><a href="#orge9e51f6">12. Garbage Collection</a></li>
-<li><a href="#orga495efd">13. POSIX</a>
+<li><a href="#org6c1467a">9. Introspection</a></li>
+<li><a href="#org0593e63">10. Sockets</a></li>
+<li><a href="#orgdd77ef0">11. Serve Event</a></li>
+<li><a href="#orgab7bd5a">12. Garbage Collection</a></li>
+<li><a href="#orgf2544ea">13. POSIX</a>
 <ul>
-<li><a href="#org16daf20">13.1. Signal Handling</a></li>
-<li><a href="#org9cd8776">13.2. Further posix interfaces</a></li>
+<li><a href="#orga2d7c52">13.1. Signal Handling</a></li>
+<li><a href="#org851b419">13.2. Further posix interfaces</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org98b75d0" class="outline-2">
-<h2 id="org98b75d0"><span class="section-number-2">1.</span> Introduction</h2>
+<div id="outline-container-orga0c7d20" class="outline-2">
+<h2 id="orga0c7d20"><span class="section-number-2">1.</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Clasp is an implementation of Common Lisp primarily designed for compatibility with C++-language programs and libraries.
@@ -328,8 +329,8 @@ Note that Clasp is a work in progress, as is this manual.
 </p>
 </div>
 
-<div id="outline-container-orga79df02" class="outline-3">
-<h3 id="orga79df02"><span class="section-number-3">1.1.</span> Conformance</h3>
+<div id="outline-container-org7c305c3" class="outline-3">
+<h3 id="org7c305c3"><span class="section-number-3">1.1.</span> Conformance</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Clasp conforms with the requirements of ANSI INCITS 226-1994 (R2004) with some exceptions, listed below in the "Lisp" section. Any deviation from the standard not listed there is a bug, and should be reported (see "Contributing").
@@ -337,8 +338,8 @@ Clasp conforms with the requirements of ANSI INCITS 226-1994 (R2004) with some e
 </div>
 </div>
 
-<div id="outline-container-org4c1d9c2" class="outline-3">
-<h3 id="org4c1d9c2"><span class="section-number-3">1.2.</span> Distribution</h3>
+<div id="outline-container-org0593848" class="outline-3">
+<h3 id="org0593848"><span class="section-number-3">1.2.</span> Distribution</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 At present, the developers do not make Clasp binaries available. Clasp is open source, and available on-line at <a href="https://github.com/clasp-developers/clasp">https://github.com/clasp-developers/clasp</a>.
@@ -346,8 +347,8 @@ At present, the developers do not make Clasp binaries available. Clasp is open s
 </div>
 </div>
 
-<div id="outline-container-org041633d" class="outline-3">
-<h3 id="org041633d"><span class="section-number-3">1.3.</span> Building</h3>
+<div id="outline-container-org5f8a7df" class="outline-3">
+<h3 id="org5f8a7df"><span class="section-number-3">1.3.</span> Building</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 See <a href="building.html">Building</a>.
@@ -355,8 +356,8 @@ See <a href="building.html">Building</a>.
 </div>
 </div>
 
-<div id="outline-container-orge4c05f4" class="outline-3">
-<h3 id="orge4c05f4"><span class="section-number-3">1.4.</span> Contributing</h3>
+<div id="outline-container-org0da5b65" class="outline-3">
+<h3 id="org0da5b65"><span class="section-number-3">1.4.</span> Contributing</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 Check <a href="community.html">the community page</a> for instructions on contributing to Clasp.
@@ -368,8 +369,8 @@ Discussions of Clasp development are mostly carried out on Freenode's #clasp cha
 </div>
 </div>
 
-<div id="outline-container-orgd60f52d" class="outline-3">
-<h3 id="orgd60f52d"><span class="section-number-3">1.5.</span> Credits</h3>
+<div id="outline-container-org02aec25" class="outline-3">
+<h3 id="org02aec25"><span class="section-number-3">1.5.</span> Credits</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 Clasp is the project of <a href="https://thirdlaw.tech">Dr. Christian Schafmeister</a>. Additional contributions have been made by <a href="https://github.com/yitzchak">Tarn W. Burton</a>, <a href="https://github.com/kpoeck">Karsten Poeck</a>, <a href="https://github.com/Bike">Alex Wood</a>, and many other contributors as seen in the Git history.
@@ -382,8 +383,8 @@ Clasp's source code is derived substantially from that of Embeddable Common Lisp
 </div>
 </div>
 
-<div id="outline-container-org2696590" class="outline-2">
-<h2 id="org2696590"><span class="section-number-2">2.</span> Starting and Stopping</h2>
+<div id="outline-container-org0ec8abd" class="outline-2">
+<h2 id="org0ec8abd"><span class="section-number-2">2.</span> Starting and Stopping</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 The Clasp executable accepts many different command line arguments. You can get the most up to date summary by passing <code>--help</code>. Here are some important ones:
@@ -410,8 +411,8 @@ To exit Clasp, the <code>ext:quit</code> function can be used. If provided an in
 </div>
 </div>
 
-<div id="outline-container-orgc476e9d" class="outline-2">
-<h2 id="orgc476e9d"><span class="section-number-2">3.</span> Lisp</h2>
+<div id="outline-container-orgf48f546" class="outline-2">
+<h2 id="orgf48f546"><span class="section-number-2">3.</span> Lisp</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Clasp is an implementation of <a href="https://en.wikipedia.org/wiki/Common_Lisp">ANSI Common Lisp</a>. The following subsections detail intentional deviations from the standard,
@@ -421,8 +422,8 @@ and notes on optimizing Lisp programs to run well within Clasp.
 </p>
 </div>
 
-<div id="outline-container-orgecf7faf" class="outline-3">
-<h3 id="orgecf7faf"><span class="section-number-3">3.1.</span> Evaluation and Compilation</h3>
+<div id="outline-container-org9a8293c" class="outline-3">
+<h3 id="org9a8293c"><span class="section-number-3">3.1.</span> Evaluation and Compilation</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 Clasp expands compiler macros essentially unconditionally.
@@ -439,8 +440,8 @@ while noting the error for display.
 </div>
 </div>
 
-<div id="outline-container-org2709fa1" class="outline-3">
-<h3 id="org2709fa1"><span class="section-number-3">3.2.</span> Types and Classes</h3>
+<div id="outline-container-orga6c469d" class="outline-3">
+<h3 id="orga6c469d"><span class="section-number-3">3.2.</span> Types and Classes</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 <code>typep</code> calls can be efficiently compiled only if the second argument, the type specifier, is constant.
@@ -454,8 +455,8 @@ A type expander is a function of two arguments, a type specifier and an environm
 </p>
 </div>
 
-<div id="outline-container-orgc3b7a0f" class="outline-4">
-<h4 id="orgc3b7a0f"><span class="section-number-4">3.2.1.</span> Disjointness</h4>
+<div id="outline-container-org07246e6" class="outline-4">
+<h4 id="org07246e6"><span class="section-number-4">3.2.1.</span> Disjointness</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 Unless otherwise specified, types Clasp defines as extensions can be considered to be in a disjointness
@@ -469,8 +470,8 @@ without this being explicitly noted here.
 </div>
 </div>
 
-<div id="outline-container-orgc15e691" class="outline-3">
-<h3 id="orgc15e691"><span class="section-number-3">3.3.</span> Data and Control Flow</h3>
+<div id="outline-container-org45a45ad" class="outline-3">
+<h3 id="org45a45ad"><span class="section-number-3">3.3.</span> Data and Control Flow</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 <code>defsetf</code>, <code>define-setf-expander</code> etc. define a "setf expander" function analogous to a macro expander
@@ -481,8 +482,8 @@ When called an appropriate place and environment, the expander computes and retu
 </div>
 </div>
 
-<div id="outline-container-org1d7b431" class="outline-3">
-<h3 id="org1d7b431"><span class="section-number-3">3.4.</span> Iteration</h3>
+<div id="outline-container-org36b0865" class="outline-3">
+<h3 id="org36b0865"><span class="section-number-3">3.4.</span> Iteration</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 <code>loop</code> supports iteration over general sequences (see below) through a for-as-sequence subclause.
@@ -493,16 +494,16 @@ For example, <code>(loop for x being each element in '(1 2 3) do (print x))</cod
 </div>
 </div>
 
-<div id="outline-container-orgd706c78" class="outline-3">
-<h3 id="orgd706c78"><span class="section-number-3">3.5.</span> Objects</h3>
+<div id="outline-container-org19cc97d" class="outline-3">
+<h3 id="org19cc97d"><span class="section-number-3">3.5.</span> Objects</h3>
 <div class="outline-text-3" id="text-3-5">
 <p>
 CLOS, as part of Common Lisp, is fully supported.
 </p>
 </div>
 
-<div id="outline-container-orgb8f0cca" class="outline-4">
-<h4 id="orgb8f0cca"><span class="section-number-4">3.5.1.</span> Metaobject Protocol</h4>
+<div id="outline-container-orgb9e9d39" class="outline-4">
+<h4 id="orgb9e9d39"><span class="section-number-4">3.5.1.</span> Metaobject Protocol</h4>
 <div class="outline-text-4" id="text-3-5-1">
 <p>
 The Metaobject Protocol, as described in <a href="http://metamodular.com/CLOS-MOP/">AMOP</a>, is supported.
@@ -515,8 +516,8 @@ Symbols relating to MOP are exported from the "CLOS" package.
 </div>
 </div>
 
-<div id="outline-container-org1de62b5" class="outline-4">
-<h4 id="org1de62b5"><span class="section-number-4">3.5.2.</span> Generic function dispatch efficiency</h4>
+<div id="outline-container-org7da3acf" class="outline-4">
+<h4 id="org7da3acf"><span class="section-number-4">3.5.2.</span> Generic function dispatch efficiency</h4>
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 Clasp uses a new system for generic function dispatch designed by Dr. Robert Strandh.
@@ -535,8 +536,8 @@ See its docstring for more info.
 </div>
 </div>
 
-<div id="outline-container-org73a0753" class="outline-4">
-<h4 id="org73a0753"><span class="section-number-4">3.5.3.</span> Miscellany</h4>
+<div id="outline-container-org6157fe5" class="outline-4">
+<h4 id="org6157fe5"><span class="section-number-4">3.5.3.</span> Miscellany</h4>
 <div class="outline-text-4" id="text-3-5-3">
 <p>
 A consequence of the dispatch method described above is that obsolete instances are updated as soon as
@@ -547,12 +548,12 @@ This is allowed by the standard, but may surprise some programmers.
 </div>
 </div>
 
-<div id="outline-container-orgf68b0db" class="outline-3">
-<h3 id="orgf68b0db"><span class="section-number-3">3.6.</span> Structures</h3>
+<div id="outline-container-org317aaa9" class="outline-3">
+<h3 id="org317aaa9"><span class="section-number-3">3.6.</span> Structures</h3>
 </div>
 
-<div id="outline-container-orgb348097" class="outline-3">
-<h3 id="orgb348097"><span class="section-number-3">3.7.</span> Conditions</h3>
+<div id="outline-container-orgb8aabdd" class="outline-3">
+<h3 id="orgb8aabdd"><span class="section-number-3">3.7.</span> Conditions</h3>
 <div class="outline-text-3" id="text-3-7">
 <p>
 In addition to <code>cl:restart-name</code>, Clasp provides some readers to introspect about restarts,
@@ -572,12 +573,12 @@ There is also <code>ext:restart-associated-conditions</code>, which returns a li
 </div>
 </div>
 
-<div id="outline-container-org0aaa487" class="outline-3">
-<h3 id="org0aaa487"><span class="section-number-3">3.8.</span> Symbols</h3>
+<div id="outline-container-orgff59aab" class="outline-3">
+<h3 id="orgff59aab"><span class="section-number-3">3.8.</span> Symbols</h3>
 </div>
 
-<div id="outline-container-org1b6e00c" class="outline-3">
-<h3 id="org1b6e00c"><span class="section-number-3">3.9.</span> Packages</h3>
+<div id="outline-container-org05f0493" class="outline-3">
+<h3 id="org05f0493"><span class="section-number-3">3.9.</span> Packages</h3>
 <div class="outline-text-3" id="text-3-9">
 <p>
 Clasp supports package-local nicknames, through an interface based on that of SBCL's.
@@ -596,8 +597,8 @@ programmatic interface.
 </div>
 </div>
 
-<div id="outline-container-org543ee51" class="outline-3">
-<h3 id="org543ee51"><span class="section-number-3">3.10.</span> Numbers</h3>
+<div id="outline-container-orga015640" class="outline-3">
+<h3 id="orga015640"><span class="section-number-3">3.10.</span> Numbers</h3>
 <div class="outline-text-3" id="text-3-10">
 <p>
 There are two types of floats, <code>single-float</code> and <code>double-float</code>. <code>short-float</code> is synonymous with the
@@ -611,8 +612,8 @@ for example <code>(logbitp 31 (ext:single-floats-to-bit float))</code> returns w
 </div>
 </div>
 
-<div id="outline-container-orgade7025" class="outline-3">
-<h3 id="orgade7025"><span class="section-number-3">3.11.</span> Characters</h3>
+<div id="outline-container-orgca58f61" class="outline-3">
+<h3 id="orgca58f61"><span class="section-number-3">3.11.</span> Characters</h3>
 <div class="outline-text-3" id="text-3-11">
 <p>
 Clasp supports Unicode by default. <code>code-char</code> and <code>char-code</code> work with Unicode codepoints.
@@ -627,12 +628,12 @@ characters, i.e. Basic Latin and Latin-1 Supplement.
 </div>
 </div>
 
-<div id="outline-container-orgd08d193" class="outline-3">
-<h3 id="orgd08d193"><span class="section-number-3">3.12.</span> Conses</h3>
+<div id="outline-container-orgf8619f3" class="outline-3">
+<h3 id="orgf8619f3"><span class="section-number-3">3.12.</span> Conses</h3>
 </div>
 
-<div id="outline-container-org8be6467" class="outline-3">
-<h3 id="org8be6467"><span class="section-number-3">3.13.</span> Arrays</h3>
+<div id="outline-container-org39ae6b2" class="outline-3">
+<h3 id="org39ae6b2"><span class="section-number-3">3.13.</span> Arrays</h3>
 <div class="outline-text-3" id="text-3-13">
 <p>
 In Clasp, arrays with no fill-pointer, displacement, or express adjustability are simple
@@ -644,16 +645,16 @@ As such, it is most efficient to work with one-dimensional simple arrays directl
 </div>
 </div>
 
-<div id="outline-container-org7ace96d" class="outline-3">
-<h3 id="org7ace96d"><span class="section-number-3">3.14.</span> Strings</h3>
+<div id="outline-container-org0ffaa93" class="outline-3">
+<h3 id="org0ffaa93"><span class="section-number-3">3.14.</span> Strings</h3>
 </div>
 
-<div id="outline-container-orga83a8eb" class="outline-3">
-<h3 id="orga83a8eb"><span class="section-number-3">3.15.</span> Sequences</h3>
+<div id="outline-container-orgc2fdf12" class="outline-3">
+<h3 id="orgc2fdf12"><span class="section-number-3">3.15.</span> Sequences</h3>
 <div class="outline-text-3" id="text-3-15">
 </div>
-<div id="outline-container-orge4eec74" class="outline-4">
-<h4 id="orge4eec74"><span class="section-number-4">3.15.1.</span> Extensible Sequences</h4>
+<div id="outline-container-org2083348" class="outline-4">
+<h4 id="org2083348"><span class="section-number-4">3.15.1.</span> Extensible Sequences</h4>
 <div class="outline-text-4" id="text-3-15-1">
 <p>
 <a href="https://doi.org/10.1145/1622123.1622138">The extensible sequences protocol developed by Christophe Rhodes</a> is supported.
@@ -698,8 +699,8 @@ get the name of the operation that failed from these conditions.
 </div>
 </div>
 
-<div id="outline-container-org5b03056" class="outline-3">
-<h3 id="org5b03056"><span class="section-number-3">3.16.</span> Hash Tables</h3>
+<div id="outline-container-org808c9e2" class="outline-3">
+<h3 id="org808c9e2"><span class="section-number-3">3.16.</span> Hash Tables</h3>
 <div class="outline-text-3" id="text-3-16">
 <p>
 <code>make-hash-table</code> supports additional keyword arguments.
@@ -734,12 +735,12 @@ undefined consequences.
 </div>
 </div>
 
-<div id="outline-container-org5d7da43" class="outline-3">
-<h3 id="org5d7da43"><span class="section-number-3">3.17.</span> Filenames</h3>
+<div id="outline-container-org8cebe85" class="outline-3">
+<h3 id="org8cebe85"><span class="section-number-3">3.17.</span> Filenames</h3>
 </div>
 
-<div id="outline-container-orgc132e55" class="outline-3">
-<h3 id="orgc132e55"><span class="section-number-3">3.18.</span> Files</h3>
+<div id="outline-container-org8b2f91f" class="outline-3">
+<h3 id="org8b2f91f"><span class="section-number-3">3.18.</span> Files</h3>
 <div class="outline-text-3" id="text-3-18">
 <p>
 <code>ext:rmdir</code> deletes a directory. <code>EXT:RMTREE</code> deletes an entire directory tree.
@@ -747,12 +748,12 @@ undefined consequences.
 </div>
 </div>
 
-<div id="outline-container-orgdb4abea" class="outline-3">
-<h3 id="orgdb4abea"><span class="section-number-3">3.19.</span> Streams</h3>
+<div id="outline-container-org26ac30a" class="outline-3">
+<h3 id="org26ac30a"><span class="section-number-3">3.19.</span> Streams</h3>
 <div class="outline-text-3" id="text-3-19">
 </div>
-<div id="outline-container-org706f7e6" class="outline-4">
-<h4 id="org706f7e6"><span class="section-number-4">3.19.1.</span> Gray streams</h4>
+<div id="outline-container-org1684136" class="outline-4">
+<h4 id="org1684136"><span class="section-number-4">3.19.1.</span> Gray streams</h4>
 <div class="outline-text-4" id="text-3-19-1">
 <p>
 The Gray stream interface as described in ANSI committee issue "STREAM-DEFINITION-BY-USER"
@@ -770,8 +771,8 @@ trivial-gray-streams documentation, for more information on how to use this inte
 </div>
 </div>
 
-<div id="outline-container-org807f845" class="outline-3">
-<h3 id="org807f845"><span class="section-number-3">3.20.</span> Printer</h3>
+<div id="outline-container-orgba02f72" class="outline-3">
+<h3 id="orgba02f72"><span class="section-number-3">3.20.</span> Printer</h3>
 <div class="outline-text-3" id="text-3-20">
 <p>
 When <code>format</code>'s control string argument is constant, the compiler will process it early, so that the
@@ -780,20 +781,20 @@ runtime doesn't have to. This improves runtime speed but increases code size.
 </div>
 </div>
 
-<div id="outline-container-org8754f59" class="outline-3">
-<h3 id="org8754f59"><span class="section-number-3">3.21.</span> Reader</h3>
+<div id="outline-container-org85f13e0" class="outline-3">
+<h3 id="org85f13e0"><span class="section-number-3">3.21.</span> Reader</h3>
 </div>
 
-<div id="outline-container-org39c3aa8" class="outline-3">
-<h3 id="org39c3aa8"><span class="section-number-3">3.22.</span> System Construction</h3>
+<div id="outline-container-org563ce55" class="outline-3">
+<h3 id="org563ce55"><span class="section-number-3">3.22.</span> System Construction</h3>
 </div>
 
-<div id="outline-container-org636ee91" class="outline-3">
-<h3 id="org636ee91"><span class="section-number-3">3.23.</span> Environment</h3>
+<div id="outline-container-org38f1fea" class="outline-3">
+<h3 id="org38f1fea"><span class="section-number-3">3.23.</span> Environment</h3>
 <div class="outline-text-3" id="text-3-23">
 </div>
-<div id="outline-container-org3e84472" class="outline-4">
-<h4 id="org3e84472"><span class="section-number-4">3.23.1.</span> Stepper</h4>
+<div id="outline-container-orgc61246d" class="outline-4">
+<h4 id="orgc61246d"><span class="section-number-4">3.23.1.</span> Stepper</h4>
 <div class="outline-text-4" id="text-3-23-1">
 <p>
 <code>cl:step</code> can be used to step through compiled code as partially described in the standard.
@@ -827,8 +828,8 @@ Stepping will proceed after the call is exited (either by normal return or a non
 </div>
 </div>
 
-<div id="outline-container-orgb40cedd" class="outline-2">
-<h2 id="orgb40cedd"><span class="section-number-2">4.</span> C++ Interface (clbind)</h2>
+<div id="outline-container-orgbc21741" class="outline-2">
+<h2 id="orgbc21741"><span class="section-number-2">4.</span> C++ Interface (clbind)</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 <a href="clbind-doc.html">Documented here.</a>
@@ -836,8 +837,8 @@ Stepping will proceed after the call is exited (either by normal return or a non
 </div>
 </div>
 
-<div id="outline-container-org0ec26ab" class="outline-2">
-<h2 id="org0ec26ab"><span class="section-number-2">5.</span> Foreign Function Interface</h2>
+<div id="outline-container-orga5b38bd" class="outline-2">
+<h2 id="orga5b38bd"><span class="section-number-2">5.</span> Foreign Function Interface</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Clasp can interact with C programs and libraries through its Foreign Function Interface (FFI).
@@ -848,8 +849,8 @@ specifically <a href="https://cffi.common-lisp.dev/">CFFI</a>. Clasp's own inter
 </div>
 </div>
 
-<div id="outline-container-org66b9a81" class="outline-2">
-<h2 id="org66b9a81"><span class="section-number-2">6.</span> REPL</h2>
+<div id="outline-container-orgda813fc" class="outline-2">
+<h2 id="orgda813fc"><span class="section-number-2">6.</span> REPL</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Clasp's built in read-eval-print loop supports various commands in addition to evaluating Lisp forms.
@@ -887,8 +888,8 @@ or <code>ext:*invoke-debugger-hook*</code>.
 </div>
 </div>
 
-<div id="outline-container-orgc1695a4" class="outline-2">
-<h2 id="orgc1695a4"><span class="section-number-2">7.</span> Debug interface</h2>
+<div id="outline-container-orge670187" class="outline-2">
+<h2 id="orge670187"><span class="section-number-2">7.</span> Debug interface</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 For advanced users, such as those developing development tools such as debuggers to use with Clasp,
@@ -937,8 +938,8 @@ not included in backtraces.
 </div>
 </div>
 
-<div id="outline-container-orgeee7b64" class="outline-2">
-<h2 id="orgeee7b64"><span class="section-number-2">8.</span> Multiprocessing</h2>
+<div id="outline-container-org8b07d65" class="outline-2">
+<h2 id="org8b07d65"><span class="section-number-2">8.</span> Multiprocessing</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Multiprocessing is supported. Symbols relating to multiprocessing are exported from the "MP" package.
@@ -947,8 +948,8 @@ interface directly when possible.
 </p>
 </div>
 
-<div id="outline-container-orgd01caac" class="outline-3">
-<h3 id="orgd01caac"><span class="section-number-3">8.1.</span> Processes</h3>
+<div id="outline-container-org3c00ed3" class="outline-3">
+<h3 id="org3c00ed3"><span class="section-number-3">8.1.</span> Processes</h3>
 <div class="outline-text-3" id="text-8-1">
 <p>
 A process is a Lisp object representing a distinct thread of execution. Each process evaluates a call to
@@ -974,8 +975,8 @@ these functions for more information.
 </div>
 </div>
 
-<div id="outline-container-orgddac7b0" class="outline-3">
-<h3 id="orgddac7b0"><span class="section-number-3">8.2.</span> Special variables</h3>
+<div id="outline-container-org70e328d" class="outline-3">
+<h3 id="org70e328d"><span class="section-number-3">8.2.</span> Special variables</h3>
 <div class="outline-text-3" id="text-8-2">
 <p>
 Bindings of special variables (by <code>let</code>, <code>progv</code>, lambda lists, etc.) are thread-local.
@@ -985,8 +986,8 @@ The global value - from <code>symbol-value</code> - is, in contrast, shared betw
 </div>
 </div>
 
-<div id="outline-container-orgfe83e2d" class="outline-3">
-<h3 id="orgfe83e2d"><span class="section-number-3">8.3.</span> Mutexes</h3>
+<div id="outline-container-org69b788b" class="outline-3">
+<h3 id="org69b788b"><span class="section-number-3">8.3.</span> Mutexes</h3>
 <div class="outline-text-3" id="text-8-3">
 <p>
 A mutex (short for "MUTual EXclusion"), or lock, can be used to control access to a shared resource by
@@ -1001,8 +1002,8 @@ mutex. <code>get-lock</code> and <code>giveup-lock</code> obtain and release exc
 </div>
 </div>
 
-<div id="outline-container-orgdbcd4e1" class="outline-3">
-<h3 id="orgdbcd4e1"><span class="section-number-3">8.4.</span> Shared Mutexes</h3>
+<div id="outline-container-org421abb5" class="outline-3">
+<h3 id="org421abb5"><span class="section-number-3">8.4.</span> Shared Mutexes</h3>
 <div class="outline-text-3" id="text-8-4">
 <p>
 Not yet documented.
@@ -1010,8 +1011,8 @@ Not yet documented.
 </div>
 </div>
 
-<div id="outline-container-org97cbe20" class="outline-3">
-<h3 id="org97cbe20"><span class="section-number-3">8.5.</span> Condition Variables</h3>
+<div id="outline-container-org48cab55" class="outline-3">
+<h3 id="org48cab55"><span class="section-number-3">8.5.</span> Condition Variables</h3>
 <div class="outline-text-3" id="text-8-5">
 <p>
 Not yet documented.
@@ -1019,8 +1020,8 @@ Not yet documented.
 </div>
 </div>
 
-<div id="outline-container-orgc3b9478" class="outline-3">
-<h3 id="orgc3b9478"><span class="section-number-3">8.6.</span> Memory Model</h3>
+<div id="outline-container-org73a5092" class="outline-3">
+<h3 id="org73a5092"><span class="section-number-3">8.6.</span> Memory Model</h3>
 <div class="outline-text-3" id="text-8-6">
 <p>
 Clasp does not have a formal memory model. Here is a sketch of one: Two accesses of a place are
@@ -1064,8 +1065,8 @@ types smaller than <code>(unsigned-byte 8)</code>. Access to <code>standard-obje
 </div>
 </div>
 
-<div id="outline-container-orgd48000a" class="outline-3">
-<h3 id="orgd48000a"><span class="section-number-3">8.7.</span> Atomics</h3>
+<div id="outline-container-org87b49c6" class="outline-3">
+<h3 id="org87b49c6"><span class="section-number-3">8.7.</span> Atomics</h3>
 <div class="outline-text-3" id="text-8-7">
 <p>
 Access can be guaranteed atomic by using the <code>atomic</code> macro. That is, <code>(atomic place)</code> is a place that
@@ -1080,8 +1081,8 @@ try <code>(documentation 'symbol-value 'mp:atomic)</code>.
 </div>
 </div>
 
-<div id="outline-container-org8bb6ae8" class="outline-3">
-<h3 id="org8bb6ae8"><span class="section-number-3">8.8.</span> Compare-and-swap</h3>
+<div id="outline-container-orgea21694" class="outline-3">
+<h3 id="orgea21694"><span class="section-number-3">8.8.</span> Compare-and-swap</h3>
 <div class="outline-text-3" id="text-8-8">
 <p>
 The <code>mp:cas</code> macro can be used to execute an atomic compare-and-swap of atomically accessible places.
@@ -1094,8 +1095,8 @@ explicitly specify the order of the operation.
 </div>
 </div>
 
-<div id="outline-container-org76dfffe" class="outline-3">
-<h3 id="org76dfffe"><span class="section-number-3">8.9.</span> Fences</h3>
+<div id="outline-container-org7d1123e" class="outline-3">
+<h3 id="org7d1123e"><span class="section-number-3">8.9.</span> Fences</h3>
 <div class="outline-text-3" id="text-8-9">
 <p>
 The <code>mp:fence</code> function can be used to establish memory fences of a specified order.
@@ -1104,8 +1105,8 @@ The <code>mp:fence</code> function can be used to establish memory fences of a s
 </div>
 </div>
 
-<div id="outline-container-orgfeaa6b8" class="outline-2">
-<h2 id="orgfeaa6b8"><span class="section-number-2">9.</span> Introspection</h2>
+<div id="outline-container-org6c1467a" class="outline-2">
+<h2 id="org6c1467a"><span class="section-number-2">9.</span> Introspection</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 Information about objects is stored and accessible. This is primarily intended for editor integration,
@@ -1127,8 +1128,8 @@ file offset (as from <code>file-position</code>) accessible with <code>ext:sourc
 </div>
 </div>
 
-<div id="outline-container-org2c70e59" class="outline-2">
-<h2 id="org2c70e59"><span class="section-number-2">10.</span> Sockets</h2>
+<div id="outline-container-org0593e63" class="outline-2">
+<h2 id="org0593e63"><span class="section-number-2">10.</span> Sockets</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 A low level networking API based on <a href="http://sbcl.org/manual/index.html#Networking">SBCL's</a> (which is in turn based on BSD sockets) is available in
@@ -1137,8 +1138,8 @@ package "SB-BSD-SOCKETS". Clasp's interface has not yet been specifically docume
 </div>
 </div>
 
-<div id="outline-container-org681ea93" class="outline-2">
-<h2 id="org681ea93"><span class="section-number-2">11.</span> Serve Event</h2>
+<div id="outline-container-orgdd77ef0" class="outline-2">
+<h2 id="orgdd77ef0"><span class="section-number-2">11.</span> Serve Event</h2>
 <div class="outline-text-2" id="text-11">
 <p>
 Not yet documented.
@@ -1146,8 +1147,8 @@ Not yet documented.
 </div>
 </div>
 
-<div id="outline-container-orge9e51f6" class="outline-2">
-<h2 id="orge9e51f6"><span class="section-number-2">12.</span> Garbage Collection</h2>
+<div id="outline-container-orgab7bd5a" class="outline-2">
+<h2 id="orgab7bd5a"><span class="section-number-2">12.</span> Garbage Collection</h2>
 <div class="outline-text-2" id="text-12">
 <p>
 Symbols related to garbage collection are exported from the "GCTOOLS" package.
@@ -1165,12 +1166,12 @@ closure will keep that object alive indefinitely.
 </div>
 </div>
 
-<div id="outline-container-orga495efd" class="outline-2">
-<h2 id="orga495efd"><span class="section-number-2">13.</span> POSIX</h2>
+<div id="outline-container-orgf2544ea" class="outline-2">
+<h2 id="orgf2544ea"><span class="section-number-2">13.</span> POSIX</h2>
 <div class="outline-text-2" id="text-13">
 </div>
-<div id="outline-container-org16daf20" class="outline-3">
-<h3 id="org16daf20"><span class="section-number-3">13.1.</span> Signal Handling</h3>
+<div id="outline-container-orga2d7c52" class="outline-3">
+<h3 id="orga2d7c52"><span class="section-number-3">13.1.</span> Signal Handling</h3>
 <div class="outline-text-3" id="text-13-1">
 <p>
 Handlers for standard POSIX signals can be defined in Clasp using the <code>ext:enable-interrupt</code> function,
@@ -1183,8 +1184,8 @@ handler to the ignore-signal handler or the default handler respectively, analog
 </div>
 </div>
 
-<div id="outline-container-org9cd8776" class="outline-3">
-<h3 id="org9cd8776"><span class="section-number-3">13.2.</span> Further posix interfaces</h3>
+<div id="outline-container-org851b419" class="outline-3">
+<h3 id="org851b419"><span class="section-number-3">13.2.</span> Further posix interfaces</h3>
 <div class="outline-text-3" id="text-13-2">
 <p>
 <code>ext:stat</code> and <code>ext:fstat</code> wrap the corresponding posix-interfaces. Use <code>ext:file-stream-file-descriptor</code>

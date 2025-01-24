@@ -1,6 +1,196 @@
 #+title: News
 #+OPTIONS: toc:nil num:nil
 
+* <2025-01-21> Version 2.7.0 (LLVM15-19)
+
+** Added
+- Package lock support, based on SBCL's. Currently ignores local
+  bindings. Thanks @bumblingbats.
+- Add support for 80-bit and 128-bit LONG-FLOAT. Extended precision
+  LONG-FLOAT is available on amd64 and non-Apple arm64 platforms. It
+  is automatically detected and enabled.
+- LLVM19 support.  
+- Interrupts have now been organized into a coherent interface.
+  Clasp will signal conditions of type MP:INTERRUPT at opportune
+  times, and these conditions can be handled like any others.
+- Extensions to Clasp and CANDO can now be built against an installed
+  Clasp implementation and dynamically loaded. For an example see
+  [[https://github.com/clasp-developers/clasp-hello-world][clasp-hello-world]].
+
+** Changed
+- Floating point exceptions FE_INVALID, FE_OVERFLOW and FE_DIVBYZERO
+  now signal the corresponding lisp errors by default.
+
+** Fixed
+- Pathnames and filesystem operations support Unicode ([[https://github.com/clasp-developers/clasp/issues/1595][#1595]]).
+- Package names support Unicode ([[https://github.com/clasp-developers/clasp/issues/1596][#1596]]).
+- Clasp threads can now be more reliably interrupted while they are
+  blocking (e.g. waiting to grab a mutex, or for input).
+
+* <2024-06-03> Version 2.6.0 (LLVM15-18)
+
+** Added
+- LLVM18 support.
+
+** Changed
+- Exit with error code when unknown option is present on command line.
+- EVAL now uses bytecode, improving evaluation speed.
+- Bytecode is now simpler for functions with &rest parameters, as well
+  as functions that close over arguments.
+
+** Fixed
+- Avoid inserting fill newlines after newline format directive in
+  logical block format directive.
+- Don't buffer overrun when encoding UCS-4 streams.
+- The bytecode system can properly handle functions with more than
+  255 keyword parameters.
+- Bytecode FASLs can contain multidimensional arrays specialized to
+  sub-byte integer types.
+- Avoid a double free when translating =const char*= arguments in the
+  C++ bridge.
+- =macroexpand= does not ignore shadowing function bindings ([[https://github.com/clasp-developers/clasp/issues/1556][#1556]]).
+- BTB compiler can handle closure variables deleted by optimization.
+- =(setf elt)= calls =(setf sequence:elt)= properly on extended
+  sequences.
+- BTB compiler handles non-constant load-time-values.
+- When =set-macro-character= is given a non-function, it signals an
+  error without breaking the readtable.
+
+** Optimized
+- Single dispatch generic functions don't perform redundant argument
+  count checks.
+
+* <2024-01-01> Version 2.5.0 (LLVM15-17)
+
+** Added
+- New module named "gray-streams" which makes it possible to
+  initialize the Gray stream protocol without calls to internal
+  functions.
+- New build mode =:bytecode-faso= which builds the kernel as native
+  code (FASO) while the bytecode compiler is active.
+- Generic =gray:stream-file-length= which implements =cl:file-length=
+  for Gray streams.
+- Generic versions of =cl:pathname= and =cl:truename=, both of which
+  are available after the Gray stream modules is required.
+- Generic =(setf gray:stream-element-type)=,
+  =gray:stream-external-format=, and 
+  =(setf gray:stream-external-format)= for basic support of bivalent 
+  streams.
+- Generic =gray:stream-file-string-length= which implements
+  =cl:file-string-length= for Gray streams.
+- The bytecode compiler warns about unused variables.
+
+** Changed
+- =cl:format= and =pprint= now respect the value returned by
+  =gray:stream-line-length=.
+- =cl:close= now uses the =:abort= argument to decide what to do with
+  the resulting file. If =:abort= is non-NIL and the file was created
+  as a result of =:if-does-not-exist :create= then the file is
+  deleted. If =:abort= is non-NIL, there was an existing file and
+  =:if-exists= is either =:supersede= or =:rename-and-delete= then the
+  original file is restored.
+
+** Removed
+- Obsolete =:object=, =:ll=, =:bc=, and =:fasl= build modes.
+
+** Fixed
+- =cl:read-line= so it correctly returns lines that end with EOF.
+- =cl:read-byte= so it respects the =eof-error-p= and =eof-value=
+  arguments for Gray streams.
+
+* <2023-10-01> Version 2.4.0 (LLVM15-17)
+
+** Added
+- Bytecode stores source location info for debugging.
+- Bytecode stores variable info, so that variables can be viewed in
+  the debugger.
+- The bytecode compiler tracks source positions for error reporting.
+- Circle detection for load forms in bytecode FASL.
+- Bytecode functions can be compiled directly into native code with
+  =cl:compile= (experimental).
+- Cross-reference (xref) capability: Search for callers of a given
+  function with =ext:who-calls=, and etc. Only works for bytecode
+  right now.
+- Support for Linux AARCH64.
+- LLVM17 support. LLVM15 and LLVM16 are still supported.
+
+** Changed
+- Improved printing of backquote and unquote.
+
+** Fixed
+- Avoid segmentation faults from incorrectly calling MP:PROCESS-JOIN
+  in EXT:RUN-PROGRAM.
+
+* <2023-06-04> Version 2.3.0 (LLVM15-16)
+
+** Added
+- Bytecode compiled images via build mode =:bytecode=.
+- FASL magic number sniffing for CL:LOAD. This enables FASL files to
+  be loaded even if the filename extension is incorrect.
+- Preliminary Apple Silicon support. Must be compiled with bytecode
+  either by specifying =--build-mode=bytecode= when invoking koga or
+  by adding =:build-mode :bytecode= to the config.sexp file.
+- LLVM16 support. LLVM15 is still supported.
+
+** Changed
+- Updated to Eclector v0.9.0
+
+** Fixed
+- Use Eclector state protocol to enable readtable changes during
+  compiling.  Fixes [[https://github.com/clasp-developers/clasp/issues/1398][#1398]].
+
+* <2023-03-01> Version 2.2.0 (LLVM15)
+
+** Added
+- =ext:describe-compiler-policy= to get information about the current
+  behavior of the compiler.
+- =gray:stream-line-length= Gray stream extension method.
+- Support for building Clasp using CCL and ECL versus the default
+  implementation of SBCL.
+- Export of =ext:num-logical-processors= to return CPU count.
+
+** Changed
+- Updated to LLVM 15 and CLANG 15.
+
+** Fixes
+- Ensure that =print-unreadable-object= can accept output stream
+  designators.
+- Set stream column to zero after printing the prompt in a REPL. Fixes
+  [[https://github.com/clasp-developers/clasp/issues/1348][#1348]].
+- Return correct values for =listen= when applied to file
+  streams. This is done by checking for available bytes using read
+  when poll/select indicate the next read will not block. Otherwise
+  use non-blocking read. Fixes [[https://github.com/clasp-developers/clasp/issues/1404][#1404]].
+- Prevent format parameters from appearing after colon or at sign
+  modifiers.
+- Avoid putting NIL into simple LOOP when compiling format directives.
+
+** Optimizations
+- Arithmetic comparisons between floats and fixnums no longer cons.
+
+* <2023-01-01> Version 2.1.0 (LLVM14)
+
+** Added
+- Add =ext:list-all-logical-hosts= and =ext:logical-host-p= functions
+  to query the current logical host status.
+- Operators for profiling CLOS code: =clos:with-profiling=
+
+** Changed
+- Removed stage and image format command line options (=-t= and =-T=)
+  and replaced with options to specify image or snapshot file
+  (=--image= or =--snapshot=) and =--base= option for loading base
+  image when extensions are present.
+- =print-unreadable-object= now prints qualified symbols for the
+  =:type t= option and uses =pprint-logical-block= when pretty
+  printing.
+  
+** Fixes
+- =ext:run-program= works with string streams.
+- =print-object= is now invoked for all calls to `write`.
+- =slot-unbound= is called for unbound condition slots ([[https://github.com/clasp-developers/clasp/issues/1390][#1390]]).
+- Multiple inheritance of class-allocated slots is resolved
+  breadth-first ([[https://github.com/clasp-developers/clasp/issues/1392][#1392]]).
+
 * <2022-10-26> Version 2.0.0 (LLVM14)
 
 ** Added

@@ -3,10 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-03 Thu 13:51 -->
+<!-- 2025-01-24 Fri 10:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>News</title>
+<meta name="author" content="Alex Wood" />
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -190,7 +191,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="styles/readtheorg/css/readtheorg-no-toc.css"/>
@@ -229,13 +230,368 @@
 <div id="content" class="content">
 <h1 class="title">News</h1>
 
-<div id="outline-container-org10a67be" class="outline-2">
-<h2 id="org10a67be"><span class="timestamp-wrapper"><span class="timestamp">&lt;2022-10-26 Wed&gt; </span></span> Version 2.0.0 (LLVM14)</h2>
-<div class="outline-text-2" id="text-org10a67be">
+<div id="outline-container-org51f9dce" class="outline-2">
+<h2 id="org51f9dce"><span class="timestamp-wrapper"><span class="timestamp">&lt;2025-01-21 Tue&gt; </span></span> Version 2.7.0 (LLVM15-19)</h2>
+<div class="outline-text-2" id="text-org51f9dce">
 </div>
-<div id="outline-container-org0fd4b60" class="outline-3">
-<h3 id="org0fd4b60">Added</h3>
-<div class="outline-text-3" id="text-org0fd4b60">
+<div id="outline-container-orge20fcf8" class="outline-3">
+<h3 id="orge20fcf8">Added</h3>
+<div class="outline-text-3" id="text-orge20fcf8">
+<ul class="org-ul">
+<li>Package lock support, based on SBCL's. Currently ignores local
+bindings. Thanks @bumblingbats.</li>
+<li>Add support for 80-bit and 128-bit LONG-FLOAT. Extended precision
+LONG-FLOAT is available on amd64 and non-Apple arm64 platforms. It
+is automatically detected and enabled.</li>
+<li>LLVM19 support.</li>
+<li>Interrupts have now been organized into a coherent interface.
+Clasp will signal conditions of type MP:INTERRUPT at opportune
+times, and these conditions can be handled like any others.</li>
+<li>Extensions to Clasp and CANDO can now be built against an installed
+Clasp implementation and dynamically loaded. For an example see
+<a href="https://github.com/clasp-developers/clasp-hello-world">clasp-hello-world</a>.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4ec9c04" class="outline-3">
+<h3 id="org4ec9c04">Changed</h3>
+<div class="outline-text-3" id="text-org4ec9c04">
+<ul class="org-ul">
+<li>Floating point exceptions FE<sub>INVALID</sub>, FE<sub>OVERFLOW</sub> and FE<sub>DIVBYZERO</sub>
+now signal the corresponding lisp errors by default.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org3b4c44c" class="outline-3">
+<h3 id="org3b4c44c">Fixed</h3>
+<div class="outline-text-3" id="text-org3b4c44c">
+<ul class="org-ul">
+<li>Pathnames and filesystem operations support Unicode (<a href="https://github.com/clasp-developers/clasp/issues/1595">#1595</a>).</li>
+<li>Package names support Unicode (<a href="https://github.com/clasp-developers/clasp/issues/1596">#1596</a>).</li>
+<li>Clasp threads can now be more reliably interrupted while they are
+blocking (e.g. waiting to grab a mutex, or for input).</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdf6d3b1" class="outline-2">
+<h2 id="orgdf6d3b1"><span class="timestamp-wrapper"><span class="timestamp">&lt;2024-06-03 Mon&gt; </span></span> Version 2.6.0 (LLVM15-18)</h2>
+<div class="outline-text-2" id="text-orgdf6d3b1">
+</div>
+<div id="outline-container-org5cc2c02" class="outline-3">
+<h3 id="org5cc2c02">Added</h3>
+<div class="outline-text-3" id="text-org5cc2c02">
+<ul class="org-ul">
+<li>LLVM18 support.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org8f09aca" class="outline-3">
+<h3 id="org8f09aca">Changed</h3>
+<div class="outline-text-3" id="text-org8f09aca">
+<ul class="org-ul">
+<li>Exit with error code when unknown option is present on command line.</li>
+<li>EVAL now uses bytecode, improving evaluation speed.</li>
+<li>Bytecode is now simpler for functions with &amp;rest parameters, as well
+as functions that close over arguments.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5c4aa97" class="outline-3">
+<h3 id="org5c4aa97">Fixed</h3>
+<div class="outline-text-3" id="text-org5c4aa97">
+<ul class="org-ul">
+<li>Avoid inserting fill newlines after newline format directive in
+logical block format directive.</li>
+<li>Don't buffer overrun when encoding UCS-4 streams.</li>
+<li>The bytecode system can properly handle functions with more than
+255 keyword parameters.</li>
+<li>Bytecode FASLs can contain multidimensional arrays specialized to
+sub-byte integer types.</li>
+<li>Avoid a double free when translating <code>const char*</code> arguments in the
+C++ bridge.</li>
+<li><code>macroexpand</code> does not ignore shadowing function bindings (<a href="https://github.com/clasp-developers/clasp/issues/1556">#1556</a>).</li>
+<li>BTB compiler can handle closure variables deleted by optimization.</li>
+<li><code>(setf elt)</code> calls <code>(setf sequence:elt)</code> properly on extended
+sequences.</li>
+<li>BTB compiler handles non-constant load-time-values.</li>
+<li>When <code>set-macro-character</code> is given a non-function, it signals an
+error without breaking the readtable.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org63e847e" class="outline-3">
+<h3 id="org63e847e">Optimized</h3>
+<div class="outline-text-3" id="text-org63e847e">
+<ul class="org-ul">
+<li>Single dispatch generic functions don't perform redundant argument
+count checks.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org079dbb0" class="outline-2">
+<h2 id="org079dbb0"><span class="timestamp-wrapper"><span class="timestamp">&lt;2024-01-01 Mon&gt; </span></span> Version 2.5.0 (LLVM15-17)</h2>
+<div class="outline-text-2" id="text-org079dbb0">
+</div>
+<div id="outline-container-org97bb8a1" class="outline-3">
+<h3 id="org97bb8a1">Added</h3>
+<div class="outline-text-3" id="text-org97bb8a1">
+<ul class="org-ul">
+<li>New module named "gray-streams" which makes it possible to
+initialize the Gray stream protocol without calls to internal
+functions.</li>
+<li>New build mode <code>:bytecode-faso</code> which builds the kernel as native
+code (FASO) while the bytecode compiler is active.</li>
+<li>Generic <code>gray:stream-file-length</code> which implements <code>cl:file-length</code>
+for Gray streams.</li>
+<li>Generic versions of <code>cl:pathname</code> and <code>cl:truename</code>, both of which
+are available after the Gray stream modules is required.</li>
+<li>Generic <code>(setf gray:stream-element-type)</code>,
+<code>gray:stream-external-format</code>, and 
+<code>(setf gray:stream-external-format)</code> for basic support of bivalent 
+streams.</li>
+<li>Generic <code>gray:stream-file-string-length</code> which implements
+<code>cl:file-string-length</code> for Gray streams.</li>
+<li>The bytecode compiler warns about unused variables.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org7c832a4" class="outline-3">
+<h3 id="org7c832a4">Changed</h3>
+<div class="outline-text-3" id="text-org7c832a4">
+<ul class="org-ul">
+<li><code>cl:format</code> and <code>pprint</code> now respect the value returned by
+<code>gray:stream-line-length</code>.</li>
+<li><code>cl:close</code> now uses the <code>:abort</code> argument to decide what to do with
+the resulting file. If <code>:abort</code> is non-NIL and the file was created
+as a result of <code>:if-does-not-exist :create</code> then the file is
+deleted. If <code>:abort</code> is non-NIL, there was an existing file and
+<code>:if-exists</code> is either <code>:supersede</code> or <code>:rename-and-delete</code> then the
+original file is restored.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgafbda44" class="outline-3">
+<h3 id="orgafbda44">Removed</h3>
+<div class="outline-text-3" id="text-orgafbda44">
+<ul class="org-ul">
+<li>Obsolete <code>:object</code>, <code>:ll</code>, <code>:bc</code>, and <code>:fasl</code> build modes.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5d9d3e6" class="outline-3">
+<h3 id="org5d9d3e6">Fixed</h3>
+<div class="outline-text-3" id="text-org5d9d3e6">
+<ul class="org-ul">
+<li><code>cl:read-line</code> so it correctly returns lines that end with EOF.</li>
+<li><code>cl:read-byte</code> so it respects the <code>eof-error-p</code> and <code>eof-value</code>
+arguments for Gray streams.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org55641e1" class="outline-2">
+<h2 id="org55641e1"><span class="timestamp-wrapper"><span class="timestamp">&lt;2023-10-01 Sun&gt; </span></span> Version 2.4.0 (LLVM15-17)</h2>
+<div class="outline-text-2" id="text-org55641e1">
+</div>
+<div id="outline-container-org61d7519" class="outline-3">
+<h3 id="org61d7519">Added</h3>
+<div class="outline-text-3" id="text-org61d7519">
+<ul class="org-ul">
+<li>Bytecode stores source location info for debugging.</li>
+<li>Bytecode stores variable info, so that variables can be viewed in
+the debugger.</li>
+<li>The bytecode compiler tracks source positions for error reporting.</li>
+<li>Circle detection for load forms in bytecode FASL.</li>
+<li>Bytecode functions can be compiled directly into native code with
+<code>cl:compile</code> (experimental).</li>
+<li>Cross-reference (xref) capability: Search for callers of a given
+function with <code>ext:who-calls</code>, and etc. Only works for bytecode
+right now.</li>
+<li>Support for Linux AARCH64.</li>
+<li>LLVM17 support. LLVM15 and LLVM16 are still supported.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6a336a0" class="outline-3">
+<h3 id="org6a336a0">Changed</h3>
+<div class="outline-text-3" id="text-org6a336a0">
+<ul class="org-ul">
+<li>Improved printing of backquote and unquote.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge0d993c" class="outline-3">
+<h3 id="orge0d993c">Fixed</h3>
+<div class="outline-text-3" id="text-orge0d993c">
+<ul class="org-ul">
+<li>Avoid segmentation faults from incorrectly calling MP:PROCESS-JOIN
+in EXT:RUN-PROGRAM.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc28254b" class="outline-2">
+<h2 id="orgc28254b"><span class="timestamp-wrapper"><span class="timestamp">&lt;2023-06-04 Sun&gt; </span></span> Version 2.3.0 (LLVM15-16)</h2>
+<div class="outline-text-2" id="text-orgc28254b">
+</div>
+<div id="outline-container-org889ec92" class="outline-3">
+<h3 id="org889ec92">Added</h3>
+<div class="outline-text-3" id="text-org889ec92">
+<ul class="org-ul">
+<li>Bytecode compiled images via build mode <code>:bytecode</code>.</li>
+<li>FASL magic number sniffing for CL:LOAD. This enables FASL files to
+be loaded even if the filename extension is incorrect.</li>
+<li>Preliminary Apple Silicon support. Must be compiled with bytecode
+either by specifying <code>--build-mode=bytecode</code> when invoking koga or
+by adding <code>:build-mode :bytecode</code> to the config.sexp file.</li>
+<li>LLVM16 support. LLVM15 is still supported.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org6555c55" class="outline-3">
+<h3 id="org6555c55">Changed</h3>
+<div class="outline-text-3" id="text-org6555c55">
+<ul class="org-ul">
+<li>Updated to Eclector v0.9.0</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgfcaa864" class="outline-3">
+<h3 id="orgfcaa864">Fixed</h3>
+<div class="outline-text-3" id="text-orgfcaa864">
+<ul class="org-ul">
+<li>Use Eclector state protocol to enable readtable changes during
+compiling.  Fixes <a href="https://github.com/clasp-developers/clasp/issues/1398">#1398</a>.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org88efc3d" class="outline-2">
+<h2 id="org88efc3d"><span class="timestamp-wrapper"><span class="timestamp">&lt;2023-03-01 Wed&gt; </span></span> Version 2.2.0 (LLVM15)</h2>
+<div class="outline-text-2" id="text-org88efc3d">
+</div>
+<div id="outline-container-org3cbfa9f" class="outline-3">
+<h3 id="org3cbfa9f">Added</h3>
+<div class="outline-text-3" id="text-org3cbfa9f">
+<ul class="org-ul">
+<li><code>ext:describe-compiler-policy</code> to get information about the current
+behavior of the compiler.</li>
+<li><code>gray:stream-line-length</code> Gray stream extension method.</li>
+<li>Support for building Clasp using CCL and ECL versus the default
+implementation of SBCL.</li>
+<li>Export of <code>ext:num-logical-processors</code> to return CPU count.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org93e133f" class="outline-3">
+<h3 id="org93e133f">Changed</h3>
+<div class="outline-text-3" id="text-org93e133f">
+<ul class="org-ul">
+<li>Updated to LLVM 15 and CLANG 15.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org20d2c4a" class="outline-3">
+<h3 id="org20d2c4a">Fixes</h3>
+<div class="outline-text-3" id="text-org20d2c4a">
+<ul class="org-ul">
+<li>Ensure that <code>print-unreadable-object</code> can accept output stream
+designators.</li>
+<li>Set stream column to zero after printing the prompt in a REPL. Fixes
+<a href="https://github.com/clasp-developers/clasp/issues/1348">#1348</a>.</li>
+<li>Return correct values for <code>listen</code> when applied to file
+streams. This is done by checking for available bytes using read
+when poll/select indicate the next read will not block. Otherwise
+use non-blocking read. Fixes <a href="https://github.com/clasp-developers/clasp/issues/1404">#1404</a>.</li>
+<li>Prevent format parameters from appearing after colon or at sign
+modifiers.</li>
+<li>Avoid putting NIL into simple LOOP when compiling format directives.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgb7740f1" class="outline-3">
+<h3 id="orgb7740f1">Optimizations</h3>
+<div class="outline-text-3" id="text-orgb7740f1">
+<ul class="org-ul">
+<li>Arithmetic comparisons between floats and fixnums no longer cons.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2eb51a4" class="outline-2">
+<h2 id="org2eb51a4"><span class="timestamp-wrapper"><span class="timestamp">&lt;2023-01-01 Sun&gt; </span></span> Version 2.1.0 (LLVM14)</h2>
+<div class="outline-text-2" id="text-org2eb51a4">
+</div>
+<div id="outline-container-orgc8850ed" class="outline-3">
+<h3 id="orgc8850ed">Added</h3>
+<div class="outline-text-3" id="text-orgc8850ed">
+<ul class="org-ul">
+<li>Add <code>ext:list-all-logical-hosts</code> and <code>ext:logical-host-p</code> functions
+to query the current logical host status.</li>
+<li>Operators for profiling CLOS code: <code>clos:with-profiling</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org71a553c" class="outline-3">
+<h3 id="org71a553c">Changed</h3>
+<div class="outline-text-3" id="text-org71a553c">
+<ul class="org-ul">
+<li>Removed stage and image format command line options (<code>-t</code> and <code>-T</code>)
+and replaced with options to specify image or snapshot file
+(<code>--image</code> or <code>--snapshot</code>) and <code>--base</code> option for loading base
+image when extensions are present.</li>
+<li><code>print-unreadable-object</code> now prints qualified symbols for the
+<code>:type t</code> option and uses <code>pprint-logical-block</code> when pretty
+printing.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org92697ed" class="outline-3">
+<h3 id="org92697ed">Fixes</h3>
+<div class="outline-text-3" id="text-org92697ed">
+<ul class="org-ul">
+<li><code>ext:run-program</code> works with string streams.</li>
+<li><code>print-object</code> is now invoked for all calls to `write`.</li>
+<li><code>slot-unbound</code> is called for unbound condition slots (<a href="https://github.com/clasp-developers/clasp/issues/1390">#1390</a>).</li>
+<li>Multiple inheritance of class-allocated slots is resolved
+breadth-first (<a href="https://github.com/clasp-developers/clasp/issues/1392">#1392</a>).</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb40899b" class="outline-2">
+<h2 id="orgb40899b"><span class="timestamp-wrapper"><span class="timestamp">&lt;2022-10-26 Wed&gt; </span></span> Version 2.0.0 (LLVM14)</h2>
+<div class="outline-text-2" id="text-orgb40899b">
+</div>
+<div id="outline-container-org1c3bf7f" class="outline-3">
+<h3 id="org1c3bf7f">Added</h3>
+<div class="outline-text-3" id="text-org1c3bf7f">
 <ul class="org-ul">
 <li>Lisp based koga metabuilder that outputs Ninja build files.</li>
 <li>basic Debian packaging files.</li>
@@ -260,9 +616,9 @@ character.</li>
 </div>
 </div>
 
-<div id="outline-container-org9359be6" class="outline-3">
-<h3 id="org9359be6">Changed</h3>
-<div class="outline-text-3" id="text-org9359be6">
+<div id="outline-container-org0c0cb20" class="outline-3">
+<h3 id="org0c0cb20">Changed</h3>
+<div class="outline-text-3" id="text-org0c0cb20">
 <ul class="org-ul">
 <li><code>core:lisp-implementation-id</code> and <code>core:clasp-git-full-commit</code> only return
 non-<code>NIL</code> values if Clasp was built in a git working tree.</li>
@@ -302,9 +658,9 @@ Clasp binary or images are now stored using logical pathnames.</li>
 </div>
 </div>
 
-<div id="outline-container-org6908c49" class="outline-3">
-<h3 id="org6908c49">Removed</h3>
-<div class="outline-text-3" id="text-org6908c49">
+<div id="outline-container-org0bbdf80" class="outline-3">
+<h3 id="org0bbdf80">Removed</h3>
+<div class="outline-text-3" id="text-org0bbdf80">
 <ul class="org-ul">
 <li><code>core:*extensions-startup-loads*</code> and <code>core:*extensions-startup-evals*</code>
 dynamic variables have been removed since they are no longer used.</li>
@@ -314,9 +670,9 @@ behavior is achieved with the <code>CLASP_HOME</code> environment variable.</li>
 </div>
 </div>
 
-<div id="outline-container-orgc560e08" class="outline-3">
-<h3 id="orgc560e08">Enhancements</h3>
-<div class="outline-text-3" id="text-orgc560e08">
+<div id="outline-container-orge13c5c3" class="outline-3">
+<h3 id="orge13c5c3">Enhancements</h3>
+<div class="outline-text-3" id="text-orge13c5c3">
 <ul class="org-ul">
 <li><code>make-instance</code> and CLOS slot access functions can be used with structure 
 objects.</li>
@@ -329,9 +685,9 @@ the <code>ext</code> interface package.</li>
 </div>
 </div>
 
-<div id="outline-container-org199d46c" class="outline-3">
-<h3 id="org199d46c">Optimizations</h3>
-<div class="outline-text-3" id="text-org199d46c">
+<div id="outline-container-org3b41c1c" class="outline-3">
+<h3 id="org3b41c1c">Optimizations</h3>
+<div class="outline-text-3" id="text-org3b41c1c">
 <ul class="org-ul">
 <li>Arguments to and return values from local functions (e.g. from FLET) are 
 passed unboxed in some common cases.</li>
@@ -357,9 +713,9 @@ bootstrapping components with the virtual machine.</li>
 </div>
 </div>
 
-<div id="outline-container-org8065054" class="outline-3">
-<h3 id="org8065054">Fixes</h3>
-<div class="outline-text-3" id="text-org8065054">
+<div id="outline-container-orgce1b96c" class="outline-3">
+<h3 id="orgce1b96c">Fixes</h3>
+<div class="outline-text-3" id="text-orgce1b96c">
 <ul class="org-ul">
 <li>Replace hard coded paths to <code>nm</code> in snapshot code with <code>NM_BINARY</code> macro value
 set by configure.</li>
@@ -375,9 +731,9 @@ print correctly.</li>
 </div>
 </div>
 
-<div id="outline-container-org05e20bf" class="outline-2">
-<h2 id="org05e20bf"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-05-25 Tue&gt; </span></span> Version 1.0</h2>
-<div class="outline-text-2" id="text-org05e20bf">
+<div id="outline-container-org532a7c1" class="outline-2">
+<h2 id="org532a7c1"><span class="timestamp-wrapper"><span class="timestamp">&lt;2021-05-25 Tue&gt; </span></span> Version 1.0</h2>
+<div class="outline-text-2" id="text-org532a7c1">
 <ul class="org-ul">
 <li>Clasp has the ability to save and restart from memory snapshots.</li>
 <li>Clasp supports the addition of extensions written in C++ by adding them to the extensions directory.
@@ -389,9 +745,9 @@ The extensions integrate with the clasp build system.</li>
 </div>
 
 
-<div id="outline-container-org997fced" class="outline-2">
-<h2 id="org997fced"><span class="timestamp-wrapper"><span class="timestamp">&lt;2015-11-20 Fri&gt; </span></span> Version 0.4</h2>
-<div class="outline-text-2" id="text-org997fced">
+<div id="outline-container-orgac2eff9" class="outline-2">
+<h2 id="orgac2eff9"><span class="timestamp-wrapper"><span class="timestamp">&lt;2015-11-20 Fri&gt; </span></span> Version 0.4</h2>
+<div class="outline-text-2" id="text-orgac2eff9">
 <ul class="org-ul">
 <li>Clasp has a completely new, optimizing/inlining compiler based on Cleavir.</li>
 <li>Fixnum, character and single-float types are immediate values.</li>
